@@ -1,0 +1,12 @@
+# Site estático no Cloudflare (Workers Static Assets, sem script: acessos grátis e sem limite).
+# Montado por ferramentas/publicar_cf.py em saida/publicar/ e enviado com `wrangler deploy`.
+name = "eleicoes2026"
+compatibility_date = "2026-10-01"
+# conta: a do login do wrangler (ou CLOUDFLARE_ACCOUNT_ID no ambiente) — não fica no repositório
+workers_dev = false
+routes = [{ pattern = "eleicoes.inema.club", custom_domain = true }]
+
+[assets]
+directory = "../../saida/publicar"
+html_handling = "auto-trailing-slash"
+not_found_handling = "none"

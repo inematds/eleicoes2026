@@ -1,0 +1,8 @@
+saida/
+__pycache__/
+*.pyc
+site/data
+handoffs/
+.wrangler/
+**/.wrangler/
+node_modules/

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Central · Eleições 2026 · INEMA</title>
+<meta name="description" content="Central de apuração do 2º turno para Presidente, com dados oficiais do TSE.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="menu.css?v=2">
+<link rel="stylesheet" href="central.css?v=14">
+</head>
+<body>
+<div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span>SIMULAÇÃO</span></div>
+
+<aside class="lateral">
+  <a class="marca" href="#/">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 45 24 24 45 3 24Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 12 36 24 24 36 12 24Z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 19 29 24 24 29 19 24Z" fill="currentColor"/></svg>
+    <span><b>INEMA</b><small>ELEIÇÕES <em>LIVE</em></small></span>
+  </a>
+  <nav class="menu" aria-label="Seções">
+    <a href="#/" data-nav="br"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Visão geral</a>
+    <a href="#estados" data-nav="estados"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/></svg>Estados</a>
+    <a href="#evolucao"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Evolução</a>
+    <a href="#resumo"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>Resumo</a>
+    <a href="#fonte"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8"/></svg>Fonte e auditoria</a>
+    <a href="classica.html"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 10h18"/></svg>Versão clássica</a>
+    <a class="sim-btn" href="?sim=1"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>Simulação</a>
+  </nav>
+  <div class="lateral-pe">
+    <div class="dominio">eleicoes<span>.</span>inema<span>.</span>club</div>
+    <p>Dados oficiais do TSE em tempo real, para um Brasil mais transparente.</p>
+  </div>
+</aside>
+
+<div class="corpo">
+  <header class="cab">
+    <div class="cab-sigla" id="cab-sigla">BR</div>
+    <div class="cab-txt">
+      <h1 id="cab-titulo">Brasil — 2º Turno</h1>
+      <div class="cab-sub"><span id="cab-tipo">Presidente</span> • <span>Atualização <b id="cab-hora">—</b></span> • <span class="vivo" id="vivo" data-estado="carregando"><i></i><span>carregando</span></span></div>
+    </div>
+    <div class="cab-dir">DEMOCRACIA<br>EM TEMPO REAL<i></i></div>
+  </header>
+  <div class="faixa-sim" id="faixa-sim" hidden></div>
+  <div class="faixa-erro" id="faixa-erro" hidden role="alert"></div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grade">
+    <section class="painel p-mapa" id="estados">
+      <div class="p-cab"><span class="ico-l"></span><div><h2 id="mapa-tit">Mapa por estado</h2><p>Clique em um estado para ver os dados</p></div>
+        <div class="map-opts" id="map-opts" role="group" aria-label="O que mostrar no mapa">
+          <button type="button" data-opt="brancos" aria-pressed="true">Brancos</button>
+          <button type="button" data-opt="nulos" aria-pressed="true">Nulos</button>
+          <button type="button" data-opt="abst" aria-pressed="true">Abstenção</button>
+          <button type="button" data-opt="pct" aria-pressed="false">%</button>
+        </div></div>
+      <div class="mapa" id="mapa" role="list"></div>
+      <div class="mapa-leg" id="mapa-leg"></div>
+    </section>
+
+    <section class="painel p-dist">
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Distribuição dos votos apurados <span class="escopo">Brasil</span></h2><p>Candidatos, brancos e nulos (só votos já apurados)</p></div>
+        <div class="p-cab-dir">Votos apurados: <b id="dist-total">—</b></div></div>
+      <div class="barra" id="dist-barra"></div>
+      <div class="dist-leg">
+        <div class="dist-itens" id="dist-itens"></div>
+        <div class="dif" id="dif"></div>
+      </div>
+      <div class="caixa-pontilhada">
+        <div class="caixa-tit"><span>Andamento da apuração (por seções)</span><span>100%</span></div>
+        <div class="barra alta" id="apur-barra"></div>
+      </div>
+    </section>
+
+    <section class="painel p-evo" id="evolucao">
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Evolução da apuração</h2><p>% dos votos válidos e % de seções apuradas ao longo do tempo</p></div></div>
+      <div class="grafico" id="grafico"></div>
+      <div class="evo-leg" id="evo-leg"></div>
+    </section>
+
+    <section class="painel p-part">
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Participação do eleitorado</h2><p id="part-sub">—</p></div></div>
+      <div class="rot-dir">100%</div>
+      <div class="barra alta" id="part-barra"></div>
+    </section>
+
+    <section class="painel p-res" id="resumo">
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Resumo rápido</h2></div></div>
+      <div class="res-cards" id="res-cards"></div>
+    </section>
+
+    <section class="painel p-uf" id="p-uf" hidden>
+      <div class="uf-nome" id="uf-nome">—</div>
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Votos apurados no estado</h2><p>Os números deste bloco e dos indicadores no topo são só deste estado</p></div>
+        <div class="p-cab-dir">Votos apurados: <b id="uf-total">—</b></div></div>
+      <div class="barra" id="uf-barra"></div>
+      <div class="dist-leg">
+        <div class="dist-itens" id="uf-itens"></div>
+        <div class="dif" id="uf-dif"></div>
+      </div>
+      <div class="caixa-pontilhada">
+        <div class="caixa-tit"><span>Andamento da apuração no estado (por seções)</span><span>100%</span></div>
+        <div class="barra alta" id="uf-apur"></div>
+      </div>
+    </section>
+
+    <section class="painel p-tab">
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Resultado por estado</h2><p>Clique em um estado para abrir o painel dele</p></div></div>
+      <div class="res-tab"><table class="tab" id="res-tab"><thead></thead><tbody></tbody></table></div>
+      <div class="res-pe" id="fonte"></div>
+    </section>
+  </div>
+</div>
+
+<div class="dica" id="dica" hidden></div>
+<script src="replay.js?v=1"></script>
+<script src="central.js?v=8"></script>
+</body>
+</html>

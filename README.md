@@ -1,0 +1,72 @@
+# INEMA Eleições 2026 — apuração ao vivo
+
+[![Apuração ao vivo](guia/assets/banner.jpg)](https://inematds.github.io/eleicoes2026/guia/)
+
+**🇧🇷 [Português](README.md) · 🇺🇸 [English](README.en.md) · 🇪🇸 [Español](README.es.md)**
+
+## O que é
+
+O INEMA Eleições 2026 é um painel aberto para acompanhar a apuração do 2º turno para Presidente com os dados oficiais do TSE (Tribunal Superior Eleitoral). Serve para quem quer ver o resultado do Brasil e de cada estado num mapa, sem números inventados. Um coletor busca os arquivos públicos do TSE a cada 15 segundos, confere as contas e publica arquivos prontos; o site só lê esses arquivos. Para acompanhar, basta abrir eleicoes.inema.club; para rodar o seu, você só precisa de Python 3.
+
+- **Painel no ar:** https://eleicoes.inema.club · simulação acelerada: botão **Simulação** no menu (ou `?sim=1`)
+- **📖 Guia de uso** (landing + passo a passo): **https://inematds.github.io/eleicoes2026/guia/**
+
+Painel independente, sem vínculo com o TSE.
+
+Duas partes separadas, ligadas só pelos arquivos JSON do contrato:
+
+| Parte | Pasta | Faz |
+|---|---|---|
+| 1. Dados | `coleta/` | lê o TSE, guarda o bruto, confere, consolida e publica JSON versionado |
+| Contrato | `contrato/README.md` | formato dos JSON (schema 1), regras de cada número, bloqueios |
+| 2. Apresentação | `site/` | `index.html` (Central, padrão) e `classica.html`; nunca acessa o TSE |
+
+Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
+
+## O processo, do início ao fim
+
+🧠 sessão com o Nei · ⚙️ script/serviço · 🤖 `claude -p`
+
+1. ⚙️ **Coletor ligado** (serviço permanente, volta sozinho):
+   `systemctl --user status eleicoes-coletor` — a cada 15 s pede ao TSE o índice
+   `oficial/ele2026/6258/dados/br/br-e006258-ab.json` (com ETag; sem novidade = 304).
+2. ⚙️ **Detecta mudança**: compara data/hora/seções de cada abrangência (BR, 27 UFs, exterior)
+   com o último publicado e baixa só o `-u.json` de quem mudou.
+3. ⚙️ **Guarda o bruto** em `saida/oficial/bruto/<abr>/` + log em `saida/oficial/coleta.jsonl`.
+4. ⚙️ **Confere** (contrato): somas fecham, seções/votos nunca diminuem, hora não volta,
+   eleição/turno certos. Falhou → **não publica** aquela abrangência e mantém a última válida.
+   Brasil ≠ soma das UFs durante a apuração = só aviso (o TSE não solta tudo junto).
+5. ⚙️ **Publica** em `saida/oficial/data/`: `uf/<uf>/vNNNNNN.json` imutáveis → histórico →
+   `latest.json` por último. Versões oficiais começam em 100001 e nunca se repetem.
+6. ⚙️ **Site** (`eleicoes-web`, porta 8470) lê `site/data/` a cada 15 s e baixa só o que mudou.
+7. 🧠 **Trocar simulação ↔ oficial**: `ferramentas/modo.sh oficial` (ou `sim`).
+   Sem argumento mostra o modo atual. Quem estiver com a página aberta recarrega.
+8. 🧠 **Acompanhar na noite**: `cat saida/oficial/status.json` (último ok, erros, bloqueios,
+   pendentes) e `journalctl --user -u eleicoes-coletor -f`.
+9. 🧠 **Estado travado por bloqueio** (ex.: TSE corrigiu um número para baixo): conferir no
+   `coleta.jsonl` e, se o dado oficial estiver certo, `touch saida/oficial/aceitar/<abr>` (vale 1 vez).
+10. 🧠 **Publicar na internet** (eleicoes.inema.club, Cloudflare): pendente de autorização
+    da API do Cloudflare — ver `ANALISE.md` §4–5.
+
+## Testes
+
+```bash
+# 1º turno real (dados finais, 12 candidatos): 29 publicados, 0 bloqueios; 2º ciclo = 304
+python3 coleta/coletor.py --saida saida/teste1t --eleicao 6257 --turno 1 --pleito 3220 --n-cand 0 --uma-vez
+
+# TSE falso com falhas de propósito (índice antes dos arquivos, BR atrasado, SP corrompido, RJ diminuindo)
+python3 coleta/servidor_local.py --pasta saida/tsefalso --porta 8471 &
+python3 coleta/simular.py --saida saida/simlixo/data --intervalo 6 --uma-vez --modo-tse saida/tsefalso &
+python3 coleta/coletor.py --saida saida/testemock --base http://127.0.0.1:8471/ --intervalo 3
+```
+
+## Simulação
+
+`coleta/simular.py` gera uma apuração inventada (nomes reais ou `--ficticio`), com eleitorado,
+comparecimento, brancos e nulos de cada UF tirados do 1º turno. Tudo sai como `fonte.tipo =
+"simulacao"`: o site mostra faixa e marca d'água **SIMULAÇÃO**, e nunca marca "Eleito".
+
+## Mapa
+
+`site/assets/mapa-br.json` (14 KB gzip) gerado por `ferramentas/gerar_mapa.py` a partir de
+`brazil-states.geojson` (click_that_hood, MIT; malha IBGE).
