@@ -14,6 +14,7 @@
   const n = (x) => nf.format(x);
   const pc = (x) => p1.format(x) + "%";
   const hora = (iso) => (iso ? iso.slice(11, 19) : "—");
+  const dataHora = (iso) => (iso ? iso.slice(8, 10) + "/" + iso.slice(5, 7) + "/" + iso.slice(0, 4) + " " + iso.slice(11, 19) : "—");
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const ICO = {
     gente: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M14.5 14.4c.8-.3 1.6-.4 2.5-.4 2.8 0 4 2 4 5"/></svg>',
@@ -47,8 +48,8 @@
   // ---------- cabeçalho e KPIs ----------
   function cabecalho(abr, res) {
     $("#cab-sigla").textContent = abr === "zz" ? "EX" : abr.toUpperCase();
-    $("#cab-titulo").textContent = NOMES[abr] + " — 2º Turno";
-    $("#cab-hora").textContent = hora(res.fonte.totalizado_tse);
+    $("#cab-titulo").textContent = NOMES[abr] + " 2026 — 2º Turno";
+    $("#cab-hora").textContent = dataHora(res.fonte.totalizado_tse);
     document.querySelectorAll(".menu a").forEach((a) => a.classList.toggle("ativo", a.dataset.nav === (abr === "br" ? "br" : "estados")));
     document.title = NOMES[abr] + " · " + pc(res.secoes.pct_totalizadas) + " · Central Eleições 2026";
   }

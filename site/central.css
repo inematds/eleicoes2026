@@ -36,6 +36,9 @@ h1, h2 { font-family: Sora, Inter, sans-serif; margin: 0; }
 .cab { display: flex; align-items: center; gap: 18px; margin-bottom: 14px; }
 .cab-sigla { font: 800 1.15rem Sora; color: var(--ouro); border: 1.5px solid var(--ouro); border-radius: 12px; padding: 12px 14px; min-width: 64px; text-align: center; box-shadow: 0 0 18px -6px var(--brilho), inset 0 0 12px -6px var(--brilho); }
 .cab h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.cab-linha { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+.cab-data { font: 500 .95rem Sora; color: var(--mut); white-space: nowrap; }
+.cab-data b { color: var(--ouro); font-weight: 700; font-variant-numeric: tabular-nums; }
 .cab-sub { color: var(--mut); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .cab-sub b { color: var(--txt); font-weight: 600; }
 .cab-dir { margin-left: auto; text-align: right; font: 600 .68rem Sora; letter-spacing: .28em; color: var(--mut); position: relative; padding-bottom: 8px; }
