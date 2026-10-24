@@ -20,6 +20,7 @@ Dos partes separadas, unidas solo por los archivos JSON del contrato:
 | 1. Datos | `coleta/` | lee el TSE, guarda el original, verifica, consolida y publica JSON versionado |
 | Contrato | `contrato/README.md` | formato de los JSON (schema 1), reglas de cada cifra, bloqueos |
 | 2. Presentación | `site/` | `index.html` (Central, predeterminada) y `classica.html`; nunca accede al TSE |
+| 3. Municipios (aparte) | `municipios/` | colector, mapa y sitio propios, ciudad por ciudad; no toca el panel — ver `municipios/README.md` |
 
 Análisis inicial y decisiones: `ANALISE.md`. Fallas corregidas: `FALHAS.md`.
 
@@ -45,8 +46,13 @@ Análisis inicial y decisiones: `ANALISE.md`. Fallas corregidas: `FALHAS.md`.
    pendientes) y `journalctl --user -u eleicoes-coletor -f`.
 9. 🧠 **Estado trabado por un bloqueo** (ej.: el TSE corrigió una cifra a la baja): revisar en
    `coleta.jsonl` y, si el dato oficial es correcto, `touch saida/oficial/aceitar/<abr>` (vale 1 vez).
-10. 🧠 **Publicar en internet** (eleicoes.inema.club, Cloudflare): pendiente de autorización
-    de la API de Cloudflare — ver `ANALISE.md` §4–5.
+10. ⚙️ **Publicar en internet** (eleicoes.inema.club, Cloudflare): el servicio `eleicoes-publicar`
+    (`ferramentas/publicar_cf.py --laco`) publica en cada cambio — ver `ANALISE.md` §4–5.
+11. ⚙️ **Municipios (sistema aparte)**: el servicio `eleicoes-municipios` lee los 27 índices por estado
+    y descarga solo las ciudades que cambiaron; `eleicoes-municipios-publicar` lo publica en
+    municipios.inema.club (Worker de Cloudflare separado). Revisar: `cat saida/municipios/status.json`.
+12. 🧠 **Enlace desde el panel**: el ítem "Municípios" del menú y el botón "Ver os municípios de <estado>"
+    en la tarjeta del estado llevan al mismo estado en municipios.inema.club. Detalles: `municipios/README.md`.
 
 ## Pruebas
 

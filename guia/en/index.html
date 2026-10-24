@@ -114,6 +114,7 @@
     <a class="sec" href="#oque">What it is</a>
     <a class="sec" href="#fluxo">How it works</a>
     <a class="sec" href="#guia">User guide</a>
+    <a class="sec" href="#municipios">Municipalities</a>
     <a class="sec" href="#exemplos">Examples</a>
     <a class="sec" href="#roadmap">Roadmap</a>
     <span class="lang"><a href="../">PT</a><a class="on" href="./">EN</a><a href="../es/">ES</a></span>
@@ -227,6 +228,37 @@
     <p>wrangler is Cloudflare's command-line tool; the publisher runs <code>npx --yes wrangler@4 deploy</code>, which is why the <code>npx wrangler login</code> from the prerequisites is mandatory. It sends <code>saida/oficial/data</code> to the site root and, if it exists, the simulation at <code>saida/simficticio/data</code> to <code>/simulacao/</code>; so the collector from step 4 must be running. To publish the simulation too, generate it first: <code>python3 coleta/simular.py --saida saida/simficticio/data --intervalo 60 --ficticio &amp;</code>. The publisher keeps running and watching; to stop it, press Ctrl+C. The domain must be in a zone of your Cloudflare account (a zone = a domain managed there).</p>
   </div></div>
 </div></section>
+<section id="municipios"><div class="wrap">
+  <span class="chip">Municipalities · a separate system</span>
+  <h2>Every city on the map, turning from gray as the TSE counts the votes</h2>
+  <p class="sub">At <a href="https://municipios.inema.club" target="_blank" rel="noopener">municipios.inema.club</a> every state appears with its municipalities drawn out. A city starts out gray and turns red or blue, in the color of whoever leads there; the stronger the color, the more polling sections have already been counted. In the dashboard, the <b>Municipalities</b> menu item and the <b>See the municipalities</b> button on the state panel take you straight there.</p>
+  <div class="cta" style="margin:0 0 22px">
+    <a class="btn" href="https://municipios.inema.club" target="_blank" rel="noopener">Open the municipalities</a>
+    <a class="btn ghost" href="https://municipios.inema.club/?sim=1" target="_blank" rel="noopener">See the simulation</a>
+  </div>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="../assets/municipios.jpg" alt="Map of Minas Gerais with colored municipalities, statewide votes, progress over time and a list of cities (simulation with fictitious names)" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>🗺️ Map by state</h3><p>Choose the state using the buttons at the top. Hover or tap a city to see the numbers; click to open its full panel. It has zoom and search by name.</p></div>
+    <div class="card"><h3>📊 Votes and progress</h3><p>A bar with each candidate's total in the state (the sum of the cities already counted, marked as an INEMA calculation) and a chart of how it evolves through the night.</p></div>
+    <div class="card"><h3>🏙️ 10 cities</h3><p>A list of 10 cities in three orders: <b>largest</b> (most voters), <b>most counted</b> and <b>100% counted</b>.</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card"><h3>Separate from the dashboard</h3><p>Its own collector, files and site. The collector reads the TSE's 27 per-state indexes and downloads only the cities that changed, the ones that have waited longest first. If it stops, the main dashboard is not affected.</p></div>
+    <div class="card"><h3>Same checks</h3><p>Every city goes through the same rules as the dashboard. A city whose numbers don't add up keeps its last good value; the rest of the state carries on.</p></div>
+    <div class="card"><h3>IBGE map</h3><p>The outlines of the 5,570 municipalities come from the official IBGE mesh, linked to the TSE by each city's IBGE code.</p></div>
+  </div>
+  <h3 style="margin:26px 0 8px">Running the municipalities on your machine</h3>
+  <p class="sub">After step 1 of the guide (project downloaded). Real commands from the repository, run from the project folder.</p>
+<pre><span class="c"># 1. (optional) the outlines already ship in the repository; this rebuilds them from the IBGE mesh</span>
+<span class="k">python3</span> municipios/gerar_malhas.py
+<span class="c"># 2. runoff collector (keeps running; every 15 s)</span>
+<span class="k">python3</span> municipios/coletor_mun.py --saida saida/municipios &amp;
+<span class="c"># 3. local site</span>
+<span class="k">ln</span> -sfn ../../saida/municipios/data municipios/site/data
+<span class="k">python3</span> coleta/servidor_local.py --pasta municipios/site --porta 8471 &amp;
+<span class="c"># open:</span> <span class="s">http://localhost:8471/</span>   <span class="c"># or the simulation:</span> <span class="s">http://localhost:8471/?sim=1</span></pre>
+  <p class="sub" style="margin-top:12px">Details, tests with the first round and known limits: <a href="https://github.com/inematds/eleicoes2026/tree/main/municipios" target="_blank" rel="noopener">municipios/README.md</a>.</p>
+</div></section>
 <section id="exemplos"><div class="wrap">
   <span class="chip">Examples</span>
   <h2>What it looks like on screen</h2>
@@ -241,7 +273,7 @@
   <h2>What already exists and what comes next</h2>
   <p class="sub">The first version was built for the October 25, 2026 runoff.</p>
   <div class="phase"><div class="tag">Done</div><div class="d"><strong>President · Brazil + 27 states + abroad</strong><span>Collector with verification, Central and Classic dashboards, real map, accelerated simulation, static publishing.</span></div></div>
-  <div class="phase"><div class="tag">Next</div><div class="d"><strong>Municipalities</strong><span>Map and results by city. The per-municipality files already exist at the TSE; the municipal map is still missing from the dashboard.</span></div></div>
+  <div class="phase"><div class="tag">Done</div><div class="d"><strong>Municipalities</strong><span>Map of each state with cities coloring in live, statewide votes and progress, 10 cities and simulation, at municipios.inema.club (10/24/2026).</span></div></div>
   <div class="phase"><div class="tag">Later</div><div class="d"><strong>Other elections</strong><span>Governor and future elections: since collection and display are separate, only the collection part changes.</span></div></div>
 </div></section>
 <footer>

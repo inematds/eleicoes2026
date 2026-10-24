@@ -1,0 +1,37 @@
+/* Menu lateral — igual na Central (index.html) e na Clássica (classica.html).
+   Cores vêm do estilo da página: --m-* têm valor padrão e podem ser trocadas por estilo. */
+.lateral {
+  --m-ouro: var(--ouro, var(--amb, #FACC15)); --m-ouro2: var(--ouro2, #f59e0b); --m-ink: var(--ouro-ink, var(--amb-ink, #1a1206));
+  --m-txt: var(--txt, #f1f1f4); --m-mut: var(--mut, #a3a3ae); --m-line: var(--line, #272730);
+  --m-bg: var(--lateral-bg, rgba(8,8,11,.85)); --m-hover: var(--lateral-hover, rgba(250,204,21,.07)); --m-dom: var(--amb-txt, var(--m-ouro));
+  position: sticky; top: 0; height: 100vh; border-right: 1px solid var(--m-line); background: var(--m-bg);
+  display: flex; flex-direction: column; padding: 18px 12px; z-index: 30;
+}
+.marca { display: flex; align-items: center; gap: 10px; color: var(--m-ouro); padding: 4px 8px 22px; text-decoration: none; }
+.marca svg { width: 40px; height: 40px; filter: drop-shadow(0 0 8px rgba(250,180,40,.35)); }
+.marca b { display: block; font: 800 1.35rem/1 Sora; color: var(--m-txt); letter-spacing: .08em; }
+.marca small { display: block; font: 600 .62rem Sora; letter-spacing: .22em; color: var(--m-mut); margin-top: 4px; }
+.marca em { font-style: normal; color: var(--m-dom); }
+.menu { display: flex; flex-direction: column; gap: 4px; }
+.menu a { display: flex; align-items: center; gap: 12px; color: var(--m-txt); padding: 11px 12px; border-radius: 10px; font: 500 15px Inter, sans-serif; text-decoration: none; }
+.menu a:hover { background: var(--m-hover); }
+.menu a.ativo { background: linear-gradient(180deg, var(--m-ouro), var(--m-ouro2)); color: var(--m-ink); font-weight: 700; box-shadow: 0 0 22px -6px rgba(250,180,40,.35); }
+.menu svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; flex: none; }
+.lateral-pe { margin-top: auto; padding: 8px; }
+.dominio { font: 800 1rem Sora; color: var(--m-dom); }
+.dominio span { color: var(--m-txt); }
+.lateral-pe p { color: var(--m-mut); font-size: .8rem; margin: 6px 0 0; }
+@media (max-width: 1000px) {
+  .lateral { position: static; height: auto; flex-direction: row; align-items: center; padding: 10px 12px; border-right: 0; border-bottom: 1px solid var(--m-line); overflow-x: auto; }
+  .marca { padding: 0 10px 0 0; } .marca svg { width: 30px; height: 30px; } .marca b { font-size: 1rem; }
+  .menu { flex-direction: row; } .menu a { padding: 8px 10px; white-space: nowrap; font-size: .85rem; }
+  .lateral-pe { display: none; }
+}
+@media (max-width: 640px) { .menu a svg { display: none; } }
+
+/* botão Simulação (24/10): amarelo, abaixo da troca de versão */
+.menu a.sim-btn { margin-top: 10px; color: var(--m-ouro); border: 1.5px solid var(--m-ouro); font-weight: 700; }
+.menu a.sim-btn:hover { background: var(--m-hover); }
+.menu a.sim-btn.ativo-sim { background: linear-gradient(180deg, var(--m-ouro), var(--m-ouro2)); color: var(--m-ink); }
+[data-estilo="papel"] .menu a.sim-btn:not(.ativo-sim) { color: #854d0e; border-color: #EAB308; }
+@media (max-width: 1000px) { .menu a.sim-btn { margin-top: 0; } }

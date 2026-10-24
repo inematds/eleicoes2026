@@ -2,6 +2,11 @@
 
 | data | o que quebrou | menor correção | prompt \| infra |
 |---|---|---|---|
+| 2026-10-24 | Municípios (revisão): eleitorado do índice preliminar sobrescrevia o da cidade já apurada → 27 estados republicados a cada 15 s com número errado | índice só preenche eleitorado/seções enquanto a cidade não tem arquivo | infra |
+| 2026-10-24 | Municípios (revisão): índice atualizado depois do arquivo faria baixar a mesma cidade para sempre | mesmo arquivo + hora publicada ≥ hora do índice = resolvido; teto de 8 tentativas | infra |
+| 2026-10-24 | Municípios: com a fila ordenada só pelo tamanho, cidade pequena nunca seria baixada enquanto as grandes mudassem (simulação: fila só crescia) | fila por tempo de espera, tamanho só desempata | infra |
+| 2026-10-24 | Municípios: ao reiniciar, o coletor esquecia as cidades na fila (índice voltava 304) e dava "0 pendentes" falso | não reaproveitar ETag dos índices na partida (relê os 27) | infra |
+| 2026-10-24 | Municípios: coletor caía na partida se a lista de municípios do TSE não viesse | tenta de novo a cada 15 s em vez de sair | infra |
 | 2026-10-24 | Marca d'água SIMULAÇÃO aparecia com dado oficial (CSS display:grid vencia o atributo hidden) | `[hidden]{display:none!important}` nas duas folhas; conferido nos dois modos | infra |
 | 2026-10-24 | Um JSON corrompido do TSE derrubaria o ciclo inteiro do coletor | erro tratado por abrangência (trava só aquele estado) | infra |
 | 2026-10-24 | Quadradinho do RS mostrou números da simulação antiga (88/99) | simulador começa cada rodada numa faixa de versões nova (rodada × 1000); contrato diz que versão nunca se repete | infra |

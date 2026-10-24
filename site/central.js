@@ -260,9 +260,20 @@
     const pUf = $("#p-uf");
     pUf.hidden = abr === "br";
     if (abr !== "br") { $("#uf-nome").textContent = NOMES[abr]; distribuicao(res, "uf"); andamento(res, "#uf-apur"); }
+    linksMunicipios(abr);
     await mapa(abr, ufs);
     if (desenhado && desenhado.split("|")[1] === abr) document.querySelectorAll(".p-dist,.kpis").forEach((x) => { x.classList.add("pisca"); setTimeout(() => x.classList.remove("pisca"), 1500); });
     desenhado = chave;
+  }
+
+  // Municípios (sistema à parte): menu e botão do card do estado levam ao mesmo estado lá
+  const MUNICIPIOS = window.MUNICIPIOS_URL || "https://municipios.inema.club/";
+  function linksMunicipios(abr) {
+    const sim = new URLSearchParams(location.search).has("sim") ? "?sim=1" : "";
+    const alvo = MUNICIPIOS + sim + (abr && abr !== "br" && abr !== "zz" ? "#" + abr : "");
+    document.querySelectorAll('a[data-nav="mun"]').forEach((a) => (a.href = alvo));
+    const b = $("#uf-mun");
+    if (b) { b.href = alvo; b.hidden = abr === "zz"; b.querySelector("span").textContent = "Ver os municípios de " + (NOMES[abr] || ""); }
   }
 
   async function ciclo() {

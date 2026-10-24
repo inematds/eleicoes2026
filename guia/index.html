@@ -114,6 +114,7 @@
     <a class="sec" href="#oque">O que é</a>
     <a class="sec" href="#fluxo">Como funciona</a>
     <a class="sec" href="#guia">Guia de uso</a>
+    <a class="sec" href="#municipios">Municípios</a>
     <a class="sec" href="#exemplos">Exemplos</a>
     <a class="sec" href="#roadmap">Roadmap</a>
     <span class="lang"><a class="on" href="./">PT</a><a href="en/">EN</a><a href="es/">ES</a></span>
@@ -227,6 +228,37 @@
     <p>O wrangler é a ferramenta de linha de comando do Cloudflare; o publicador roda <code>npx --yes wrangler@4 deploy</code>, por isso o <code>npx wrangler login</code> dos pré-requisitos é obrigatório. Ele envia <code>saida/oficial/data</code> para a raiz do site e, se existir, a simulação em <code>saida/simficticio/data</code> para <code>/simulacao/</code>; então o coletor do passo 4 precisa estar rodando. Para publicar também a simulação, gere antes: <code>python3 coleta/simular.py --saida saida/simficticio/data --intervalo 60 --ficticio &amp;</code>. O publicador fica rodando e vigiando; para parar, Ctrl+C. O domínio tem de estar numa zona da sua conta Cloudflare (zona = um domínio administrado nela).</p>
   </div></div>
 </div></section>
+<section id="municipios"><div class="wrap">
+  <span class="chip">Municípios · sistema à parte</span>
+  <h2>Cada cidade no mapa, saindo do cinza conforme o TSE apura</h2>
+  <p class="sub">Em <a href="https://municipios.inema.club" target="_blank" rel="noopener">municipios.inema.club</a> cada estado aparece com os seus municípios desenhados. A cidade começa cinza e fica vermelha ou azul, na cor de quem lidera nela; quanto mais forte a cor, mais seções já foram apuradas. No painel, o item <b>Municípios</b> do menu e o botão <b>Ver os municípios</b> no quadro do estado levam direto para lá.</p>
+  <div class="cta" style="margin:0 0 22px">
+    <a class="btn" href="https://municipios.inema.club" target="_blank" rel="noopener">Abrir os municípios</a>
+    <a class="btn ghost" href="https://municipios.inema.club/?sim=1" target="_blank" rel="noopener">Ver a simulação</a>
+  </div>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="assets/municipios.jpg" alt="Mapa de Minas Gerais com os municípios coloridos, votos do estado, evolução e lista de cidades (simulação com nomes fictícios)" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>🗺️ Mapa por estado</h3><p>Escolha o estado nos botões de cima. Passe o mouse ou o dedo numa cidade para ver os números; clique para abrir o quadro completo dela. Tem zoom e busca pelo nome.</p></div>
+    <div class="card"><h3>📊 Votos e evolução</h3><p>Barra com o total de cada candidato no estado (soma das cidades já apuradas, marcada como cálculo do INEMA) e gráfico da evolução ao longo da noite.</p></div>
+    <div class="card"><h3>🏙️ 10 cidades</h3><p>Lista das 10 cidades em três ordens: <b>maiores</b> (mais eleitores), <b>mais apuradas</b> e <b>100% apuradas</b>.</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card"><h3>Separado do painel</h3><p>Coletor, arquivos e site próprios. O coletor lê os 27 índices por estado do TSE e baixa só as cidades que mudaram, as que esperam há mais tempo primeiro. Se ele parar, o painel principal não é afetado.</p></div>
+    <div class="card"><h3>Mesmas conferências</h3><p>Cada cidade passa pelas mesmas regras do painel. Uma cidade com conta que não fecha fica com o último valor bom; o resto do estado segue.</p></div>
+    <div class="card"><h3>Mapa do IBGE</h3><p>Desenho dos 5.570 municípios vindo da malha oficial do IBGE, ligado ao TSE pelo código IBGE de cada cidade.</p></div>
+  </div>
+  <h3 style="margin:26px 0 8px">Rodando os municípios na sua máquina</h3>
+  <p class="sub">Depois do passo 1 do guia (projeto baixado). Comandos reais do repositório, a partir da pasta do projeto.</p>
+<pre><span class="c"># 1. (opcional) o desenho já vem no repositório; isto o refaz a partir da malha do IBGE</span>
+<span class="k">python3</span> municipios/gerar_malhas.py
+<span class="c"># 2. coletor do 2º turno (fica rodando; a cada 15 s)</span>
+<span class="k">python3</span> municipios/coletor_mun.py --saida saida/municipios &amp;
+<span class="c"># 3. site local</span>
+<span class="k">ln</span> -sfn ../../saida/municipios/data municipios/site/data
+<span class="k">python3</span> coleta/servidor_local.py --pasta municipios/site --porta 8471 &amp;
+<span class="c"># abra:</span> <span class="s">http://localhost:8471/</span>   <span class="c"># ou a simulação:</span> <span class="s">http://localhost:8471/?sim=1</span></pre>
+  <p class="sub" style="margin-top:12px">Detalhes, testes com o 1º turno e limites conhecidos: <a href="https://github.com/inematds/eleicoes2026/tree/main/municipios" target="_blank" rel="noopener">municipios/README.md</a>.</p>
+</div></section>
 <section id="exemplos"><div class="wrap">
   <span class="chip">Exemplos</span>
   <h2>Como fica na tela</h2>
@@ -241,7 +273,7 @@
   <h2>O que já existe e o que vem depois</h2>
   <p class="sub">A primeira versão foi feita para o 2º turno de 25/10/2026.</p>
   <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Presidente · Brasil + 27 estados + exterior</strong><span>Coletor com conferência, painéis Central e Clássica, mapa real, simulação acelerada, publicação estática.</span></div></div>
-  <div class="phase"><div class="tag">Próximo</div><div class="d"><strong>Municípios</strong><span>Mapa e resultado por cidade. Os arquivos por município já existem no TSE; falta o mapa municipal no painel.</span></div></div>
+  <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Municípios</strong><span>Mapa de cada estado com as cidades colorindo ao vivo, votos e evolução do estado, 10 cidades e simulação, em municipios.inema.club (24/10/2026).</span></div></div>
   <div class="phase"><div class="tag">Depois</div><div class="d"><strong>Outras eleições</strong><span>Governador e as próximas eleições: como coleta e tela são separadas, muda só a parte da coleta.</span></div></div>
 </div></section>
 <footer>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Municípios · Eleições 2026 · INEMA</title>
+<meta name="description" content="Apuração do 2º turno para Presidente cidade por cidade, com dados oficiais do TSE e mapa do IBGE.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="menu.css?v=1">
+<link rel="stylesheet" href="mun.css?v=3">
+</head>
+<body>
+<div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span>SIMULAÇÃO</span></div>
+
+<aside class="lateral">
+  <a class="marca" href="https://eleicoes.inema.club/">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 45 24 24 45 3 24Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 12 36 24 24 36 12 24Z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 19 29 24 24 29 19 24Z" fill="currentColor"/></svg>
+    <span><b>INEMA</b><small>ELEIÇÕES <em>LIVE</em></small></span>
+  </a>
+  <nav class="menu" aria-label="Seções">
+    <a href="https://eleicoes.inema.club/"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Painel Brasil</a>
+    <a href="#" class="ativo" data-nav="mapa"><svg viewBox="0 0 24 24"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3zM9 3v15M15 6v15"/></svg>Municípios</a>
+    <a href="#votos"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Votos e evolução</a>
+    <a href="#cidades"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Lista de cidades</a>
+    <a href="#fonte"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8"/></svg>Fonte</a>
+    <a class="sim-btn" href="?sim=1"><svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9z"/></svg>Simulação</a>
+  </nav>
+  <div class="lateral-pe">
+    <div class="dominio">eleicoes<span>.</span>inema<span>.</span>club</div>
+    <p>Cada cidade com os dados oficiais do TSE. Cinza = ainda sem apuração.</p>
+  </div>
+</aside>
+
+<div class="corpo">
+  <header class="cab">
+    <div class="cab-sigla" id="cab-sigla">—</div>
+    <div class="cab-txt">
+      <h1 id="cab-titulo">Municípios — 2º Turno</h1>
+      <div class="cab-sub"><span>Presidente</span> • <span>Atualização <b id="cab-hora">—</b></span> • <span class="vivo" id="vivo" data-estado="carregando"><i></i><span>carregando</span></span></div>
+    </div>
+    <div class="cab-dir">CIDADE<br>POR CIDADE<i></i></div>
+  </header>
+  <div class="faixa-sim" id="faixa-sim" hidden></div>
+  <div class="faixa-erro" id="faixa-erro" hidden role="alert"></div>
+
+  <nav class="ufs" id="ufs" aria-label="Escolha o estado"></nav>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grade">
+    <div class="col-esq">
+    <section class="painel p-mapa" id="mapa-painel">
+      <div class="p-cab"><span class="ico-l"></span><div><h2 id="mapa-tit">Mapa dos municípios</h2><p>Passe o dedo ou o mouse numa cidade. Cor = quem lidera; quanto mais forte, mais apurada.</p></div>
+        <label class="busca"><span class="sr">Buscar cidade</span><input id="busca" type="search" placeholder="Buscar cidade" autocomplete="off" list="lista-cidades"><datalist id="lista-cidades"></datalist></label>
+      </div>
+      <div class="mapa-caixa" id="mapa-caixa">
+        <svg class="mapa-mun" id="mapa-mun" role="img" aria-label="Mapa dos municípios do estado"></svg>
+        <div class="zoom" role="group" aria-label="Zoom do mapa">
+          <button type="button" data-z="1" aria-label="Aproximar">+</button>
+          <button type="button" data-z="-1" aria-label="Afastar">−</button>
+          <button type="button" data-z="0" aria-label="Ver o estado inteiro">⤢</button>
+        </div>
+      </div>
+      <div class="mapa-leg" id="mapa-leg"></div>
+    </section>
+
+    <section class="painel p-cidade" id="p-cidade" hidden>
+      <div class="cid-nome" id="cid-nome">—</div>
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Votos apurados na cidade</h2><p id="cid-sub">—</p></div>
+        <div class="p-cab-dir">Seções: <b id="cid-pst">—</b></div></div>
+      <div class="barra" id="cid-barra"></div>
+      <div class="dist-itens" id="cid-itens"></div>
+      <div class="cid-ext" id="cid-ext"></div>
+    </section>
+    </div>
+    <div class="col-dir">
+    <section class="painel p-dist" id="votos">
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Votos apurados no estado</h2><p id="dist-sub">Soma das cidades já apuradas</p></div>
+        <div class="p-cab-dir">Votos: <b id="dist-total">—</b></div></div>
+      <div class="barra" id="dist-barra"></div>
+      <div class="dist-leg"><div class="dist-itens" id="dist-itens"></div><div class="dif" id="dif"></div></div>
+    </section>
+
+    <section class="painel p-evo" id="evolucao">
+      <div class="p-cab"><span class="ico-l"></span><div><h2>Evolução no estado</h2><p>% dos votos válidos de cada um e % de seções apuradas ao longo da noite</p></div></div>
+      <div class="grafico" id="grafico"></div>
+      <div class="evo-leg" id="evo-leg"></div>
+    </section>
+
+    <section class="painel p-lista" id="cidades">
+      <div class="p-cab"><span class="ico-l"></span><div><h2>10 cidades</h2><p id="lista-sub">—</p></div></div>
+      <div class="abas" role="tablist" aria-label="Ordem da lista">
+        <button type="button" role="tab" data-modo="maiores" aria-selected="true">Maiores</button>
+        <button type="button" role="tab" data-modo="apuradas" aria-selected="false">Mais apuradas</button>
+        <button type="button" role="tab" data-modo="completas" aria-selected="false">100% apuradas</button>
+      </div>
+      <ol class="lista" id="lista"></ol>
+    </section>
+
+    </div>
+  </div>
+
+  <footer class="res-pe" id="fonte"></footer>
+</div>
+
+<div class="dica" id="dica" hidden></div>
+<script src="mun.js?v=3"></script>
+</body>
+</html>

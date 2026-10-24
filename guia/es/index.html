@@ -114,6 +114,7 @@
     <a class="sec" href="#oque">Qué es</a>
     <a class="sec" href="#fluxo">Cómo funciona</a>
     <a class="sec" href="#guia">Guía de uso</a>
+    <a class="sec" href="#municipios">Municipios</a>
     <a class="sec" href="#exemplos">Ejemplos</a>
     <a class="sec" href="#roadmap">Roadmap</a>
     <span class="lang"><a href="../">PT</a><a href="../en/">EN</a><a class="on" href="./">ES</a></span>
@@ -227,6 +228,37 @@
     <p>wrangler es la herramienta de línea de comandos de Cloudflare; el publicador ejecuta <code>npx --yes wrangler@4 deploy</code>, por eso el <code>npx wrangler login</code> de los requisitos previos es obligatorio. Envía <code>saida/oficial/data</code> a la raíz del sitio y, si existe, la simulación en <code>saida/simficticio/data</code> a <code>/simulacao/</code>; así que el colector del paso 4 debe estar ejecutándose. Para publicar también la simulación, genérala antes: <code>python3 coleta/simular.py --saida saida/simficticio/data --intervalo 60 --ficticio &amp;</code>. El publicador sigue ejecutándose y vigilando; para detenerlo, Ctrl+C. El dominio debe estar en una zona de tu cuenta de Cloudflare (zona = un dominio administrado en ella).</p>
   </div></div>
 </div></section>
+<section id="municipios"><div class="wrap">
+  <span class="chip">Municipios · sistema aparte</span>
+  <h2>Cada ciudad en el mapa, saliendo del gris conforme el TSE va escrutando</h2>
+  <p class="sub">En <a href="https://municipios.inema.club" target="_blank" rel="noopener">municipios.inema.club</a> cada estado aparece con sus municipios dibujados. La ciudad empieza gris y se vuelve roja o azul, según el color de quien lidera en ella; cuanto más fuerte el color, más mesas ya fueron escrutadas. En el panel, el ítem <b>Municipios</b> del menú y el botón <b>Ver los municipios</b> en el cuadro del estado llevan directo allí.</p>
+  <div class="cta" style="margin:0 0 22px">
+    <a class="btn" href="https://municipios.inema.club" target="_blank" rel="noopener">Abrir los municipios</a>
+    <a class="btn ghost" href="https://municipios.inema.club/?sim=1" target="_blank" rel="noopener">Ver la simulación</a>
+  </div>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="../assets/municipios.jpg" alt="Mapa de Minas Gerais con los municipios coloreados, votos del estado, evolución y lista de ciudades (simulación con nombres ficticios)" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>🗺️ Mapa por estado</h3><p>Elija el estado en los botones de arriba. Pase el mouse o el dedo por una ciudad para ver los números; haga clic para abrir su cuadro completo. Tiene zoom y búsqueda por nombre.</p></div>
+    <div class="card"><h3>📊 Votos y evolución</h3><p>Barra con el total de cada candidato en el estado (suma de las ciudades ya escrutadas, marcada como cálculo de INEMA) y gráfico de la evolución a lo largo de la noche.</p></div>
+    <div class="card"><h3>🏙️ 10 ciudades</h3><p>Lista de las 10 ciudades en tres órdenes: <b>mayores</b> (más electores), <b>más escrutadas</b> y <b>100% escrutadas</b>.</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card"><h3>Separado del panel</h3><p>Recolector, archivos y sitio propios. El recolector lee los 27 índices por estado del TSE y descarga solo las ciudades que cambiaron, primero las que llevan más tiempo esperando. Si se detiene, el panel principal no se ve afectado.</p></div>
+    <div class="card"><h3>Mismas verificaciones</h3><p>Cada ciudad pasa por las mismas reglas del panel. Una ciudad con una cuenta que no cuadra se queda con el último valor bueno; el resto del estado sigue.</p></div>
+    <div class="card"><h3>Mapa del IBGE</h3><p>Dibujo de los 5.570 municipios proveniente de la malla oficial del IBGE, vinculado al TSE por el código IBGE de cada ciudad.</p></div>
+  </div>
+  <h3 style="margin:26px 0 8px">Ejecutando los municipios en su máquina</h3>
+  <p class="sub">Después del paso 1 de la guía (proyecto descargado). Comandos reales del repositorio, desde la carpeta del proyecto.</p>
+<pre><span class="c"># 1. (opcional) el dibujo ya viene en el repositorio; esto lo rehace a partir de la malla del IBGE</span>
+<span class="k">python3</span> municipios/gerar_malhas.py
+<span class="c"># 2. recolector del 2º turno (queda ejecutándose; cada 15 s)</span>
+<span class="k">python3</span> municipios/coletor_mun.py --saida saida/municipios &amp;
+<span class="c"># 3. sitio local</span>
+<span class="k">ln</span> -sfn ../../saida/municipios/data municipios/site/data
+<span class="k">python3</span> coleta/servidor_local.py --pasta municipios/site --porta 8471 &amp;
+<span class="c"># abra:</span> <span class="s">http://localhost:8471/</span>   <span class="c"># o la simulación:</span> <span class="s">http://localhost:8471/?sim=1</span></pre>
+  <p class="sub" style="margin-top:12px">Detalles, pruebas con el 1er turno y límites conocidos: <a href="https://github.com/inematds/eleicoes2026/tree/main/municipios" target="_blank" rel="noopener">municipios/README.md</a>.</p>
+</div></section>
 <section id="exemplos"><div class="wrap">
   <span class="chip">Ejemplos</span>
   <h2>Cómo se ve en pantalla</h2>
@@ -241,7 +273,7 @@
   <h2>Lo que ya existe y lo que viene después</h2>
   <p class="sub">La primera versión se hizo para la segunda vuelta del 25/10/2026.</p>
   <div class="phase"><div class="tag">Hecho</div><div class="d"><strong>Presidente · Brasil + 27 estados + exterior</strong><span>Colector con verificación, paneles Central y Clásica, mapa real, simulación acelerada, publicación estática.</span></div></div>
-  <div class="phase"><div class="tag">Próximo</div><div class="d"><strong>Municipios</strong><span>Mapa y resultado por ciudad. Los archivos por municipio ya existen en el TSE; falta el mapa municipal en el panel.</span></div></div>
+  <div class="phase"><div class="tag">Hecho</div><div class="d"><strong>Municipios</strong><span>Mapa de cada estado con las ciudades coloreándose en vivo, votos y evolución del estado, 10 ciudades y simulación, en municipios.inema.club (24/10/2026).</span></div></div>
   <div class="phase"><div class="tag">Después</div><div class="d"><strong>Otras elecciones</strong><span>Gobernador y las próximas elecciones: como el colector y la pantalla están separados, solo cambia la parte del colector.</span></div></div>
 </div></section>
 <footer>

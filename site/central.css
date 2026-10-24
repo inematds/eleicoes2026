@@ -236,3 +236,11 @@ h1, h2 { font-family: Sora, Inter, sans-serif; margin: 0; }
 .tab tbody tr.sel td { background: rgba(250,204,21,.10); font-weight: 700; }
 .tab tbody tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--ouro); }
 @media (max-width: 1000px) { .grade { grid-template-areas: "uf" "dist" "mapa" "res" "evo" "part" "tab"; } }
+
+/* botão Municípios no card do estado (sistema à parte) */
+.uf-topo { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 2px 0 12px; }
+.uf-topo .uf-nome { margin: 0; }
+.btn-mun { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font: 700 .86rem Sora; color: var(--ouro-ink); background: linear-gradient(180deg, var(--ouro), var(--ouro2)); border-radius: 10px; padding: 9px 14px; box-shadow: 0 0 18px -6px var(--brilho); white-space: nowrap; }
+.btn-mun:hover { filter: brightness(1.08); }
+.btn-mun svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
+@media (max-width: 640px) { .btn-mun { margin-left: 0; } }

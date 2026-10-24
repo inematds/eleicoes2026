@@ -6,3 +6,5 @@ handoffs/
 .wrangler/
 **/.wrangler/
 node_modules/
+municipios/site/data
+municipios/site/data-*

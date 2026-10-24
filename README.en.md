@@ -20,6 +20,7 @@ Two separate parts, linked only by the contract's JSON files:
 | 1. Data | `coleta/` | reads the TSE, stores the raw data, checks, consolidates and publishes versioned JSON |
 | Contract | `contrato/README.md` | JSON format (schema 1), rules for each number, blocks |
 | 2. Presentation | `site/` | `index.html` (Central, default) and `classica.html`; never accesses the TSE |
+| 3. Municipalities (separate) | `municipios/` | own collector, map and site, city by city; never touches the dashboard — see `municipios/README.md` |
 
 Initial analysis and decisions: `ANALISE.md`. Fixed failures: `FALHAS.md`.
 
@@ -45,8 +46,13 @@ Initial analysis and decisions: `ANALISE.md`. Fixed failures: `FALHAS.md`.
    pending) and `journalctl --user -u eleicoes-coletor -f`.
 9. 🧠 **State stuck on a block** (e.g. the TSE corrected a number downward): check
    `coleta.jsonl` and, if the official data is right, `touch saida/oficial/aceitar/<abr>` (valid once).
-10. 🧠 **Publish to the internet** (eleicoes.inema.club, Cloudflare): pending authorization
-    of the Cloudflare API — see `ANALISE.md` §4–5.
+10. ⚙️ **Publish to the internet** (eleicoes.inema.club, Cloudflare): the `eleicoes-publicar` service
+    (`ferramentas/publicar_cf.py --laco`) deploys on every change — see `ANALISE.md` §4–5.
+11. ⚙️ **Municipalities (separate system)**: the `eleicoes-municipios` service reads the 27 per-state
+    indexes and downloads only the cities that changed; published by `eleicoes-municipios-publicar`
+    to municipios.inema.club (separate Cloudflare Worker). Check: `cat saida/municipios/status.json`.
+12. 🧠 **Link from the dashboard**: "Municípios" menu item and "Ver os municípios de <state>" button
+    on the state card take you to the same state at municipios.inema.club. Details: `municipios/README.md`.
 
 ## Tests
 
