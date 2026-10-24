@@ -35,3 +35,9 @@
 .menu a.sim-btn.ativo-sim { background: linear-gradient(180deg, var(--m-ouro), var(--m-ouro2)); color: var(--m-ink); }
 [data-estilo="papel"] .menu a.sim-btn:not(.ativo-sim) { color: #854d0e; border-color: #EAB308; }
 @media (max-width: 1000px) { .menu a.sim-btn { margin-top: 0; } }
+
+/* contador de acessos (24/10): lateral, acima do domínio; no celular vai para a linha do título */
+.acessos { font: 600 .82rem Inter, sans-serif; color: var(--m-mut); margin-bottom: 8px; }
+.acessos b { font: 800 1.05rem Sora; color: var(--m-ouro); margin-right: 4px; font-variant-numeric: tabular-nums; }
+.acessos-cel b { color: var(--m-ouro, #FACC15); font-weight: 700; }
+@media (min-width: 1001px) { .acessos-cel { display: none !important; } }

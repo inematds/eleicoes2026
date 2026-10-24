@@ -1,7 +1,8 @@
 # Site de MUNICÍPIOS no Cloudflare — Worker separado do painel oficial ("eleicoes2026").
 # Montado por municipios/publicar_mun.py em saida/municipios-publicar/ e enviado com `wrangler deploy`.
-# Ainda NÃO publicado: o domínio abaixo é proposta, a confirmar antes do 1º envio.
 name = "eleicoes2026-municipios"
+# script só para /api/acessos (contador); o resto é arquivo estático e nem passa por ele
+main = "contador.js"
 compatibility_date = "2026-10-01"
 # conta: a do login do wrangler (ou CLOUDFLARE_ACCOUNT_ID no ambiente) — não fica no repositório
 workers_dev = false
@@ -9,5 +10,14 @@ routes = [{ pattern = "municipios.inema.club", custom_domain = true }]
 
 [assets]
 directory = "../../saida/municipios-publicar"
+binding = "ASSETS"
 html_handling = "auto-trailing-slash"
 not_found_handling = "none"
+
+[[durable_objects.bindings]]
+name = "CONTADOR"
+class_name = "Contador"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Contador"]

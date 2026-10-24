@@ -53,6 +53,9 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     Acompanhar: `cat saida/municipios/status.json`. Detalhes: `municipios/README.md`.
 12. ⚙️ **Publicar os municípios**: serviço `eleicoes-municipios-publicar`
     (`municipios/publicar_mun.py --laco 20`) envia a municipios.inema.club (Worker separado) a cada mudança.
+14. ⚙️ **Contador de acessos** (os dois sites): `contador.js` no Worker de cada um (Durable Object), só em
+    `/api/acessos`; a página soma 1 por sessão do navegador e mostra na lateral (no celular, na linha do título).
+    Ler: `python3 -c "import urllib.request;print(urllib.request.urlopen('https://eleicoes.inema.club/api/acessos').read())"`.
 13. 🧠 **Ligação com o painel**: item "Municípios" no menu e botão "Ver os municípios de <estado>" no card
     do estado levam ao mesmo estado em municipios.inema.club (com `?sim=1` na simulação).
 
