@@ -26,7 +26,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import nucleo as N  # noqa: E402
@@ -127,7 +127,11 @@ class Coletor:
                     continue
                 k = chave_ab(item)
                 h = hora_tse(item.get("dt"), item.get("ht"))
-                pub = self.est["abr"].get(abr, {})
+                # br e zz vêm no índice com a hora local de um país do exterior (~16 h à frente):
+                # hora no futuro não serve para comparar com o arquivo, senão o br nunca publica
+                if h and h > datetime.now() + timedelta(minutes=10):
+                    h = None
+                pub =self.est["abr"].get(abr, {})
                 h_pub = datetime.fromisoformat(pub["hora_pub"]) if pub.get("hora_pub") else None
                 if pub.get("chave_ab") == k or (h and h_pub and h < h_pub):
                     self.pendentes.pop(abr, None)  # já temos isso (ou algo mais novo) publicado
