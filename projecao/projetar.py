@@ -108,6 +108,29 @@ def faixa_final(res, pct_cid):
     return pa - m, pa + m
 
 
+# Faixa por estado, pelo % do eleitorado do estado já em cidades encerradas.
+# PISO_UF[k] vale para FAIXAS_EL_UF[k]; None = projeção instável (não mostra número). Ver calibracao.py.
+# Medido em 6.048 casos (estado × momento): piso p/ 90% = 1,4 · 1,3 · 1,0 · 0,7 · 0,4; aqui com ~20% de folga.
+FAIXAS_EL_UF = [(0, 1), (1, 5), (5, 15), (15, 30), (30, 60), (60, 101)]
+PISO_UF = [None, 1.7, 1.6, 1.2, 1.0, 0.5]
+
+
+def _piso_uf(pct_el):
+    for (a, b), p in zip(FAIXAS_EL_UF, PISO_UF):
+        if a <= pct_el < b:
+            return p
+    return PISO_UF[-1]
+
+
+def uf_estavel(u):
+    return _piso_uf(u["pct_el"]) is not None and u["cid_fin"] >= min(3, u["cid_tot"])
+
+
+def faixa_uf(meia_modelo, pct_el):
+    p = _piso_uf(pct_el)
+    return max(FATOR_FAIXA * meia_modelo, p if p is not None else 0.0)
+
+
 def calcula(a):
     base_raw, _, _ = cidades(a.base1t)
     atual_raw, man2, cand2 = cidades(a.atual)
@@ -178,6 +201,32 @@ def calcula(a):
         "nome_regiao": M.NOME_REGIAO,
     })
     out["virada"] = virada(tot, agora_tse, ca, cb)
+    out["ufs"] = por_estado(res, a, ca, ext)
+    return out
+
+
+def por_estado(res, a, ca, ext):
+    """Projeção de cada estado (e do exterior), com faixa calibrada; instável = sem número."""
+    out = {}
+    for u, v in res["ufs"].items():
+        r = ultimo(a.oficial, u)
+        tse = None
+        if r and r["votos"]["validos"]:
+            tse = {"pct_a": next((c["pct_validos"] for c in r["candidatos"] if c["numero"] == ca), None),
+                   "pct_secoes": r["secoes"]["pct_totalizadas"]}
+        e = {"pct_cid": round(100 * v["cid_fin"] / v["cid_tot"], 1) if v["cid_tot"] else None,
+             "pct_el": round(v["pct_el"], 1), "cid_fin": v["cid_fin"], "cid_tot": v["cid_tot"], "tse": tse}
+        if u == "zz":
+            final = ext is not None and ext[2] is not None
+            e["estavel"] = final
+            if final:
+                e.update(pct_a=round(v["pct_a"], 2), lo=round(v["pct_a"], 2), hi=round(v["pct_a"], 2), final=True)
+        elif uf_estavel(v):
+            m = faixa_uf(v["meia_modelo"], v["pct_el"])
+            e.update(estavel=True, pct_a=round(v["pct_a"], 2), lo=round(v["pct_a"] - m, 2), hi=round(v["pct_a"] + m, 2))
+        else:
+            e["estavel"] = False
+        out[u] = e
     return out
 
 

@@ -17,7 +17,7 @@
   function vivo(est, txt) { const el = $("#vivo"); el.dataset.estado = est; el.querySelector("span").textContent = txt; }
 
   function aguardando(d) {
-    $("#pj-aguardando").hidden = false; $("#pj-resultado").hidden = true; $("#pj-transf").hidden = true; $("#pj-hist").hidden = true;
+    $("#pj-aguardando").hidden = false; $("#pj-resultado").hidden = true; $("#pj-transf").hidden = true; $("#pj-hist").hidden = true; $("#pj-ufs").hidden = true;
     const b = d.base, nomes = { N: "Norte", NE: "Nordeste", CO: "Centro-Oeste", SE: "Sudeste", S: "Sul" };
     $("#pj-ag-txt").innerHTML = "A projeção liga sozinha com pelo menos <b>" + b.minimo_cidades + " cidades</b> com a apuração encerrada, <b>" +
       b.minimo_por_regiao + " em cada região</b>" + (b.minimo_ufs ? ", " + (b.minimo_por_uf || 3) + " em cada um de <b>" + b.minimo_ufs + " estados</b> e <b>" + p1.format(b.minimo_pct_eleitorado) + "% do eleitorado</b>" : "") +
@@ -52,6 +52,7 @@
     tabela();
     virada(d);
     historico();
+    estados();
     const idade = Date.now() - new Date(d.calculado_em).getTime();
     if (idade > 5 * 60000) vivo("atrasado", "Sem recálculo há " + Math.round(idade / 60000) + " min");
     else vivo("vivo", "Ao vivo");
@@ -109,6 +110,55 @@
       $("#pj-hist-sub").textContent = "% dos válidos de " + titulo(a.nome_urna) + " a cada cálculo (" + e.length + " registros). Cada cálculo publicado fica guardado; nada é reescrito.";
     } catch (err) { /* histórico é opcional */ }
   }
+
+  const NOMES_UF = { ac: "Acre", al: "Alagoas", am: "Amazonas", ap: "Amapá", ba: "Bahia", ce: "Ceará", df: "Distrito Federal", es: "Espírito Santo",
+    go: "Goiás", ma: "Maranhão", mg: "Minas Gerais", ms: "Mato Grosso do Sul", mt: "Mato Grosso", pa: "Pará", pb: "Paraíba", pe: "Pernambuco",
+    pi: "Piauí", pr: "Paraná", rj: "Rio de Janeiro", rn: "Rio Grande do Norte", ro: "Rondônia", rr: "Roraima", rs: "Rio Grande do Sul",
+    sc: "Santa Catarina", se: "Sergipe", sp: "São Paulo", to: "Tocantins", zz: "Exterior" };
+  let ordemUf = "disputa", ufsAberto = false;
+
+  function estados() {
+    if (!dados || !dados.ufs) return;
+    const [a, b] = dados.candidatos, lista = Object.entries(dados.ufs);
+    lista.sort((x, y) => {
+      if (ordemUf === "az") return NOMES_UF[x[0]].localeCompare(NOMES_UF[y[0]], "pt");
+      if (x[1].estavel !== y[1].estavel) return x[1].estavel ? -1 : 1;
+      const dx = x[1].estavel ? Math.abs(x[1].pct_a - 50) : 99, dy = y[1].estavel ? Math.abs(y[1].pct_a - 50) : 99;
+      return dx - dy || NOMES_UF[x[0]].localeCompare(NOMES_UF[y[0]], "pt");
+    });
+    const na = esc(titulo(a.nome_urna)), nb = esc(titulo(b.nome_urna));
+    $("#pj-ufs-sub").textContent = "% dos válidos de " + titulo(a.nome_urna) + " (vermelho) × " + titulo(b.nome_urna) + " (azul) em cada estado, com a faixa provável";
+    $("#pj-ufs-ord").querySelectorAll("button").forEach((bt) => bt.setAttribute("aria-pressed", String(bt.dataset.o === ordemUf)));
+    $("#pj-ufs-lista").innerHTML = lista.map(([u, e]) => {
+      const ap = e.tse && e.tse.pct_a != null ? "Apurado " + p2.format(e.tse.pct_a) + "% · " + p1.format(e.tse.pct_secoes) + "% das seções" : "Sem apuração ainda";
+      const cid = u === "zz" ? "" : nf.format(e.cid_fin) + " de " + nf.format(e.cid_tot) + " cidades encerradas";
+      let barra, num;
+      if (e.estavel) {
+        barra = '<div class="pj-b pj-b-uf"><i class="ba" style="width:' + e.pct_a + '%"></i><i class="bb" style="width:' + (100 - e.pct_a) + '%"></i>' +
+          (e.final ? "" : '<span class="pj-band" style="left:' + e.lo + "%;width:" + Math.max(0.4, e.hi - e.lo) + '%"></span>') + '<span class="pj-meio"></span></div>';
+        const ra = Math.round(e.pct_a * 10) / 10;
+        num = '<b class="ca">' + p1.format(ra) + '%</b> × <b class="cb">' + p1.format(100 - ra) + "%</b>" +
+          (e.final ? ' <small>(final)</small>' : ' <small>entre ' + p1.format(e.lo) + " e " + p1.format(e.hi) + "</small>");
+      } else {
+        const t = e.tse && e.tse.pct_a != null ? e.tse.pct_a : null;
+        barra = '<div class="pj-b pj-b-uf pj-inst">' + (t != null ? '<i class="ba" style="width:' + t + '%"></i><i class="bb" style="width:' + (100 - t) + '%"></i>' : "") + '<span class="pj-meio"></span></div>';
+        num = '<span class="pj-inst-t">projeção instável</span>';
+      }
+      const link = u === "zz" ? "index.html#/uf/zz" : "index.html#/uf/" + u;
+      return '<a class="pj-uf" href="' + link + '"><div class="pj-uf-n"><b>' + NOMES_UF[u] + "</b><small>" + cid + '</small></div><div class="pj-uf-b">' + barra +
+        '</div><div class="pj-uf-v">' + num + "<small>" + ap + "</small></div></a>";
+    }).join("");
+    $("#pj-ufs").hidden = !ufsAberto;
+  }
+
+  $("#pj-ver-ufs").addEventListener("click", () => {
+    ufsAberto = !ufsAberto;
+    $("#pj-ver-ufs").setAttribute("aria-expanded", String(ufsAberto));
+    $("#pj-ver-ufs").textContent = ufsAberto ? "Esconder estados" : "Ver por estado";
+    estados();
+    if (ufsAberto) $("#pj-ufs").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("#pj-ufs-ord").addEventListener("click", (ev) => { const bt = ev.target.closest("button[data-o]"); if (bt) { ordemUf = bt.dataset.o; estados(); } });
 
   $("#pj-reg-opts").addEventListener("click", (e) => { const bt = e.target.closest("button[data-r]"); if (bt) { reg = bt.dataset.r; tabela(); } });
 

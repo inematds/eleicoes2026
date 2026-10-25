@@ -52,10 +52,13 @@ def cenario(args):
     if not pronto:
         return None
     res = mod.roda(atual, n_boot=PJ.N_BOOT, semente=s)
+    verd_uf = G.setdefault("verd_uf_" + nome, {u: v["pct_a"] for u, v in mod.roda(final)["ufs"].items()})
     pct_cid = 100 * len(fin) / len(mod.cds)
+    ufs = [{"uf": u, "erro": v["pct_a"] - verd_uf[u], "meia_modelo": v["meia_modelo"], "pct_el": v["pct_el"],
+            "cid_fin": v["cid_fin"], "cid_tot": v["cid_tot"]} for u, v in res["ufs"].items() if u in verd_uf]
     return {"dados": nome, "ordem": tipo, "s": s, "frac": frac, "pct_cid": pct_cid, "pct_el": est["pct_eleitorado_finalizado"],
             "erro": res["pct_a"] - verdade, "meia_modelo": (res["faixa_a"][1] - res["faixa_a"][0]) / 2,
-            "piso": PJ.faixa_minima(pct_cid)}
+            "piso": PJ.faixa_minima(pct_cid), "ufs": ufs}
 
 
 def cobre(r, fator):
@@ -95,7 +98,33 @@ def main():
             sub = [r for r in rs if a <= r["pct_cid"] < b]
             if sub:
                 print(f"  {a:>2}–{b:>3}%: {100*np.mean([cobre(r, escolhido) for r in sub]):5.1f}% · meia-faixa média {np.mean([max(escolhido*r['meia_modelo'], r['piso']) for r in sub]):.2f} p.p.")
+    estados(rs)
     json.dump(rs, open(os.path.join(P, "saida", "backtest2022", "calibracao.json"), "w"))
+
+
+def estados(rs):
+    """Faixa por estado: cobertura com a regra atual e o menor piso que dá ≥ 90% em cada faixa de
+    % do eleitorado do estado já em cidades encerradas."""
+    us = [u for r in rs for u in r["ufs"]]
+    print(f"\n=== por estado: {len(us)} casos (estado × momento) ===")
+    cob = [abs(u["erro"]) <= PJ.faixa_uf(u["meia_modelo"], u["pct_el"]) for u in us if PJ.uf_estavel(u)]
+    if cob:
+        print(f"regra atual: {100*np.mean(cob):.1f}% de cobertura nos {len(cob)} casos mostrados como estáveis "
+              f"({100*len(cob)/len(us):.0f}% dos casos)")
+    for a, b in [(0, 5), (5, 15), (15, 30), (30, 60), (60, 101)]:
+        sub = [u for u in us if a <= u["pct_el"] < b]
+        if not sub:
+            continue
+        piso = None
+        for f in np.arange(0.0, 15.01, 0.1):
+            if np.mean([abs(u["erro"]) <= max(u["meia_modelo"], f) for u in sub]) >= 0.9:
+                piso = round(float(f), 1)
+                break
+        e = np.abs([u["erro"] for u in sub])
+        est = [u for u in sub if PJ.uf_estavel(u)]
+        c = np.mean([abs(u["erro"]) <= PJ.faixa_uf(u["meia_modelo"], u["pct_el"]) for u in est]) if est else float("nan")
+        print(f"  {a:>3}–{b:>3}% do eleitorado do estado: {len(sub):4d} casos · erro médio {e.mean():.2f} · p90 {np.percentile(e, 90):.2f} · "
+              f"piso p/ 90%: {piso} · regra atual {100*c:.0f}% em {len(est)} estáveis")
 
 
 if __name__ == "__main__":

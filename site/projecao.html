@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="menu.css?v=5">
 <link rel="stylesheet" href="central.css?v=18">
-<link rel="stylesheet" href="projecao.css?v=4">
+<link rel="stylesheet" href="projecao.css?v=5">
 </head>
 <body>
 <div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span></span></div>
@@ -62,6 +62,14 @@
     <div class="pj-barra" id="pj-barra"></div>
     <div class="pj-base" id="pj-base"></div>
     <div class="pj-virada" id="pj-virada" hidden></div>
+    <button type="button" class="pj-ver-ufs" id="pj-ver-ufs" aria-expanded="false" aria-controls="pj-ufs">Ver por estado</button>
+  </section>
+
+  <section class="painel" id="pj-ufs" hidden>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Projeção por estado</h2><p id="pj-ufs-sub">% dos válidos de cada estado, com a faixa provável</p></div>
+      <div class="map-opts" id="pj-ufs-ord" role="group" aria-label="Ordem"><button type="button" data-o="disputa" aria-pressed="true">Mais disputados</button><button type="button" data-o="az" aria-pressed="false">A–Z</button></div></div>
+    <div class="pj-ufs" id="pj-ufs-lista"></div>
+    <p class="pj-nota">Estado com pouco eleitorado em cidades encerradas aparece como “instável” e mostra só o apurado do TSE. Clique num estado para abrir o painel dele.</p>
   </section>
 
   <section class="painel" id="pj-hist" hidden>
@@ -102,6 +110,7 @@
           </tbody></table>
         <p class="pj-p" style="margin-top:8px">Num segundo teste, mais duro (simulação com um desvio sorteado em cada cidade), o erro chegou a 0,9 p.p. com 6% das cidades e 0,5 p.p. com 30%. Por isso a faixa mostrada nunca é menor que isso.</p>
         <p class="pj-p"><b>Calibração da faixa:</b> em 224 momentos de noite simulados (2022 e simulação, ordens de chegada diferentes), o resultado final ficou dentro da faixa mostrada em 98,7% das vezes — acima de 90% em cada etapa (até 10%, 10–30%, 30–60% e mais de 60% das cidades). Parte desses testes ajudou a definir o piso da faixa, então isso não é garantia para esta eleição.</p>
+        <p class="pj-p"><b>Por estado:</b> em 6.048 casos (estado × momento da noite), a faixa de cada estado conteve o resultado final do estado em 95,5% das vezes (93,5% a 97,6% conforme o quanto do estado já apurou). Estado com menos de 1% do eleitorado em cidades encerradas, ou menos de 3 cidades encerradas, aparece como “instável”.</p>
       </div>
       <div class="aud-bloco">
         <h3>Limites</h3>
@@ -124,7 +133,7 @@
   </section>
 </div>
 
-<script src="projecao.js?v=7"></script>
+<script src="projecao.js?v=9"></script>
 <script src="acessos.js?v=1"></script>
 <script src="compartilhar.js?v=1"></script>
 </body>

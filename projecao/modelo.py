@@ -103,6 +103,10 @@ class Modelo:
         self.peso_medio = self.te1.mean()
         self.Tprior = prior(self.grupos, a, b)
         self.idx = {cd: i for i, cd in enumerate(self.cds)}
+        self.lista_uf = sorted(set(self.uf)) + ["zz"]           # zz = exterior (última linha)
+        self.iuf = np.array([self.lista_uf.index(u) for u in self.uf] + [len(self.lista_uf) - 1])
+        self.cid_uf = {u: int(np.sum(self.uf == u)) for u in self.lista_uf[:-1]}
+        self.te_uf = {u: float(self.te1[self.uf == u].sum()) for u in self.lista_uf[:-1]}
 
     # ---------- ajuste em camadas ----------
     def ajusta_camadas(self, fin, Y):
@@ -132,34 +136,38 @@ class Modelo:
     def projeta(self, atual2t, T, exterior=None):
         """atual2t: {cd: cidade_2t}. Finalizada → voto real; parcial → real + resto projetado;
         sem dado → projetada pelo 1º turno. exterior: (votos_origem_1t, te, destinos_2t_ou_None)."""
-        tot = np.zeros(4)
-        resto = np.zeros(len(self.cds) + 1)   # eleitores ainda projetados (não apurados) por cidade
+        contrib = np.zeros((len(self.cds) + 1, 4))   # votos (reais + projetados) de cada cidade; última = exterior
+        resto = np.zeros(len(self.cds) + 1)          # eleitores ainda projetados (não apurados) por cidade
         for i, cd in enumerate(self.cds):
             c2 = atual2t.get(cd)
             Tc = T[(self.uf[i], self.porte[i], self.perfil[i])]
             te = c2["te"] if c2 and c2.get("te") else self.te1[i]
             prev = (self.X[i] @ Tc) * te
             if c2 and c2.get("and") == "finalizada":
-                tot += destinos(c2, self.a, self.b)
+                contrib[i] = destinos(c2, self.a, self.b)
             elif c2 and c2.get("st") and c2.get("ts"):
                 d2 = destinos(c2, self.a, self.b)
                 # parte já apurada = eleitorado das seções apuradas (comparecimento + abstenção nelas,
                 # como o TSE informa); seções têm tamanhos diferentes, então st/ts só como reserva
                 frac = d2.sum() / te if 0 < d2.sum() <= te else min(1.0, c2["st"] / c2["ts"])
-                tot += d2 + (1 - frac) * prev
+                contrib[i] = d2 + (1 - frac) * prev
                 resto[i] = (1 - frac) * te
             else:
-                tot += prev
+                contrib[i] = prev
                 resto[i] = te
         if exterior is not None:
             v1, te, d2 = exterior
             if d2 is not None:
-                tot += d2
+                contrib[-1] = d2
             else:
-                tot += (v1 / te) @ T["BR"] * te
+                contrib[-1] = (v1 / te) @ T["BR"] * te
                 resto[-1] = te
         self.ultimo_resto = resto
-        return tot
+        self.ultimo_uf = np.zeros((len(self.lista_uf), 4))
+        np.add.at(self.ultimo_uf, self.iuf, contrib)
+        self.ultimo_resto_uf = np.zeros(len(self.lista_uf))
+        np.add.at(self.ultimo_resto_uf, self.iuf, resto ** 2)
+        return contrib.sum(0)
 
     def desvio_cidade(self, fin, Y, T):
         """Quanto uma cidade foge do padrão: desvio-padrão do resíduo de (A − B), em fração do
@@ -191,19 +199,36 @@ class Modelo:
         sig = self.desvio_cidade(fin, Y, T)
         dp_resto = 100 * sig * np.sqrt(np.sum(self.ultimo_resto ** 2)) / (2 * (tot[0] + tot[1]))
         res = {"tot": tot, "pct_a": pa, "T": T, "n_fin": len(fin), "fin": fin, "desvio_cidade": sig, "dp_resto": dp_resto}
+        tuf, ruf = self.ultimo_uf.copy(), self.ultimo_resto_uf.copy()
+        valid_uf = np.maximum(1.0, tuf[:, 0] + tuf[:, 1])
+        pa_uf = 100 * tuf[:, 0] / valid_uf
+        dp_resto_uf = 100 * sig * np.sqrt(ruf) / (2 * valid_uf)
         # incerteza 2: as próprias taxas (reamostrando as cidades encerradas)
-        dp_taxas = 0.0
+        dp_taxas, dp_taxas_uf = 0.0, np.zeros(len(self.lista_uf))
         if n_boot and len(fin):
             rng = np.random.default_rng(semente)
-            amostra = []
+            amostra, amostra_uf = [], []
             for _ in range(n_boot):
                 j = rng.integers(0, len(fin), len(fin))
                 Tb = self.ajusta_camadas(fin[j], Y[j])
                 tb = self.projeta(atual2t, Tb, exterior)
                 amostra.append(100 * tb[0] / (tb[0] + tb[1]))
+                u = self.ultimo_uf
+                amostra_uf.append(100 * u[:, 0] / np.maximum(1.0, u[:, 0] + u[:, 1]))
             dp_taxas = float(np.std(amostra))
+            dp_taxas_uf = np.std(np.array(amostra_uf), axis=0)
             self.projeta(atual2t, T, exterior)  # devolve ultimo_resto ao ajuste principal
         meia = 1.645 * float(np.sqrt(dp_resto ** 2 + dp_taxas ** 2))
         res["dp_taxas"] = dp_taxas
         res["faixa_a"] = (pa - meia, pa + meia)
+        # por estado: cidades encerradas e eleitorado já em cidades encerradas
+        fin_uf = {u: 0 for u in self.lista_uf[:-1]}
+        el_uf = {u: 0.0 for u in self.lista_uf[:-1]}
+        for i in fin:
+            fin_uf[self.uf[i]] += 1
+            el_uf[self.uf[i]] += self.te1[i]
+        res["ufs"] = {u: {"pct_a": float(pa_uf[k]), "meia_modelo": 1.645 * float(np.sqrt(dp_resto_uf[k] ** 2 + dp_taxas_uf[k] ** 2)),
+                          "tot": tuf[k], "cid_fin": fin_uf.get(u, 0), "cid_tot": self.cid_uf.get(u, 0),
+                          "pct_el": 100 * el_uf[u] / self.te_uf[u] if u in el_uf and self.te_uf[u] else 0.0}
+                      for k, u in enumerate(self.lista_uf) if u != "zz" or exterior is not None}
         return res
