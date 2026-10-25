@@ -1,0 +1,10 @@
+[Unit]
+Description=Eleições 2026 INEMA — desliga as simulações às 16h do 2º turno (roda no boot se a máquina estava desligada)
+
+[Timer]
+OnCalendar=2026-10-25 16:00:00
+Persistent=true
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

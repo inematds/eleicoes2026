@@ -1,0 +1,7 @@
+[Unit]
+Description=Eleições 2026 INEMA — desliga as simulações (país e municípios) e põe o site local em modo oficial
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/nmaldaner/projetos/eleicoes2026
+ExecStart=/bin/bash -c "/home/nmaldaner/projetos/eleicoes2026/ferramentas/modo.sh oficial; systemctl --user stop eleicoes-simpub eleicoes-sim; /home/nmaldaner/projetos/eleicoes2026/municipios/simulacao.sh parar; true"

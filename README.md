@@ -31,11 +31,12 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
 1. ⚙️ **Coletor ligado** (serviço permanente, volta sozinho):
    `systemctl --user status eleicoes-coletor` — a cada 15 s pede ao TSE o índice
    `oficial/ele2026/6258/dados/br/br-e006258-ab.json` (com ETag; sem novidade = 304).
-   Antes da abertura (TSE só divulga às 17h de Brasília, inclusive o exterior) os coletores ficam
-   parados; o timer `eleicoes-religar-17h` liga `eleicoes-coletor` + `eleicoes-municipios` no dia às 17:00
-   (`systemctl --user list-timers eleicoes-religar-17h`; ligar na mão: `systemctl --user start eleicoes-coletor eleicoes-municipios`).
-   Às 16:00 o timer `eleicoes-desliga-sim-16h` desliga as simulações (país e municípios): `modo.sh oficial`,
-   para `eleicoes-simpub` (o `/simulacao/` público fica congelado) e `municipios/simulacao.sh parar`.
+   Antes da abertura (TSE só divulga às 17h de Brasília, inclusive o exterior) os coletores não consultam o TSE:
+   `eleicoes-coletor` e `eleicoes-municipios` têm o drop-in `espera-17h.conf` (`ferramentas/espera_ate.sh`,
+   cópia em `ferramentas/systemd/`), que segura a partida até 25/10 17:00 — vale também se o servidor reiniciar.
+   Às 16:00 o timer permanente `eleicoes-desliga-sim.timer` (Persistent: roda no boot se a máquina estava
+   desligada) desliga as simulações (país e municípios), põe o site local em modo oficial e congela o `/simulacao/`.
+   Reinício do servidor: todos os serviços `eleicoes-*` são `enabled` e o usuário tem linger, então voltam sozinhos.
 2. ⚙️ **Detecta mudança**: compara data/hora/seções de cada abrangência (BR, 27 UFs, exterior)
    com o último publicado e baixa só o `-u.json` de quem mudou.
 3. ⚙️ **Guarda o bruto** em `saida/oficial/bruto/<abr>/` + log em `saida/oficial/coleta.jsonl`.
