@@ -1,0 +1,14 @@
+[Unit]
+Description=Eleições 2026 INEMA — Projeção (transferência de votos 1º→2º turno; só lê arquivos locais)
+
+[Service]
+WorkingDirectory=/home/nmaldaner/projetos/eleicoes2026
+ExecStart=/usr/bin/python3 /home/nmaldaner/projetos/eleicoes2026/projecao/projetar.py --laco 60
+Restart=always
+RestartSec=10
+MemoryMax=800M
+CPUQuota=200%
+Environment=PYTHONUNBUFFERED=1 OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2
+
+[Install]
+WantedBy=default.target

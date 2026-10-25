@@ -67,6 +67,13 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     título. Só no navegador (menu de compartilhar do aparelho ou copia o link, sem `?sim=1`), sem servidor nem custo.
 16. ⚙️ **Fonte e auditoria** (seção `#fonte` da Central): dado da tela com link para o arquivo do TSE, horários,
     versão e sha256 (`auditoria()` em `site/central.js`), mais como buscamos, o que conferimos e como conferir.
+17. ⚙️ **Projeção INEMA** (menu "Projeção", `site/projecao.html`): serviço `eleicoes-projecao`
+    (`projecao/projetar.py --laco 60`, só lê arquivos locais) estima a transferência de votos 1º→2º turno
+    nas cidades já encerradas (país → região → estado → porte → perfil) e projeta as que faltam; grava
+    `saida/oficial/data/projecao.json`, que o publicador leva junto. Liga com ≥250 cidades encerradas e ≥15 por
+    região; faixa = incerteza das taxas + desvio das cidades que faltam, com piso pelo pior erro dos testes.
+    Teste: `python3 projecao/backtest_2022.py saida/backtest2022/bruto` (dados abertos do TSE 2022 em
+    `saida/backtest2022/bruto/{partido,detalhe}`). Sem pesquisa de opinião; na simulação, não aparece.
 
 ## Testes
 

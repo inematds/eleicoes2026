@@ -19,6 +19,8 @@ MANTER = 4  # versões por abrangência
 
 HEADERS = """/data/latest.json
   Cache-Control: no-cache, max-age=0
+/data/projecao.json
+  Cache-Control: no-cache, max-age=0
 /data/historico/*
   Cache-Control: no-cache, max-age=0
 /data/br/*
@@ -63,6 +65,9 @@ def copia_dados(fonte, alvo):
         os.makedirs(os.path.dirname(d), exist_ok=True)
         shutil.copy2(os.path.join(fonte, rel), d)
     shutil.copy2(os.path.join(fonte, "latest.json"), os.path.join(alvo, "latest.json"))  # manifesto
+    proj = os.path.join(fonte, "projecao.json")  # Projeção INEMA (projecao/projetar.py), só no oficial
+    if os.path.exists(proj):
+        shutil.copy2(proj, os.path.join(alvo, "projecao.json"))
     return m["versao"]
 
 
@@ -92,6 +97,8 @@ def assinatura():
     for f in sorted(FONTES.values()):
         try:
             h.update(open(os.path.join(f, "latest.json"), "rb").read())
+            if os.path.exists(os.path.join(f, "projecao.json")):
+                h.update(open(os.path.join(f, "projecao.json"), "rb").read())
         except FileNotFoundError:
             pass
     h.update(str(max((os.path.getmtime(os.path.join(SITE, x)) for x in os.listdir(SITE) if x != "data"), default=0)).encode())
