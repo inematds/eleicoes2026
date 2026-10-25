@@ -79,6 +79,27 @@ unit eleicoes-municipios "Eleições 2026 INEMA (reserva) — coletor de municí
   "/usr/bin/python3 $R/municipios/coletor_mun.py --saida $R/saida/municipios --intervalo 15 --versao-inicial $BASE" 400M
 unit eleicoes-projecao "Eleições 2026 INEMA (reserva) — Projeção (só lê arquivos locais)" \
   "/usr/bin/python3 $R/projecao/projetar.py --laco 60" 800M
+# Exterior (boletins de urna por seção): uma rodada por hora, aos :35 (a máquina principal roda aos :05)
+cat > /etc/systemd/system/eleicoes-exterior.service <<EOF
+[Unit]
+Description=Eleições 2026 INEMA (reserva) — exterior por país (boletins de urna)
+[Service]
+Type=oneshot
+WorkingDirectory=$R
+ExecStart=/usr/bin/python3 $R/exterior/coletor_ext.py
+TimeoutStartSec=900
+MemoryMax=400M
+Environment=PYTHONUNBUFFERED=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+EOF
+cat > /etc/systemd/system/eleicoes-exterior.timer <<EOF
+[Unit]
+Description=Eleições 2026 INEMA (reserva) — exterior de hora em hora em 25/10
+[Timer]
+OnCalendar=2026-10-25 *:35:00 America/Sao_Paulo
+AccuracySec=30s
+[Install]
+WantedBy=timers.target
+EOF
 
 # HTTPS: usa o certificado do Let's Encrypt se já existir; senão, um autoassinado (vale no modo Full do Cloudflare)
 mkdir -p /var/www/certbot /etc/ssl/eleicoes
@@ -100,5 +121,6 @@ systemctl daemon-reload
 systemctl enable --now nginx
 systemctl reload nginx
 systemctl enable eleicoes-coletor eleicoes-municipios eleicoes-projecao
+systemctl enable --now eleicoes-exterior.timer
 systemctl restart eleicoes-coletor eleicoes-municipios eleicoes-projecao --no-block
 echo "reserva instalada em $R · coletores esperam até $ABERTURA · versões a partir de $((BASE + 1))"

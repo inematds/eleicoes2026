@@ -79,6 +79,16 @@ def secoes_principais(indice):
 
 
 def busca_secao(cd, zona, sec, pleito=PLEITO, eleicao=ELEICAO):
+    """Boletim de uma seção, ou None se ainda não chegou ou deu erro (tenta de novo na próxima rodada)."""
+    try:
+        return _busca_secao(cd, zona, sec, pleito, eleicao)
+    except Exception as e:  # TSE fora do ar, tempo esgotado, boletim com formato inesperado
+        print(json.dumps({"erro_secao": f"{cd}/{zona}/{sec}", "pleito": pleito, "tipo": type(e).__name__,
+                          "msg": str(e)[:120]}, ensure_ascii=False), flush=True)
+        return None
+
+
+def _busca_secao(cd, zona, sec, pleito, eleicao):
     pasta = f"https://resultados.tse.jus.br/oficial/ele2026/arquivo-urna/{pleito}/dados/zz/{cd}/{zona}/{sec}/"
     st, corpo = baixa(f"{pasta}p00{pleito}-zz-m{cd}-z{zona}-s{sec}-aux.json")
     if st != 200:
@@ -314,6 +324,8 @@ def main():
                 if r:
                     estado["secoes"][f"{cd}/{z}/{s}"] = r
                     novas += 1
+                    if novas % 100 == 0:
+                        grava(a.estado, estado)  # não perde o que já baixou se a rodada cair
         estado["ultima_consulta"] = agora()
         grava(a.estado, estado)
     sem_pais = sorted({nm for _, nm, _, _ in secoes_principais(indice)} - set(paises["cidades"]))
