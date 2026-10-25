@@ -83,7 +83,7 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     `ferramentas/vps/instalar.sh`): coletores próprios (versões a partir de 500001, esperam 17:00 -0300), projeção e
     nginx servindo os dois sites com os mesmos caches. Já responde em **https://eleicoes2026.inema.club** e **https://municipios2026.inema.club** (DNS A com
     proxy no Cloudflare). Em pane daqui: apontar `eleicoes.inema.club` (e `municipios.inema.club`) para 62.238.25.84
-    no Cloudflare — com um comando: `python3 ferramentas/vps/trocar_dominios.py vps --executar` (para os publicadores
+    no Cloudflare — com um comando: `ferramentas/vps/trocar_dominios.sh vps --executar` (sem argumento mostra os comandos) (para os publicadores
     daqui, solta os domínios dos Workers e cria CNAME com proxy para eleicoes2026/municipios2026); volta com
     `... trocar_dominios.py volta --executar`; ver onde está com `... status`; sem `--executar` só simula. Precisa
     desta máquina (login do wrangler + token de DNS) ou de `CF_TOKEN` com Workers e DNS. Atualizar: `ssh root@62.238.25.84 'cd /opt/eleicoes2026 && git pull && bash ferramentas/vps/instalar.sh'`.
