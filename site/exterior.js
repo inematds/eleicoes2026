@@ -112,7 +112,7 @@
     $("ex-hora").textContent = hora(dados.ultima_consulta_tse || dados.gerado_em);
     var v = $("vivo");
     v.dataset.estado = "vivo";
-    v.querySelector("span").textContent = "parcial · consulta de hora em hora";
+    v.querySelector("span").textContent = "parcial · consulta a cada 30 min";
     total(); comparacao(); paises();
   }
 

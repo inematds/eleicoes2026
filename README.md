@@ -91,7 +91,7 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     `saida/backtest2022/bruto/{partido,detalhe}`). Sem pesquisa de opinião; na simulação, não aparece.
 19. ⚙️ **Exterior país a país** (menu Exterior, `site/exterior.html`): `exterior/coletor_ext.py` lê os boletins de urna
     que o TSE publica seção a seção no arquivo-urna (antes do total oficial das 17h), soma por país e grava
-    `saida/oficial/data/exterior.json`; timer `eleicoes-exterior.timer` de hora em hora em 25/10 (exceção à regra das
+    `saida/oficial/data/exterior.json`; timer `eleicoes-exterior.timer` a cada 30 min em 25/10 (exceção à regra das
     17h autorizada pelo Nei). 1º turno ao lado: `python3 exterior/coletor_ext.py --primeiro-turno` (uma vez).
     Previsto x apurado usa a regra de transferência da Projeção. Leitor do boletim (BER/ASN.1): `exterior/bu.py`.
 

@@ -2,7 +2,7 @@
 Description=Eleições 2026 INEMA — exterior de hora em hora no dia do 2º turno (autorizado pelo Nei em 25/10)
 
 [Timer]
-OnCalendar=2026-10-25 *:00:00
+OnCalendar=2026-10-25 *:00,30:00
 AccuracySec=30s
 
 [Install]
