@@ -34,6 +34,8 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
    Antes da abertura (TSE só divulga às 17h de Brasília, inclusive o exterior) os coletores ficam
    parados; o timer `eleicoes-religar-17h` liga `eleicoes-coletor` + `eleicoes-municipios` no dia às 17:00
    (`systemctl --user list-timers eleicoes-religar-17h`; ligar na mão: `systemctl --user start eleicoes-coletor eleicoes-municipios`).
+   Às 16:00 o timer `eleicoes-desliga-sim-16h` desliga as simulações (país e municípios): `modo.sh oficial`,
+   para `eleicoes-simpub` (o `/simulacao/` público fica congelado) e `municipios/simulacao.sh parar`.
 2. ⚙️ **Detecta mudança**: compara data/hora/seções de cada abrangência (BR, 27 UFs, exterior)
    com o último publicado e baixa só o `-u.json` de quem mudou.
 3. ⚙️ **Guarda o bruto** em `saida/oficial/bruto/<abr>/` + log em `saida/oficial/coleta.jsonl`.
