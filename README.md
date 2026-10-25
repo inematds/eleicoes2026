@@ -81,7 +81,7 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     Cada estado tem uma linha com a evolução da sua projeção na noite (o histórico guarda `ufs` a cada cálculo).
 18. ⚙️ **Reserva operacional na VPS4** (mkt3, 62.238.25.84, `/opt/eleicoes2026`, instalada por
     `ferramentas/vps/instalar.sh`): coletores próprios (versões a partir de 500001, esperam 17:00 -0300), projeção e
-    nginx servindo os dois sites com os mesmos caches. Já responde em **https://eleicoes2026.inema.club** (DNS A com
+    nginx servindo os dois sites com os mesmos caches. Já responde em **https://eleicoes2026.inema.club** e **https://municipios2026.inema.club** (DNS A com
     proxy no Cloudflare). Em pane daqui: apontar `eleicoes.inema.club` (e `municipios.inema.club`) para 62.238.25.84
     no Cloudflare. Atualizar: `ssh root@62.238.25.84 'cd /opt/eleicoes2026 && git pull && bash ferramentas/vps/instalar.sh'`.
     Teste: `python3 projecao/backtest_2022.py saida/backtest2022/bruto` (dados abertos do TSE 2022 em
