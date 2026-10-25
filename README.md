@@ -65,6 +65,8 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     do estado levam ao mesmo estado em municipios.inema.club (com `?sim=1` na simulação).
 15. ⚙️ **Botão Compartilhar** (`site/compartilhar.js`): abaixo da Simulação no menu; no celular, na linha do
     título. Só no navegador (menu de compartilhar do aparelho ou copia o link, sem `?sim=1`), sem servidor nem custo.
+16. ⚙️ **Fonte e auditoria** (seção `#fonte` da Central): dado da tela com link para o arquivo do TSE, horários,
+    versão e sha256 (`auditoria()` em `site/central.js`), mais como buscamos, o que conferimos e como conferir.
 
 ## Testes
 

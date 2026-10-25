@@ -247,3 +247,17 @@ h1, h2 { font-family: Sora, Inter, sans-serif; margin: 0; }
 .btn-mun:hover { filter: brightness(1.08); }
 .btn-mun svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
 @media (max-width: 640px) { .btn-mun { margin-left: 0; } }
+
+/* fonte e auditoria (25/10) */
+.aud { margin-top: 12px; }
+.aud-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 22px; margin-top: 10px; }
+.aud-bloco h3 { font: 700 .95rem Sora; color: var(--ouro); margin: 0 0 8px; }
+.aud-bloco ol, .aud-bloco ul { margin: 0; padding-left: 1.2em; color: var(--txt); font-size: .86rem; line-height: 1.5; }
+.aud-bloco li { margin-bottom: 6px; }
+.aud-bloco li b { color: var(--txt); }
+.aud-bloco a { color: var(--ouro); }
+.aud-bloco code { font: .78rem JetBrains Mono, monospace; overflow-wrap: anywhere; }
+.aud-dado { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0; font-size: .86rem; }
+.aud-dado dt { color: var(--mut); }
+.aud-dado dd { margin: 0; color: var(--txt); overflow-wrap: anywhere; }
+@media (max-width: 1000px) { .aud-grade { grid-template-columns: 1fr; } .aud-dado { grid-template-columns: 1fr; gap: 2px; } .aud-dado dd { margin-bottom: 6px; } }

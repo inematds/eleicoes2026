@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="menu.css?v=5">
-<link rel="stylesheet" href="central.css?v=16">
+<link rel="stylesheet" href="central.css?v=17">
 </head>
 <body>
 <div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span>SIMULAÇÃO</span></div>
@@ -114,14 +114,54 @@
     <section class="painel p-tab">
       <div class="p-cab"><span class="ico-l"></span><div><h2>Resultado por estado</h2><p>Clique em um estado para abrir o painel dele</p></div></div>
       <div class="res-tab"><table class="tab" id="res-tab"><thead></thead><tbody></tbody></table></div>
-      <div class="res-pe" id="fonte"></div>
+      <div class="res-pe" id="fonte-linha"></div>
     </section>
   </div>
+
+  <section class="painel aud" id="fonte">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Fonte e auditoria</h2><p>De onde vêm os números e como garantimos que eles são os oficiais</p></div></div>
+    <div class="aud-grade">
+      <div class="aud-bloco">
+        <h3>Dado exibido agora</h3>
+        <dl class="aud-dado" id="aud-dado"><dt>Carregando…</dt><dd></dd></dl>
+      </div>
+      <div class="aud-bloco">
+        <h3>Como buscamos</h3>
+        <ol>
+          <li><b>Uma fonte só: o TSE.</b> Lemos os arquivos públicos do portal oficial de resultados (<code>resultados.tse.jus.br</code>), os mesmos que alimentam o app Resultados da Justiça Eleitoral. Nenhum número é digitado à mão nem vem de outro site.</li>
+          <li><b>A cada 15 segundos</b> consultamos o índice do TSE e baixamos só o arquivo do estado que mudou.</li>
+          <li><b>Guardamos o arquivo bruto</b> exatamente como veio, com a impressão digital (sha256) e o horário da coleta.</li>
+          <li><b>Conferimos antes de publicar</b> (veja “O que conferimos”). Se algo não fecha, aquele estado não muda e continua o último dado válido.</li>
+          <li><b>Publicamos versões numeradas</b> que nunca são reescritas. O site só lê essas versões; quem abre a página não acessa o TSE diretamente.</li>
+        </ol>
+      </div>
+      <div class="aud-bloco">
+        <h3>O que conferimos</h3>
+        <ul>
+          <li>As contas fecham: votos dos candidatos = válidos; válidos + brancos + nulos = total; comparecimento + abstenção = eleitorado apurado; seções apuradas + pendentes = total.</li>
+          <li>Os percentuais são os do próprio TSE (valor de alta precisão), <b>nunca recalculados</b> por nós.</li>
+          <li>Seções apuradas e votos nunca diminuem de uma versão para a outra.</li>
+          <li>O horário do TSE nunca volta no tempo; cópia antiga servida pelo cache do TSE é descartada.</li>
+          <li>É a eleição certa: 2026, 2º turno, Presidente.</li>
+          <li>No fim, o Brasil precisa bater com a soma dos 27 estados + exterior.</li>
+        </ul>
+      </div>
+      <div class="aud-bloco">
+        <h3>Confira você mesmo</h3>
+        <ul>
+          <li>Compare com o portal oficial: <a href="https://resultados.tse.jus.br/oficial/app/index.html" target="_blank" rel="noopener">resultados.tse.jus.br</a>.</li>
+          <li>Abra o arquivo do TSE que gerou o número da tela (link em “Dado exibido agora”).</li>
+          <li>Código aberto, com o coletor e as regras: <a href="https://github.com/inematds/eleicoes2026" target="_blank" rel="noopener">github.com/inematds/eleicoes2026</a>.</li>
+          <li>A simulação é separada e sempre aparece com faixa e marca d’água <b>SIMULAÇÃO</b>; nunca se mistura com o oficial.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </div>
 
 <div class="dica" id="dica" hidden></div>
 <script src="replay.js?v=1"></script>
-<script src="central.js?v=10"></script>
+<script src="central.js?v=11"></script>
 <script src="acessos.js?v=1"></script>
 <script src="compartilhar.js?v=1"></script>
 </body>

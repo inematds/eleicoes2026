@@ -231,7 +231,24 @@
         '<td class="' + (m === ca.numero ? "ma c" + ca.numero : "") + '">' + pc(ca.pct_validos) + '</td><td class="' + (m === cb.numero ? "ma c" + cb.numero : "") + '">' + pc(cb.pct_validos) + "</td><td>" + pc(r.votos.pct_brancos_sobre_total) + "</td><td>" + pc(r.votos.pct_nulos_sobre_total) + "</td></tr>";
     }).join("");
     const f = res.fonte;
-    $("#fonte").innerHTML = "Versão " + res.versao + " · coletado " + hora(f.coletado_em) + " · sha256 <code>" + esc((f.sha256_bruto || "").slice(0, 12)) + "…</code>" + (f.tipo !== "oficial" ? " · <b>SIMULAÇÃO — números ilustrativos</b>" : " · fonte: TSE");
+    auditoria(res);
+    $("#fonte-linha").innerHTML = "Versão " + res.versao + " · coletado " + hora(f.coletado_em) + " · sha256 <code>" + esc((f.sha256_bruto || "").slice(0, 12)) + "…</code>" + (f.tipo !== "oficial" ? " · <b>SIMULAÇÃO — números ilustrativos</b>" : " · fonte: TSE");
+  }
+
+  // ---------- fonte e auditoria: o dado da tela, com link para o arquivo do TSE ----------
+  function auditoria(res) {
+    const f = res.fonte, of = f.tipo === "oficial";
+    const lin = (k, v) => "<dt>" + k + "</dt><dd>" + v + "</dd>";
+    const url = /^https:\/\/resultados\.tse\.jus\.br\//.test(f.url || "") ? f.url : "";
+    $("#aud-dado").innerHTML =
+      lin("Abrangência", esc(res.abrangencia.nome)) +
+      lin("Tipo", of ? "Oficial — TSE" : "<b>SIMULAÇÃO</b> — números ilustrativos") +
+      lin("Arquivo de origem", url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener"><code>' + esc(url.replace("https://resultados.tse.jus.br/", "")) + "</code></a>" : "—") +
+      lin("Totalizado pelo TSE", dataHora(f.totalizado_tse)) +
+      lin("Arquivo gerado pelo TSE", dataHora(f.gerado_tse)) +
+      lin("Coletado pelo INEMA", dataHora(f.coletado_em)) +
+      lin("Versão INEMA", esc(String(res.versao))) +
+      lin("Impressão digital (sha256)", "<code>" + esc(f.sha256_bruto || "—") + "</code>");
   }
 
   function estadoVivo() {
