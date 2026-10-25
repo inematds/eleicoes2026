@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exterior · Eleições 2026 · INEMA</title>
+<meta name="description" content="Voto dos brasileiros no exterior no 2º turno, país a país, a partir dos boletins de urna publicados pelo TSE, com o 1º turno ao lado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="menu.css?v=5">
+<link rel="stylesheet" href="central.css?v=18">
+<link rel="stylesheet" href="projecao.css?v=8">
+<link rel="stylesheet" href="exterior.css?v=3">
+</head>
+<body>
+<div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span></span></div>
+
+<aside class="lateral">
+  <a class="marca" href="index.html#/">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 45 24 24 45 3 24Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 12 36 24 24 36 12 24Z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 19 29 24 24 29 19 24Z" fill="currentColor"/></svg>
+    <span><b>INEMA</b><small>ELEIÇÕES <em>LIVE</em></small></span>
+  </a>
+  <nav class="menu" aria-label="Seções">
+    <a href="index.html#/" data-nav="br"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Visão geral</a>
+    <a href="index.html#estados" data-nav="estados"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/></svg>Estados</a>
+    <a href="https://municipios.inema.club/" data-nav="mun"><svg viewBox="0 0 24 24"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3zM9 3v15M15 6v15"/></svg>Municípios</a>
+    <a href="exterior.html" data-nav="ext" class="ativo" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Exterior</a>
+    <a href="projecao.html" data-nav="proj"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 16l4-5 4 3 6-8M15 6h4v4"/></svg>Projeção</a>
+    <a href="index.html#evolucao"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Evolução</a>
+    <a href="index.html#resumo"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>Resumo</a>
+    <a href="index.html#fonte"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8"/></svg>Fonte e auditoria</a>
+    <a href="classica.html"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 10h18"/></svg>Versão clássica</a>
+    <a class="comp-btn" href="#" role="button" data-compartilhar><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartilhar</span></a>
+  </nav>
+  <div class="lateral-pe">
+    <div class="acessos" data-acessos hidden><b>—</b> acessos</div>
+    <div class="dominio">eleicoes<span>.</span>inema<span>.</span>club</div>
+    <p>Dados oficiais do TSE em tempo real, para um Brasil mais transparente.</p>
+  </div>
+</aside>
+
+<div class="corpo">
+  <header class="cab">
+    <div class="cab-sigla">EX</div>
+    <div class="cab-txt">
+      <div class="cab-linha"><h1>Exterior 2026 — 2º Turno</h1><span class="cab-data">Consulta ao TSE <b id="ex-hora">—</b></span></div>
+      <div class="cab-sub"><span>Boletins de urna das seções do exterior, país a país</span> • <span class="vivo" id="vivo" data-estado="carregando"><i></i><span>carregando</span></span><span class="acessos-cel" data-acessos hidden> • <b>—</b> acessos</span><a class="comp-cel" href="#" role="button" data-compartilhar aria-label="Compartilhar"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartilhar</span></a></div>
+    </div>
+    <div class="cab-dir">DEMOCRACIA<br>EM TEMPO REAL<i></i></div>
+  </header>
+
+  <div class="pj-selo"><b>PARCIAL DO EXTERIOR</b> Soma dos boletins de urna que o TSE já publicou, seção por seção. O total oficial do TSE começa às 17h de Brasília. O exterior é menos de 0,6% do eleitorado.</div>
+  <div class="faixa-erro" id="faixa-erro" hidden role="alert"></div>
+
+  <section class="painel" id="ex-total" hidden>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Exterior até agora</h2><p id="ex-total-sub">% dos votos válidos nas seções que já mandaram boletim</p></div></div>
+    <div class="pj-cands" id="ex-cands"></div>
+    <div class="pj-barra" id="ex-barra"></div>
+    <div class="pj-base" id="ex-base"></div>
+  </section>
+
+  <section class="painel" id="ex-comp" hidden>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Previsto x apurado</h2><p id="ex-comp-sub">Só nas cidades que já mandaram boletim, para a comparação ser justa</p></div></div>
+    <div class="res-tab"><table class="tab ex-comp-tab" id="ex-comp-tab"><thead></thead><tbody></tbody></table></div>
+    <p class="pj-nota">“Previsto” = o 1º turno de cada cidade passado pela regra de transferência da <a href="projecao.html">Projeção INEMA</a> (a regra inicial, sem dado do 2º turno; depois das 17h, também as taxas medidas no Brasil). O eleitor do exterior é diferente do Brasil: acertar ou errar aqui diz pouco sobre o país.</p>
+  </section>
+
+  <section class="painel" id="ex-paises" hidden>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>País a país</h2><p id="ex-paises-sub">2º turno apurado, com o 1º turno ao lado. Clique num país para ver as cidades.</p></div>
+      <div class="map-opts" id="ex-filtro" role="group" aria-label="Mostrar"><button type="button" data-f="apurados" aria-pressed="true">Já apurados</button><button type="button" data-f="todos" aria-pressed="false">Todos</button></div></div>
+    <div class="map-opts ex-ord" id="ex-ord" role="group" aria-label="Ordem"><button type="button" data-o="votos" aria-pressed="true">Mais votos</button><button type="button" data-o="lula" aria-pressed="false">Mais Lula</button><button type="button" data-o="flavio" aria-pressed="false">Mais Flávio</button><button type="button" data-o="mudou" aria-pressed="false">Mais mudou</button><button type="button" data-o="az" aria-pressed="false">A–Z</button></div>
+    <div class="res-tab"><table class="tab ex-tab" id="ex-tab"><thead></thead><tbody></tbody></table></div>
+    <p class="pj-nota">1º turno: % dos válidos com todos os candidatos (por isso Lula + Flávio fica abaixo de 100%). 2º turno: % dos válidos entre os dois. “Mudou” = variação de Lula entre a parte Lula/(Lula+Flávio) do 1º turno e o 2º turno.</p>
+  </section>
+
+  <section class="painel aud" id="ex-metodo">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>De onde vêm estes números</h2><p>Fonte e limites</p></div></div>
+    <div class="aud-grade">
+      <div class="aud-bloco">
+        <h3>A fonte</h3>
+        <ol>
+          <li>Quando uma seção do exterior encerra, o TSE publica o <b>boletim de urna</b> dela no arquivo de urna, antes do total oficial.</li>
+          <li>De hora em hora lemos o índice das 1.351 seções principais do exterior e baixamos só os boletins novos.</li>
+          <li>Somamos por cidade e por país. O 1º turno ao lado vem dos boletins do 1º turno das mesmas seções.</li>
+        </ol>
+      </div>
+      <div class="aud-bloco">
+        <h3>Limites</h3>
+        <ul>
+          <li>É <b>parcial</b>: só entra o que já foi publicado. Ásia e Oceania votam primeiro; as Américas fecham junto com o Brasil.</li>
+          <li>O exterior tem cerca de 918 mil eleitores (menos de 0,6% do total) e vota diferente do Brasil.</li>
+          <li>O resultado oficial é o do TSE, no <a href="index.html#/">painel principal</a> a partir das 17h.</li>
+        </ul>
+      </div>
+      <div class="aud-bloco">
+        <h3>Transparência</h3>
+        <ul>
+          <li>Os números desta página estão em <a href="data/exterior.json" target="_blank" rel="noopener">data/exterior.json</a>.</li>
+          <li>Boletins: <a href="https://resultados.tse.jus.br/oficial/ele2026/arquivo-urna/3221/config/zz/zz-p003221-cs.json" target="_blank" rel="noopener">índice de seções do exterior no TSE</a>.</li>
+          <li>Código aberto: <a href="https://github.com/inematds/eleicoes2026/tree/main/exterior" target="_blank" rel="noopener">github.com/inematds/eleicoes2026</a>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="exterior.js?v=2"></script>
+<script src="acessos.js?v=1"></script>
+<script src="compartilhar.js?v=1"></script>
+</body>
+</html>

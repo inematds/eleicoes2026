@@ -23,6 +23,8 @@ HEADERS = """/data/latest.json
   Cache-Control: no-cache, max-age=0
 /data/projecao-historico.json
   Cache-Control: no-cache, max-age=0
+/data/exterior.json
+  Cache-Control: no-cache, max-age=0
 /data/historico/*
   Cache-Control: no-cache, max-age=0
 /data/br/*
@@ -73,6 +75,9 @@ def copia_dados(fonte, alvo):
     hist = os.path.join(fonte, "projecao-historico.json")
     if os.path.exists(hist):
         shutil.copy2(hist, os.path.join(alvo, "projecao-historico.json"))
+    ext = os.path.join(fonte, "exterior.json")  # boletins do exterior (exterior/coletor_ext.py), só no oficial
+    if os.path.exists(ext):
+        shutil.copy2(ext, os.path.join(alvo, "exterior.json"))
     return m["versao"]
 
 
@@ -102,8 +107,9 @@ def assinatura():
     for f in sorted(FONTES.values()):
         try:
             h.update(open(os.path.join(f, "latest.json"), "rb").read())
-            if os.path.exists(os.path.join(f, "projecao.json")):
-                h.update(open(os.path.join(f, "projecao.json"), "rb").read())
+            for extra in ("projecao.json", "exterior.json"):
+                if os.path.exists(os.path.join(f, extra)):
+                    h.update(open(os.path.join(f, extra), "rb").read())
         except FileNotFoundError:
             pass
     h.update(str(max((os.path.getmtime(os.path.join(SITE, x)) for x in os.listdir(SITE) if x != "data"), default=0)).encode())

@@ -1,0 +1,27 @@
+/* Página do Exterior (25/10) — usa os tokens de central.css e partes de projecao.css */
+#ex-total, #ex-comp, #ex-paises { margin-bottom: 12px; }
+#ex-comp .res-tab, #ex-paises .res-tab { max-height: none; }
+.ex-ord { margin: 10px 0 4px; flex-wrap: wrap; }
+.ex-tab td, .ex-tab th, .ex-comp-tab td, .ex-comp-tab th { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ex-tab tbody tr.ex-pais { cursor: pointer; }
+.ex-tab tbody tr.ex-pais:hover td { background: rgba(250,204,21,.05); }
+.ex-tab tr.ex-cid td { color: var(--mut); font-size: .84rem; background: rgba(255,255,255,.02); }
+.ex-tab tr.ex-cid td:first-child { padding-left: 26px; }
+.ex-tab tr.ex-sem td { color: var(--fraco); }
+.ex-nome b { font-weight: 600; } .ex-nome small { display: block; color: var(--fraco); font-size: .72rem; }
+.ex-seta { display: inline-block; width: 12px; color: var(--ouro); transition: transform .15s; }
+.ex-aberto .ex-seta { transform: rotate(90deg); }
+.ex-mini { display: flex; width: 90px; height: 8px; border-radius: 99px; overflow: hidden; background: var(--pend); }
+.ex-mini .ba { background: var(--c13); } .ex-mini .bb { background: var(--c22); }
+.ex-c13 { color: var(--c13); font-weight: 700; } .ex-c22 { color: var(--c22); font-weight: 700; }
+.ex-dif.mais { color: var(--c13); } .ex-dif.menos { color: var(--c22); }
+.ex-comp-tab td:first-child { font-weight: 600; }
+.ex-comp-tab tr.ex-real td { border-top: 1px solid var(--line); font-weight: 700; }
+@media (max-width: 700px) {
+  .ex-tab th:nth-child(5), .ex-tab td:nth-child(5), .ex-tab th:nth-child(6), .ex-tab td:nth-child(6),
+  .ex-tab th:nth-child(9), .ex-tab td:nth-child(9), .ex-tab th:nth-child(10), .ex-tab td:nth-child(10) { display: none; }
+  .ex-comp-tab th:nth-child(4), .ex-comp-tab td:nth-child(4) { display: none; }
+  .ex-comp-tab td:first-child { white-space: normal; }
+  .ex-tab td, .ex-tab th { padding-left: 6px; padding-right: 6px; }
+  .ex-nome small { display: none; }
+}
