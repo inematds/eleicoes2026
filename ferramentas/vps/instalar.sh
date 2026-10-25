@@ -79,7 +79,7 @@ unit eleicoes-municipios "Eleições 2026 INEMA (reserva) — coletor de municí
   "/usr/bin/python3 $R/municipios/coletor_mun.py --saida $R/saida/municipios --intervalo 15 --versao-inicial $BASE" 400M
 unit eleicoes-projecao "Eleições 2026 INEMA (reserva) — Projeção (só lê arquivos locais)" \
   "/usr/bin/python3 $R/projecao/projetar.py --laco 60" 800M
-# Exterior (boletins de urna por seção): uma rodada por hora, aos :35 (a máquina principal roda aos :05)
+# Exterior (boletins de urna por seção): uma rodada por hora, na hora cheia
 cat > /etc/systemd/system/eleicoes-exterior.service <<EOF
 [Unit]
 Description=Eleições 2026 INEMA (reserva) — exterior por país (boletins de urna)
@@ -95,7 +95,7 @@ cat > /etc/systemd/system/eleicoes-exterior.timer <<EOF
 [Unit]
 Description=Eleições 2026 INEMA (reserva) — exterior de hora em hora em 25/10
 [Timer]
-OnCalendar=2026-10-25 *:35:00 America/Sao_Paulo
+OnCalendar=2026-10-25 *:00:00 America/Sao_Paulo
 AccuracySec=30s
 [Install]
 WantedBy=timers.target
