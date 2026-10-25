@@ -179,7 +179,7 @@ class ColetorMun:
             if item.get("tpabr") == "uf":
                 novo = {"ts": N._i(s.get("ts")), "st": N._i(s.get("st")), "pst": N._pct(s.get("pstn")),
                         "te": N._i(e.get("te")), "and": N.ANDAMENTO.get(item.get("and"), item.get("and")),
-                        "ht": N._iso(item.get("dt"), item.get("ht"))}
+                        "ht": N._iso(item.get("dt"), item.get("ht"), uf)}
                 if self.uf_info.get(uf, {}).get("indice") != novo:
                     self.uf_info.setdefault(uf, {})["indice"] = novo
                     self.sujos.add(uf)

@@ -63,10 +63,19 @@ def _pct(x):
     return round(float(str(x).replace(",", ".")), 2)
 
 
-def _iso(d, h):
+# O TSE informa a hora de cada estado no fuso LOCAL dele (AC 2 h e AM/RR/RO/MT/MS 1 h atrás de Brasília).
+# Tudo aqui sai em horário de Brasília.
+FUSO_ATRAS = {"ac": 2, "am": 1, "rr": 1, "ro": 1, "mt": 1, "ms": 1}
+
+
+def _iso(d, h, abr=None):
     if not d or not h:
         return None
     dd, mm, aa = d.split("/")
+    atras = FUSO_ATRAS.get(abr or "", 0)
+    if atras:
+        t = datetime.strptime(f"{d} {h}", "%d/%m/%Y %H:%M:%S") + timedelta(hours=atras)
+        return t.strftime("%Y-%m-%dT%H:%M:%S") + "-03:00"
     return f"{aa}-{mm}-{dd}T{h}-03:00"
 
 
@@ -100,8 +109,8 @@ def consolidar(raw_bytes, abr, coletado_em, versao, fonte_tipo="oficial"):
         "eleicao": dict(ELEICAO),
         "fonte": {
             "tipo": fonte_tipo, "url": url_tse(abr), "idg": raw.get("idg"),
-            "gerado_tse": _iso(raw.get("dg"), raw.get("hg")),
-            "totalizado_tse": _iso(raw.get("dt"), raw.get("ht")),
+            "gerado_tse": _iso(raw.get("dg"), raw.get("hg"), abr),
+            "totalizado_tse": _iso(raw.get("dt"), raw.get("ht"), abr),
             "coletado_em": coletado_em,
             "sha256_bruto": hashlib.sha256(raw_bytes).hexdigest(),
         },
