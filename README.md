@@ -31,6 +31,9 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
 1. ⚙️ **Coletor ligado** (serviço permanente, volta sozinho):
    `systemctl --user status eleicoes-coletor` — a cada 15 s pede ao TSE o índice
    `oficial/ele2026/6258/dados/br/br-e006258-ab.json` (com ETag; sem novidade = 304).
+   Antes da abertura (TSE só divulga às 17h de Brasília, inclusive o exterior) os coletores ficam
+   parados; o timer `eleicoes-religar-17h` liga `eleicoes-coletor` + `eleicoes-municipios` no dia às 17:00
+   (`systemctl --user list-timers eleicoes-religar-17h`; ligar na mão: `systemctl --user start eleicoes-coletor eleicoes-municipios`).
 2. ⚙️ **Detecta mudança**: compara data/hora/seções de cada abrangência (BR, 27 UFs, exterior)
    com o último publicado e baixa só o `-u.json` de quem mudou.
 3. ⚙️ **Guarda o bruto** em `saida/oficial/bruto/<abr>/` + log em `saida/oficial/coleta.jsonl`.
