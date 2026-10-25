@@ -49,7 +49,9 @@
       p1.format(bs.pct_eleitorado_finalizado) + "% do eleitorado)" + (ap ? " · TSE com <b>" + p2.format(ap.pct_secoes) + "%</b> das seções apuradas" : "") +
       " · comparecimento projetado <b>" + p1.format(pr.pct_comparecimento) + "%</b>";
     tabela();
-    vivo("vivo", "Ao vivo");
+    const idade = Date.now() - new Date(d.calculado_em).getTime();
+    if (idade > 5 * 60000) vivo("atrasado", "Sem recálculo há " + Math.round(idade / 60000) + " min");
+    else vivo("vivo", "Ao vivo");
   }
 
   function tabela() {

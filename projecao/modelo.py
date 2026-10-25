@@ -142,8 +142,11 @@ class Modelo:
             if c2 and c2.get("and") == "finalizada":
                 tot += destinos(c2, self.a, self.b)
             elif c2 and c2.get("st") and c2.get("ts"):
-                frac = min(1.0, c2["st"] / c2["ts"])
-                tot += destinos(c2, self.a, self.b) + (1 - frac) * prev
+                d2 = destinos(c2, self.a, self.b)
+                # parte já apurada = eleitorado das seções apuradas (comparecimento + abstenção nelas,
+                # como o TSE informa); seções têm tamanhos diferentes, então st/ts só como reserva
+                frac = d2.sum() / te if 0 < d2.sum() <= te else min(1.0, c2["st"] / c2["ts"])
+                tot += d2 + (1 - frac) * prev
                 resto[i] = (1 - frac) * te
             else:
                 tot += prev
