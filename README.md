@@ -86,7 +86,7 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     no Cloudflare — com um comando: `ferramentas/vps/trocar_dominios.sh vps --executar` (sem argumento mostra os comandos) (para os publicadores
     daqui, solta os domínios dos Workers e cria CNAME com proxy para eleicoes2026/municipios2026); volta com
     `... trocar_dominios.py volta --executar`; ver onde está com `... status`; sem `--executar` só simula. Precisa
-    desta máquina (login do wrangler + token de DNS) ou de `CF_TOKEN` com Workers e DNS. Atualizar: `ssh root@62.238.25.84 'cd /opt/eleicoes2026 && git pull && bash ferramentas/vps/instalar.sh'`.
+    desta máquina (login do wrangler + token de DNS) ou de `CF_TOKEN` com Workers e DNS. Atualizar: `ferramentas/vps/instalar.sh vps` (sem argumento mostra os comandos), ou `ssh root@62.238.25.84 'cd /opt/eleicoes2026 && git pull && bash ferramentas/vps/instalar.sh --executar'`.
     Teste: `python3 projecao/backtest_2022.py saida/backtest2022/bruto` (dados abertos do TSE 2022 em
     `saida/backtest2022/bruto/{partido,detalhe}`). Sem pesquisa de opinião; na simulação, não aparece.
 

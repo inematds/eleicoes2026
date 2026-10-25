@@ -22,7 +22,7 @@ Comandos equivalentes (de $RAIZ):
   python3 ferramentas/vps/trocar_dominios.py volta --executar
 
 Endereços da reserva (sempre na VPS4): https://eleicoes2026.inema.club  https://municipios2026.inema.club
-Atualizar a VPS4: ssh root@62.238.25.84 'cd /opt/eleicoes2026 && git pull && bash ferramentas/vps/instalar.sh'
+Atualizar a VPS4: ssh root@62.238.25.84 'cd /opt/eleicoes2026 && git pull && bash ferramentas/vps/instalar.sh --executar'
 EOF
 }
 

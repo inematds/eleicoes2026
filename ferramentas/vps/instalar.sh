@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Reserva operacional numa VPS (Ubuntu): coletores + projeção + nginx servindo os dois sites.
 # Em pane da máquina principal, basta apontar eleicoes.inema.club e municipios.inema.club para o IP da VPS
-# no Cloudflare. Rode como root na VPS, de dentro do repositório: bash ferramentas/vps/instalar.sh
+# no Cloudflare (ferramentas/vps/trocar_dominios.sh). Sem argumento: mostra os comandos.
 # - versões a partir de 500000 (não colidem com os arquivos imutáveis já publicados pela máquina principal)
 # - coletores só consultam o TSE a partir de ABERTURA (horário de Brasília, fuso explícito: a VPS fica em UTC)
 # - sem publicador (Cloudflare) e sem simulação
@@ -9,6 +9,43 @@ set -euo pipefail
 R="$(cd "$(dirname "$0")/../.." && pwd)"
 ABERTURA="${ABERTURA:-2026-10-25 17:00:00 -0300}"
 BASE="${VERSAO_INICIAL:-500000}"
+VPS="${VPS:-root@62.238.25.84}"
+DIR_VPS=/opt/eleicoes2026
+
+ajuda() {
+  cat <<EOF
+Reserva na VPS4 ($VPS, $DIR_VPS) — coletores + projeção + nginx
+
+Daqui (máquina principal):
+  $0 vps        atualiza a VPS4 (git pull) e reinstala tudo lá
+  $0 status     mostra serviços e sites da VPS4
+
+Dentro da VPS4 (como root):
+  bash ferramentas/vps/instalar.sh --executar
+
+Comandos equivalentes:
+  ssh $VPS 'cd $DIR_VPS && git pull && bash ferramentas/vps/instalar.sh --executar'
+  ssh $VPS 'systemctl is-active nginx eleicoes-coletor eleicoes-municipios eleicoes-projecao'
+
+Sites da reserva: https://eleicoes2026.inema.club  https://municipios2026.inema.club
+Troca de domínios: ferramentas/vps/trocar_dominios.sh
+EOF
+}
+
+case "${1:-}" in
+  --executar) ;;  # segue para a instalação abaixo
+  vps)
+    echo "\$ ssh $VPS 'cd $DIR_VPS && git pull && bash ferramentas/vps/instalar.sh --executar'"
+    exec ssh "$VPS" "cd $DIR_VPS && git pull -q && bash ferramentas/vps/instalar.sh --executar" ;;
+  status)
+    echo "\$ ssh $VPS (serviços e sites)"
+    exec ssh "$VPS" "cd $DIR_VPS && git log -1 --oneline
+      for s in nginx eleicoes-coletor eleicoes-municipios eleicoes-projecao; do printf '%-22s %s\n' \$s \"\$(systemctl is-active \$s)\"; done
+      echo '(activating = esperando as 17h)'
+      for h in eleicoes2026.inema.club municipios2026.inema.club; do
+        curl -s -o /dev/null -w \"\$h /data/latest.json -> %{http_code}\n\" -H \"Host: \$h\" http://127.0.0.1/data/latest.json; done" ;;
+  *) ajuda; exit 0 ;;
+esac
 
 apt-get install -y -q nginx python3-numpy python3-scipy >/dev/null
 mkdir -p "$R/saida/oficial/data" "$R/saida/municipios/data"
