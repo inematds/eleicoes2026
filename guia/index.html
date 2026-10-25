@@ -46,6 +46,7 @@
   nav .clubpro{display:inline-flex;align-items:center;gap:6px}
   nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
   nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1180px){nav .links a.sec[href="#exemplos"],nav .links a.sec[href="#roadmap"]{display:none}}
   .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
   .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
   .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
@@ -115,6 +116,7 @@
     <a class="sec" href="#fluxo">Como funciona</a>
     <a class="sec" href="#guia">Guia de uso</a>
     <a class="sec" href="#municipios">Municípios</a>
+    <a class="sec" href="#projecao">Projeção</a>
     <a class="sec" href="#exemplos">Exemplos</a>
     <a class="sec" href="#roadmap">Roadmap</a>
     <span class="lang"><a class="on" href="./">PT</a><a href="en/">EN</a><a href="es/">ES</a></span>
@@ -259,6 +261,33 @@
 <span class="c"># abra:</span> <span class="s">http://localhost:8471/</span>   <span class="c"># ou a simulação:</span> <span class="s">http://localhost:8471/?sim=1</span></pre>
   <p class="sub" style="margin-top:12px">Detalhes, testes com o 1º turno e limites conhecidos: <a href="https://github.com/inematds/eleicoes2026/tree/main/municipios" target="_blank" rel="noopener">municipios/README.md</a>.</p>
 </div></section>
+<section id="projecao"><div class="wrap">
+  <span class="chip">Projeção INEMA · estimativa</span>
+  <h2>Para onde a apuração está indo, antes de terminar</h2>
+  <p class="sub">Em <a href="https://eleicoes.inema.club/projecao.html" target="_blank" rel="noopener">eleicoes.inema.club/projecao.html</a> (item <b>Projeção</b> do menu) o INEMA estima o resultado final a partir dos votos já apurados. O número parcial engana porque as cidades pequenas e algumas regiões fecham antes; a projeção corrige isso. É estimativa, sempre marcada como tal: quem vence é quem o TSE declarar eleito.</p>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="assets/projecao.jpg" alt="Página da Projeção: os dois candidatos com a faixa provável, o que falta para a virada e o gráfico da projeção ao longo da noite (simulação)" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>🔁 Transferência de votos</h3><p>Nas cidades que já encerraram, comparamos o 1º e o 2º turno e estimamos para onde foi cada grupo (eleitores de cada candidato, brancos e nulos, quem não votou), por região, estado, porte e perfil da cidade. Depois aplicamos isso no 1º turno das cidades que faltam.</p></div>
+    <div class="card"><h3>📏 Faixa medida</h3><p>Cada número vem com uma faixa provável. Testamos com a eleição real de 2022 e com a simulação: com 5% das cidades encerradas o erro médio foi de 0,3 ponto, contra 4,7 do número parcial, e a faixa conteve o resultado final em 98,7% dos 224 cenários.</p></div>
+    <div class="card"><h3>🗺️ Por estado</h3><p>O botão <b>Ver por estado</b> mostra cada estado numa linha, com barra, faixa e o apurado do TSE. Estado com pouca apuração aparece como “instável”. Nos testes, a faixa dos estados acertou em 95,5% dos casos.</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card"><h3>O que falta para a virada</h3><p>Quantos votos válidos ainda faltam e que fatia deles o candidato que está atrás precisaria para virar, comparado com o que a projeção indica.</p></div>
+    <div class="card"><h3>Histórico da noite</h3><p>Cada projeção publicada fica guardada, sem ser reescrita, e vira um gráfico comparando a projeção com o apurado do TSE. Dá para conferir depois onde acertou e onde errou.</p></div>
+    <div class="card"><h3>Liga sozinha</h3><p>Só aparece com pelo menos 250 cidades encerradas, 15 em cada região, 3 em cada um de 20 estados e 1% do eleitorado. Não usa pesquisa de opinião, só votos oficiais do TSE. Na simulação, não aparece.</p></div>
+  </div>
+  <figure style="margin:22px 0 0;border-radius:16px;overflow:hidden;border:1px solid var(--line)"><img src="assets/projecao-estados.jpg" alt="Lista Ver por estado: cada estado com barra, faixa provável e apurado do TSE (simulação)" loading="lazy" style="width:100%;display:block"></figure>
+  <h3 style="margin:26px 0 8px">Fonte e auditoria · Compartilhar</h3>
+  <p class="sub">No painel, a seção <b>Fonte e auditoria</b> mostra o dado da tela com o link para o arquivo oficial do TSE, os horários (totalização, geração, coleta), a versão e a impressão digital (sha256), além de como buscamos, o que conferimos e como qualquer pessoa pode conferir. O botão <b>Compartilhar</b> abre o menu do celular ou copia o link, sem servidor e sem custo.</p>
+  <h3 style="margin:26px 0 8px">Rodando a projeção na sua máquina</h3>
+<pre><span class="c"># teste com a eleição de 2022 (dados abertos do TSE em saida/backtest2022/bruto)</span>
+<span class="k">python3</span> projecao/backtest_2022.py saida/backtest2022/bruto
+<span class="c"># medição da faixa (vários cenários, em paralelo)</span>
+<span class="k">python3</span> projecao/calibracao.py saida/backtest2022/bruto 14
+<span class="c"># serviço: recalcula quando os dados mudam e grava saida/oficial/data/projecao.json</span>
+<span class="k">python3</span> projecao/projetar.py --laco 60</pre>
+  <p class="sub" style="margin-top:12px">Código e detalhes: <a href="https://github.com/inematds/eleicoes2026/tree/main/projecao" target="_blank" rel="noopener">projecao/</a>. Precisa de <code>numpy</code> e <code>scipy</code>.</p>
+</div></section>
 <section id="exemplos"><div class="wrap">
   <span class="chip">Exemplos</span>
   <h2>Como fica na tela</h2>
@@ -274,6 +303,7 @@
   <p class="sub">A primeira versão foi feita para o 2º turno de 25/10/2026.</p>
   <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Presidente · Brasil + 27 estados + exterior</strong><span>Coletor com conferência, painéis Central e Clássica, mapa real, simulação acelerada, publicação estática.</span></div></div>
   <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Municípios</strong><span>Mapa de cada estado com as cidades colorindo ao vivo, votos e evolução do estado, 10 cidades e simulação, em municipios.inema.club (24/10/2026).</span></div></div>
+  <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Projeção, auditoria e compartilhar</strong><span>Projeção do resultado final por transferência de votos, com faixa medida, lista por estado, histórico da noite e o que falta para a virada; seção Fonte e auditoria e botão Compartilhar (25/10/2026).</span></div></div>
   <div class="phase"><div class="tag">Depois</div><div class="d"><strong>Outras eleições</strong><span>Governador e as próximas eleições: como coleta e tela são separadas, muda só a parte da coleta.</span></div></div>
 </div></section>
 <footer>

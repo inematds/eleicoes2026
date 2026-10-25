@@ -46,6 +46,7 @@
   nav .clubpro{display:inline-flex;align-items:center;gap:6px}
   nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
   nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1180px){nav .links a.sec[href="#exemplos"],nav .links a.sec[href="#roadmap"]{display:none}}
   .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
   .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
   .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
@@ -115,6 +116,7 @@
     <a class="sec" href="#fluxo">How it works</a>
     <a class="sec" href="#guia">User guide</a>
     <a class="sec" href="#municipios">Municipalities</a>
+    <a class="sec" href="#projecao">Projection</a>
     <a class="sec" href="#exemplos">Examples</a>
     <a class="sec" href="#roadmap">Roadmap</a>
     <span class="lang"><a href="../">PT</a><a class="on" href="./">EN</a><a href="../es/">ES</a></span>
@@ -259,6 +261,33 @@
 <span class="c"># open:</span> <span class="s">http://localhost:8471/</span>   <span class="c"># or the simulation:</span> <span class="s">http://localhost:8471/?sim=1</span></pre>
   <p class="sub" style="margin-top:12px">Details, tests with the first round and known limits: <a href="https://github.com/inematds/eleicoes2026/tree/main/municipios" target="_blank" rel="noopener">municipios/README.md</a>.</p>
 </div></section>
+<section id="projecao"><div class="wrap">
+  <span class="chip">INEMA Projection · estimate</span>
+  <h2>Where the count is heading, before it finishes</h2>
+  <p class="sub">At <a href="https://eleicoes.inema.club/projecao.html" target="_blank" rel="noopener">eleicoes.inema.club/projecao.html</a> (the <b>Projeção</b> item in the menu) INEMA estimates the final result from the votes already counted. The partial number is misleading because small cities and some regions close first; the projection corrects for that. It is an estimate, always labeled as such: the winner is whoever the TSE (Brazil's Superior Electoral Court) declares elected.</p>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="../assets/projecao.jpg" alt="Projeção page: the two candidates with the likely range, what is needed for a comeback, and the chart of the projection over the course of the night (simulation)" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="grid g3">
+    <div class="card"><h3>🔁 Vote transfer</h3><p>In the cities that have already finished counting, we compare the 1st and 2nd rounds and estimate where each group went (each candidate's voters, blank and null votes, and those who did not vote), by region, state, city size, and city profile. Then we apply this to the 1st round of the cities still to come.</p></div>
+    <div class="card"><h3>📏 Measured range</h3><p>Each number comes with a likely range. We tested it against the real 2022 election and the simulation: with 5% of cities finished, the average error was 0.3 point, versus 4.7 for the partial number, and the range contained the final result in 98.7% of the 224 scenarios.</p></div>
+    <div class="card"><h3>🗺️ By state</h3><p>The <b>Ver por estado</b> (View by state) button shows each state on one line, with a bar, range, and the TSE count. A state with little counted appears as “unstable”. In tests, the state ranges were right in 95.5% of cases.</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card"><h3>What is needed for a comeback</h3><p>How many valid votes are still outstanding and what share of them the trailing candidate would need to turn the result around, compared with what the projection indicates.</p></div>
+    <div class="card"><h3>History of the night</h3><p>Each published projection is stored without being rewritten, and becomes a chart comparing the projection with the TSE count. You can check afterwards where it was right and where it was wrong.</p></div>
+    <div class="card"><h3>Turns on by itself</h3><p>It only appears with at least 250 cities finished, 15 in each region, 3 in each of 20 states, and 1% of the electorate. It does not use opinion polls, only official TSE votes. In the simulation, it does not appear.</p></div>
+  </div>
+  <figure style="margin:22px 0 0;border-radius:16px;overflow:hidden;border:1px solid var(--line)"><img src="../assets/projecao-estados.jpg" alt="Ver por estado list: each state with a bar, likely range, and TSE count (simulation)" loading="lazy" style="width:100%;display:block"></figure>
+  <h3 style="margin:26px 0 8px">Fonte e auditoria · Compartilhar (Source and audit · Share)</h3>
+  <p class="sub">In the panel, the <b>Fonte e auditoria</b> (Source and audit) section shows the data on screen with the link to the official TSE file, the timestamps (tallying, generation, collection), the version, and the fingerprint (sha256), as well as how we fetch it, what we check, and how anyone can verify it. The <b>Compartilhar</b> (Share) button opens the phone's share menu or copies the link, with no server and no cost.</p>
+  <h3 style="margin:26px 0 8px">Running the projection on your machine</h3>
+<pre><span class="c"># teste com a eleição de 2022 (dados abertos do TSE em saida/backtest2022/bruto)</span>
+<span class="k">python3</span> projecao/backtest_2022.py saida/backtest2022/bruto
+<span class="c"># medição da faixa (vários cenários, em paralelo)</span>
+<span class="k">python3</span> projecao/calibracao.py saida/backtest2022/bruto 14
+<span class="c"># serviço: recalcula quando os dados mudam e grava saida/oficial/data/projecao.json</span>
+<span class="k">python3</span> projecao/projetar.py --laco 60</pre>
+  <p class="sub" style="margin-top:12px">Code and details: <a href="https://github.com/inematds/eleicoes2026/tree/main/projecao" target="_blank" rel="noopener">projecao/</a>. Requires <code>numpy</code> and <code>scipy</code>.</p>
+</div></section>
 <section id="exemplos"><div class="wrap">
   <span class="chip">Examples</span>
   <h2>What it looks like on screen</h2>
@@ -274,6 +303,7 @@
   <p class="sub">The first version was built for the October 25, 2026 runoff.</p>
   <div class="phase"><div class="tag">Done</div><div class="d"><strong>President · Brazil + 27 states + abroad</strong><span>Collector with verification, Central and Classic dashboards, real map, accelerated simulation, static publishing.</span></div></div>
   <div class="phase"><div class="tag">Done</div><div class="d"><strong>Municipalities</strong><span>Map of each state with cities coloring in live, statewide votes and progress, 10 cities and simulation, at municipios.inema.club (10/24/2026).</span></div></div>
+  <div class="phase"><div class="tag">Done</div><div class="d"><strong>Projection, audit and sharing</strong><span>Projection of the final result through vote transfer, with a measured range, a per-state list, the night's history and what is still needed for a comeback; Fonte e auditoria (Source and audit) section and Compartilhar (Share) button (10/25/2026).</span></div></div>
   <div class="phase"><div class="tag">Later</div><div class="d"><strong>Other elections</strong><span>Governor and future elections: since collection and display are separate, only the collection part changes.</span></div></div>
 </div></section>
 <footer>
