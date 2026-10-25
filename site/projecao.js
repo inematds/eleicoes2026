@@ -17,10 +17,11 @@
   function vivo(est, txt) { const el = $("#vivo"); el.dataset.estado = est; el.querySelector("span").textContent = txt; }
 
   function aguardando(d) {
-    $("#pj-aguardando").hidden = false; $("#pj-resultado").hidden = true; $("#pj-transf").hidden = true;
+    $("#pj-aguardando").hidden = false; $("#pj-resultado").hidden = true; $("#pj-transf").hidden = true; $("#pj-hist").hidden = true;
     const b = d.base, nomes = { N: "Norte", NE: "Nordeste", CO: "Centro-Oeste", SE: "Sudeste", S: "Sul" };
-    $("#pj-ag-txt").innerHTML = "A projeção liga sozinha com pelo menos <b>" + b.minimo_cidades + " cidades</b> com a apuração encerrada, e <b>" +
-      b.minimo_por_regiao + " em cada região</b>. Agora: <b>" + nf.format(b.cidades_finalizadas) + "</b> cidades encerradas.";
+    $("#pj-ag-txt").innerHTML = "A projeção liga sozinha com pelo menos <b>" + b.minimo_cidades + " cidades</b> com a apuração encerrada, <b>" +
+      b.minimo_por_regiao + " em cada região</b>" + (b.minimo_ufs ? ", " + (b.minimo_por_uf || 3) + " em cada um de <b>" + b.minimo_ufs + " estados</b> e <b>" + p1.format(b.minimo_pct_eleitorado) + "% do eleitorado</b>" : "") +
+      ". Agora: <b>" + nf.format(b.cidades_finalizadas) + "</b> cidades encerradas" + (b.minimo_ufs ? ", " + (b.ufs_com_minimo || 0) + " estados com o mínimo e " + p1.format(b.pct_eleitorado_finalizado || 0) + "% do eleitorado" : "") + ".";
     $("#pj-regioes").innerHTML = Object.keys(nomes).map((r) => {
       const n = b.por_regiao[r] || 0, pct = Math.min(100, (100 * n) / b.minimo_por_regiao);
       return '<div class="pj-reg"><span>' + nomes[r] + "</span><div class=\"pj-reg-b\"><i style=\"width:" + pct + '%"></i></div><b>' + n + " / " + b.minimo_por_regiao + "</b></div>";
@@ -49,6 +50,8 @@
       p1.format(bs.pct_eleitorado_finalizado) + "% do eleitorado)" + (ap ? " · TSE com <b>" + p2.format(ap.pct_secoes) + "%</b> das seções apuradas" : "") +
       " · comparecimento projetado <b>" + p1.format(pr.pct_comparecimento) + "%</b>";
     tabela();
+    virada(d);
+    historico();
     const idade = Date.now() - new Date(d.calculado_em).getTime();
     if (idade > 5 * 60000) vivo("atrasado", "Sem recálculo há " + Math.round(idade / 60000) + " min");
     else vivo("vivo", "Ao vivo");
@@ -64,6 +67,47 @@
       const t = l.para, cel = (v, cls) => '<td><span class="pj-cel ' + cls + '" style="--v:' + v + '%">' + p1.format(v) + "%</span></td>";
       return "<tr><td>" + esc(titulo(l.origem)) + "</td><td>" + nf.format(l.votos_1t) + "</td>" + cel(t[a.numero], "ca") + cel(t[b.numero], "cb") + cel(t.brancos_nulos, "cn") + cel(t.nao_votou, "cx") + "</tr>";
     }).join("");
+  }
+
+  function virada(d) {
+    const v = d.virada, el = $("#pj-virada");
+    if (!v) { el.hidden = true; return; }
+    const nome = (n) => esc(titulo((d.candidatos.find((c) => c.numero === n) || {}).nome_urna || n));
+    let h;
+    if (v.situacao === "praticamente_apurado") h = "<b>Praticamente tudo apurado:</b> restam menos de 0,2% dos votos válidos estimados.";
+    else if (v.situacao === "impossivel") h = "<b>O que falta para a virada:</b> faltam cerca de <b>" + nf.format(v.faltam_validos) + "</b> votos válidos (" + p1.format(v.pct_faltam) +
+      "% do total estimado). Nem com 100% deles " + nome(v.atras) + " alcançaria " + nome(v.lider) + " pelos números de agora.";
+    else if (v.situacao === "ja_a_frente") h = "<b>Atenção:</b> no número apurado pelo TSE, " + nome(v.atras) + " está à frente, mas a projeção indica que os votos que faltam favorecem " + nome(v.lider) + ".";
+    else h = "<b>O que falta para a virada:</b> faltam cerca de <b>" + nf.format(v.faltam_validos) + "</b> votos válidos (" + p1.format(v.pct_faltam) + "% do total estimado). Para virar, " +
+      nome(v.atras) + " precisaria de <b>" + p1.format(v.precisa_pct) + "%</b> deles; a projeção indica <b>" + p1.format(v.projecao_pct) + "%</b>.";
+    el.innerHTML = h + ' <span class="pj-v-nota">(conta com o apurado oficial do TSE e o total de válidos projetado)</span>';
+    el.hidden = false;
+  }
+
+  async function historico() {
+    try {
+      const r = await fetch("data/projecao-historico.json?t=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) return;
+      const h = await r.json(), e = (h.entradas || []).filter((x) => x.a != null);
+      if (e.length < 2) { $("#pj-hist").hidden = true; return; }
+      $("#pj-hist").hidden = false;
+      const W = Math.max(320, Math.min(1100, $("#pj-graf").clientWidth || 900)), H = W < 600 ? 220 : 240, pl = 44, pr = 12, pt = 12, pb = 28;
+      const ts = e.map((x) => new Date(x.t).getTime()), t0 = Math.min(...ts), t1 = Math.max(...ts) || t0 + 1;
+      const vals = e.flatMap((x) => [x.lo, x.hi, x.tse_a].filter((v) => v != null)).concat([50]);
+      let y0 = Math.floor(Math.min(...vals) - 0.5), y1 = Math.ceil(Math.max(...vals) + 0.5);
+      const X = (t) => pl + ((t - t0) / Math.max(1, t1 - t0)) * (W - pl - pr), Y = (v) => pt + (1 - (v - y0) / (y1 - y0)) * (H - pt - pb);
+      const area = e.map((x, i) => X(ts[i]) + "," + Y(x.hi)).join(" ") + " " + e.slice().reverse().map((x, i) => X(ts[e.length - 1 - i]) + "," + Y(x.lo)).join(" ");
+      const linha = (k) => e.map((x, i) => (x[k] == null ? null : X(ts[i]) + "," + Y(x[k]))).filter(Boolean).join(" ");
+      let grade = "";
+      for (let v = y0; v <= y1; v += Math.max(1, Math.round((y1 - y0) / 5))) grade += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" class="g"/><text x="' + (pl - 6) + '" y="' + (Y(v) + 4) + '" class="ty">' + v + "%</text>";
+      const hh = (t) => new Date(t).toTimeString().slice(0, 5);
+      $("#pj-graf").innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Projeção ao longo da noite">' + grade +
+        '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + Y(50) + '" y2="' + Y(50) + '" class="m50"/>' +
+        '<polygon points="' + area + '" class="ar"/><polyline points="' + linha("a") + '" class="lp"/><polyline points="' + linha("tse_a") + '" class="lt"/>' +
+        '<text x="' + pl + '" y="' + (H - 8) + '" class="tx">' + hh(t0) + '</text><text x="' + (W - pr) + '" y="' + (H - 8) + '" class="tx" text-anchor="end">' + hh(t1) + "</text></svg>";
+      const a = dados.candidatos[0];
+      $("#pj-hist-sub").textContent = "% dos válidos de " + titulo(a.nome_urna) + " a cada cálculo (" + e.length + " registros). Cada cálculo publicado fica guardado; nada é reescrito.";
+    } catch (err) { /* histórico é opcional */ }
   }
 
   $("#pj-reg-opts").addEventListener("click", (e) => { const bt = e.target.closest("button[data-r]"); if (bt) { reg = bt.dataset.r; tabela(); } });

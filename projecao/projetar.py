@@ -17,8 +17,13 @@ import modelo as M  # noqa: E402
 P = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BRT = timezone(timedelta(hours=-3))
 GRUPOS_1T = ["13", "22", "70", "14", "55"]  # Lula, Flávio, Cury, Renan, Caiado; os outros 7 viram "pequenos"
+MODELO_VERSAO = "1.1"
 MIN_CIDADES = 250        # cidades FINALIZADAS no país (no teste de 2022, ~5% das cidades → erro médio 0,3 p.p.)
 MIN_POR_REGIAO = 15      # e em cada uma das 5 regiões
+MIN_PCT_ELEITORADO = 1.0 # % do eleitorado do país já em cidades encerradas
+MIN_UFS = 20             # estados com pelo menos MIN_POR_UF cidades encerradas
+MIN_POR_UF = 3
+FATOR_FAIXA = 1.0        # multiplica a faixa do modelo; calibrado em projecao/calibracao.py
 N_BOOT = 30
 
 
@@ -84,6 +89,25 @@ def faixa_minima(pct_cidades):
     return 0.25
 
 
+def criterio(mod, fin):
+    """Quando a projeção pode aparecer: cidades, regiões, estados e eleitorado mínimos."""
+    por_reg = {r: int(np.sum(mod.reg[fin] == r)) for r in M.REGIOES}
+    ufs, n = np.unique(mod.uf[fin], return_counts=True) if len(fin) else ([], [])
+    n_ufs = int(sum(1 for k in n if k >= MIN_POR_UF))
+    pct_el = 100 * float(mod.te1[fin].sum() / mod.te1.sum()) if len(fin) else 0.0
+    pronto = (len(fin) >= MIN_CIDADES and min(por_reg.values()) >= MIN_POR_REGIAO
+              and pct_el >= MIN_PCT_ELEITORADO and n_ufs >= MIN_UFS)
+    return pronto, {"por_regiao": por_reg, "ufs_com_minimo": n_ufs, "pct_eleitorado_finalizado": round(pct_el, 2)}
+
+
+def faixa_final(res, pct_cid):
+    """Faixa mostrada: a do modelo × FATOR_FAIXA, nunca menor que o piso dos testes."""
+    pa = res["pct_a"]
+    lo, hi = res.get("faixa_a", (pa, pa))
+    m = max(FATOR_FAIXA * (hi - lo) / 2, faixa_minima(pct_cid))
+    return pa - m, pa + m
+
+
 def calcula(a):
     base_raw, _, _ = cidades(a.base1t)
     atual_raw, man2, cand2 = cidades(a.atual)
@@ -101,33 +125,31 @@ def calcula(a):
         ext = (v1, te, destinos_ext_2t(ultimo(a.oficial, "zz"), ca, cb))
 
     fin, _ = mod.finalizadas(atual)
-    por_reg = {r: int(np.sum(mod.reg[fin] == r)) for r in M.REGIOES}
+    pronto, est = criterio(mod, fin)
     n_cid = len(mod.cds)
     pct_cid = 100 * len(fin) / n_cid
-    pct_el = 100 * float(mod.te1[fin].sum() / mod.te1.sum()) if len(fin) else 0.0
     br = ultimo(a.oficial, "br")
     agora_tse = None
     if br and br["votos"]["validos"]:
         agora_tse = {"pct_secoes": br["secoes"]["pct_totalizadas"],
                      "pct_validos": {c["numero"]: c["pct_validos"] for c in br["candidatos"]},
+                     "votos": {c["numero"]: c["votos"] for c in br["candidatos"]},
                      "totalizado_tse": br["fonte"].get("totalizado_tse")}
 
     out = {"schema": 1, "tipo": "projecao", "simulacao": sim, "calculado_em": agora(),
            "candidatos": [{"numero": n, "nome_urna": nomes[n]} for n in (ca, cb)],
-           "base": {"cidades_total": n_cid, "cidades_finalizadas": len(fin), "pct_cidades": round(pct_cid, 2),
-                    "pct_eleitorado_finalizado": round(pct_el, 2), "por_regiao": por_reg,
-                    "minimo_cidades": MIN_CIDADES, "minimo_por_regiao": MIN_POR_REGIAO},
+           "modelo_versao": MODELO_VERSAO,
+           "base": {"cidades_total": n_cid, "cidades_finalizadas": len(fin), "pct_cidades": round(pct_cid, 2), **est,
+                    "minimo_cidades": MIN_CIDADES, "minimo_por_regiao": MIN_POR_REGIAO,
+                    "minimo_pct_eleitorado": MIN_PCT_ELEITORADO, "minimo_ufs": MIN_UFS, "minimo_por_uf": MIN_POR_UF},
            "apurado_tse": agora_tse}
-    pronto = len(fin) >= MIN_CIDADES and min(por_reg.values()) >= MIN_POR_REGIAO
     if not pronto:
         out["status"] = "aguardando"
         return out
 
     res = mod.roda(atual, ext, n_boot=N_BOOT)
     tot, pa = res["tot"], res["pct_a"]
-    lo, hi = res.get("faixa_a", (pa, pa))
-    m = faixa_minima(pct_cid)
-    lo, hi = min(lo, pa - m), max(hi, pa + m)
+    lo, hi = faixa_final(res, pct_cid)
     te_tot = float(tot.sum())
     T = res["T"]
     nomes_orig = [nomes.get(g) or g for g in GRUPOS_1T]
@@ -155,7 +177,51 @@ def calcula(a):
         "transferencias": {"BR": matriz(T["BR"]), **{r: matriz(T[r], r) for r in M.REGIOES}},
         "nome_regiao": M.NOME_REGIAO,
     })
+    out["virada"] = virada(tot, agora_tse, ca, cb)
     return out
+
+
+def virada(tot, ap, ca, cb):
+    """Quanto o candidato que está atrás na projeção precisaria dos votos válidos que ainda faltam.
+    Faltam = válidos projetados − válidos já apurados pelo TSE (Brasil, oficial)."""
+    if not ap or not ap.get("votos"):
+        return None
+    va, vb = ap["votos"].get(ca, 0), ap["votos"].get(cb, 0)
+    total = float(tot[0] + tot[1])
+    falta = total - (va + vb)
+    lider, atras = (ca, cb) if tot[0] >= tot[1] else (cb, ca)
+    ap_l, ap_t = (va, vb) if lider == ca else (vb, va)
+    proj_t = float(tot[1] if lider == ca else tot[0])
+    if falta <= 0.002 * total:
+        return {"lider": lider, "atras": atras, "faltam_validos": max(0, int(falta)), "situacao": "praticamente_apurado"}
+    precisa = (ap_l - ap_t + falta) / (2 * falta)          # fatia dos que faltam para empatar
+    projetado = (proj_t - ap_t) / falta                    # fatia que a projeção dá a ele
+    return {"lider": lider, "atras": atras, "faltam_validos": int(falta),
+            "pct_faltam": round(100 * falta / total, 2),
+            "precisa_pct": round(100 * precisa, 1), "projecao_pct": round(100 * projetado, 1),
+            "situacao": "impossivel" if precisa > 1 else ("ja_a_frente" if precisa < 0 else "possivel")}
+
+
+def registra_historico(caminho, out):
+    """Acrescenta a projeção ao histórico público (nunca reescreve entradas antigas)."""
+    if out.get("status") != "ok":
+        return
+    pr, ap, b = out["projecao"], out.get("apurado_tse") or {}, out["base"]
+    ca = out["candidatos"][0]["numero"]
+    e = {"t": out["calculado_em"], "v": out["modelo_versao"], "cid": b["cidades_finalizadas"],
+         "pct_cid": b["pct_cidades"], "pct_el": b["pct_eleitorado_finalizado"],
+         "a": pr["pct_validos"][ca], "lo": pr["faixa"][ca][0], "hi": pr["faixa"][ca][1],
+         "tse_a": (ap.get("pct_validos") or {}).get(ca), "tse_secoes": ap.get("pct_secoes")}
+    try:
+        h = le(caminho)
+    except (FileNotFoundError, ValueError):
+        h = {"schema": 1, "tipo": "projecao_historico", "candidato_a": ca, "entradas": []}
+    if h["entradas"] and {k: v for k, v in h["entradas"][-1].items() if k != "t"} == {k: v for k, v in e.items() if k != "t"}:
+        return  # nada mudou
+    h["entradas"].append(e)
+    grava(caminho, h)
+    with open(os.path.join(os.path.dirname(caminho), "..", "..", "projecao-log.jsonl"), "a", encoding="utf-8") as f:
+        f.write(json.dumps(out, ensure_ascii=False) + "\n")  # cópia completa de cada projeção publicada
 
 
 def assinatura(a):
@@ -192,6 +258,7 @@ def main():
             try:
                 out = calcula(a)
                 grava(a.saida, out)
+                registra_historico(os.path.join(os.path.dirname(a.saida), "projecao-historico.json"), out)
                 ult = s
                 print(json.dumps({"t": agora(), "status": out["status"], "cidades": out["base"]["cidades_finalizadas"],
                                   "proj": out.get("projecao", {}).get("pct_validos"), "s": round(time.time() - t0, 1)}), flush=True)

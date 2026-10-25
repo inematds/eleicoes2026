@@ -261,3 +261,6 @@ h1, h2 { font-family: Sora, Inter, sans-serif; margin: 0; }
 .aud-dado dt { color: var(--mut); }
 .aud-dado dd { margin: 0; color: var(--txt); overflow-wrap: anywhere; }
 @media (max-width: 1000px) { .aud-grade { grid-template-columns: 1fr; } .aud-dado { grid-template-columns: 1fr; gap: 2px; } .aud-dado dd { margin-bottom: 6px; } }
+
+/* o texto da marca vem do estilo, não do HTML: leitores automáticos não o confundem com dado oficial */
+.marca-sim span::after { content: "SIMULAÇÃO"; }

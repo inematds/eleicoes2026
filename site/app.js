@@ -285,6 +285,7 @@
     const [res, hist] = await Promise.all([pega(info.arquivo, true), pega(manifesto.historico[abr], false)]);
     const sim = manifesto.fonte.tipo !== "oficial" || res.fonte.tipo !== "oficial";
     $("#faixa-sim").hidden = !sim; $("#marca-sim").hidden = !sim;
+    if (sim && !$("#faixa-sim").textContent.trim()) $("#faixa-sim").innerHTML = "<strong>SIMULAÇÃO</strong> Nomes e números fictícios, para teste do painel. Não é resultado da eleição.";
     if (sim && manifesto.fonte.nota) $("#faixa-sim").innerHTML = "<strong>SIMULAÇÃO</strong> " + esc(manifesto.fonte.nota.replace(/^Simulação: /, ""));
     aplicaCores(res.candidatos);
     placar(res); progresso(res); barra100(res); tiles(res); grafico(res, hist); fonte(res);

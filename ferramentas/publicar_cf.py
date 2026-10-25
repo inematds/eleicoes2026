@@ -21,6 +21,8 @@ HEADERS = """/data/latest.json
   Cache-Control: no-cache, max-age=0
 /data/projecao.json
   Cache-Control: no-cache, max-age=0
+/data/projecao-historico.json
+  Cache-Control: no-cache, max-age=0
 /data/historico/*
   Cache-Control: no-cache, max-age=0
 /data/br/*
@@ -68,6 +70,9 @@ def copia_dados(fonte, alvo):
     proj = os.path.join(fonte, "projecao.json")  # Projeção INEMA (projecao/projetar.py), só no oficial
     if os.path.exists(proj):
         shutil.copy2(proj, os.path.join(alvo, "projecao.json"))
+    hist = os.path.join(fonte, "projecao-historico.json")
+    if os.path.exists(hist):
+        shutil.copy2(hist, os.path.join(alvo, "projecao-historico.json"))
     return m["versao"]
 
 

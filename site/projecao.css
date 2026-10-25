@@ -32,3 +32,14 @@
 #pj-reg-opts { margin-left: auto; }
 @media (max-width: 1000px) { .pj-cands { grid-template-columns: 1fr; } .pj-reg { grid-template-columns: 90px 1fr 60px; } #pj-reg-opts { margin-left: 0; } }
 #pj-transf .res-tab { max-height: none; overflow-x: auto; overflow-y: visible; }
+.pj-virada { margin-top: 12px; padding: 10px 14px; border-left: 3px solid var(--ouro); background: rgba(250,204,21,.05); border-radius: 0 8px 8px 0; font-size: .92rem; }
+.pj-v-nota { color: var(--fraco); font-size: .78rem; }
+#pj-hist { margin-bottom: 12px; }
+.pj-graf svg { width: 100%; height: auto; display: block; margin-top: 8px; }
+.pj-graf .g { stroke: var(--line2); stroke-width: 1; } .pj-graf .m50 { stroke: var(--ouro); stroke-dasharray: 4 4; stroke-width: 1; }
+.pj-graf .ar { fill: rgba(229,72,77,.18); } .pj-graf .lp { fill: none; stroke: var(--c13); stroke-width: 2.5; }
+.pj-graf .lt { fill: none; stroke: var(--mut); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.pj-graf .ty, .pj-graf .tx { fill: var(--mut); font: 11px Inter; } .pj-graf .ty { text-anchor: end; }
+.pj-leg { display: flex; gap: 18px; color: var(--mut); font-size: .8rem; margin-top: 6px; }
+.pj-leg span::before { content: ""; display: inline-block; width: 18px; height: 3px; margin-right: 6px; vertical-align: middle; }
+.pj-leg .lp::before { background: var(--c13); } .pj-leg .lt::before { background: repeating-linear-gradient(90deg, var(--mut) 0 5px, transparent 5px 9px); }

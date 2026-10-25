@@ -333,3 +333,6 @@ body { display: grid; grid-template-columns: 220px minmax(0, 1fr); }
 .rc .v { font: 700 1.05rem Sora; margin-top: 4px; }
 @media (max-width: 900px) { .res-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 #mapa .mapa-leg { grid-column: 1 / -1 !important; grid-row: 9 !important; margin-top: 8px; }
+
+/* o texto da marca vem do estilo, não do HTML: leitores automáticos não o confundem com dado oficial */
+.marca-sim span::after { content: "SIMULAÇÃO"; }

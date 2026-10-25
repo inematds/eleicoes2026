@@ -9,11 +9,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="menu.css?v=5">
-<link rel="stylesheet" href="central.css?v=17">
-<link rel="stylesheet" href="projecao.css?v=3">
+<link rel="stylesheet" href="central.css?v=18">
+<link rel="stylesheet" href="projecao.css?v=4">
 </head>
 <body>
-<div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span>SIMULAÇÃO</span></div>
+<div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span></span></div>
 
 <aside class="lateral">
   <a class="marca" href="index.html#/">
@@ -57,17 +57,24 @@
   </section>
 
   <section class="painel" id="pj-resultado" hidden>
-    <div class="p-cab"><span class="ico-l"></span><div><h2>Projeção do resultado final</h2><p>% dos votos válidos, com a faixa provável (90%)</p></div></div>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Projeção do resultado final</h2><p>% dos votos válidos, com a faixa provável (nos testes, a faixa conteve o resultado final em 99% dos casos)</p></div></div>
     <div class="pj-cands" id="pj-cands"></div>
     <div class="pj-barra" id="pj-barra"></div>
     <div class="pj-base" id="pj-base"></div>
+    <div class="pj-virada" id="pj-virada" hidden></div>
+  </section>
+
+  <section class="painel" id="pj-hist" hidden>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>A projeção ao longo da noite</h2><p id="pj-hist-sub">Cada cálculo publicado fica guardado; nada é reescrito</p></div></div>
+    <div class="pj-graf" id="pj-graf"></div>
+    <div class="pj-leg"><span class="lp">Projeção INEMA (com a faixa)</span><span class="lt">Apurado no TSE (parcial)</span></div>
   </section>
 
   <section class="painel" id="pj-transf" hidden>
-    <div class="p-cab"><span class="ico-l"></span><div><h2>Para onde foram os votos do 1º turno</h2><p>Estimado nas cidades já encerradas: de cada 100 eleitores de cada grupo no 1º turno, quantos foram para cada lado no 2º</p></div>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Para onde foram os votos do 1º turno</h2><p>Transferência agregada estimada nas cidades já encerradas: de cada 100 eleitores de cada grupo no 1º turno, quantos foram para cada lado no 2º</p></div>
       <div class="map-opts" id="pj-reg-opts" role="group" aria-label="Região"></div></div>
     <div class="res-tab"><table class="tab pj-tab" id="pj-tab"><thead></thead><tbody></tbody></table></div>
-    <p class="pj-nota">Estimativa sobre o conjunto das cidades, não sobre cada eleitor. Grupos pequenos têm taxa mais incerta.</p>
+    <p class="pj-nota">Estimativa feita sobre o conjunto das cidades (inferência agregada), não sobre cada eleitor: combinações diferentes de eleitores podem gerar os mesmos totais. Grupos pequenos têm taxa mais incerta.</p>
   </section>
 
   <section class="painel aud" id="pj-metodo">
@@ -94,12 +101,13 @@
             <tr><td>60%</td><td>0,04 p.p.</td><td>0,72 p.p.</td></tr>
           </tbody></table>
         <p class="pj-p" style="margin-top:8px">Num segundo teste, mais duro (simulação com um desvio sorteado em cada cidade), o erro chegou a 0,9 p.p. com 6% das cidades e 0,5 p.p. com 30%. Por isso a faixa mostrada nunca é menor que isso.</p>
+        <p class="pj-p"><b>Calibração da faixa:</b> em 224 momentos de noite simulados (2022 e simulação, ordens de chegada diferentes), o resultado final ficou dentro da faixa mostrada em 98,7% das vezes — acima de 90% em cada etapa (até 10%, 10–30%, 30–60% e mais de 60% das cidades). Parte desses testes ajudou a definir o piso da faixa, então isso não é garantia para esta eleição.</p>
       </div>
       <div class="aud-bloco">
         <h3>Limites</h3>
         <ul>
           <li>É uma <b>estimativa</b>. Pode errar se as cidades que ainda faltam votarem de um jeito que as já encerradas não mostram.</li>
-          <li>Só liga com pelo menos 250 cidades encerradas, e 15 em cada região. Antes disso, aparece “aguardando”.</li>
+          <li>Só liga com pelo menos 250 cidades encerradas, 15 em cada região, 3 em cada um de 20 estados e 1% do eleitorado do país. Antes disso, aparece “aguardando”.</li>
           <li>Não usa pesquisa de opinião, só votos oficiais do TSE (1º turno completo e 2º turno apurado).</li>
           <li>Nunca declara eleito. Isso é do TSE.</li>
         </ul>
@@ -116,7 +124,7 @@
   </section>
 </div>
 
-<script src="projecao.js?v=5"></script>
+<script src="projecao.js?v=7"></script>
 <script src="acessos.js?v=1"></script>
 <script src="compartilhar.js?v=1"></script>
 </body>

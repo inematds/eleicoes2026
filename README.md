@@ -70,8 +70,11 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
 17. ⚙️ **Projeção INEMA** (menu "Projeção", `site/projecao.html`): serviço `eleicoes-projecao`
     (`projecao/projetar.py --laco 60`, só lê arquivos locais) estima a transferência de votos 1º→2º turno
     nas cidades já encerradas (país → região → estado → porte → perfil) e projeta as que faltam; grava
-    `saida/oficial/data/projecao.json`, que o publicador leva junto. Liga com ≥250 cidades encerradas e ≥15 por
-    região; faixa = incerteza das taxas + desvio das cidades que faltam, com piso pelo pior erro dos testes.
+    `saida/oficial/data/projecao.json`, que o publicador leva junto. Liga com ≥250 cidades encerradas, ≥15 por
+    região, ≥3 em 20 estados e ≥1% do eleitorado; faixa = incerteza das taxas + desvio das cidades que faltam,
+    com piso pelo pior erro dos testes. Calibração: `python3 projecao/calibracao.py saida/backtest2022/bruto 14`
+    (224 cenários, faixa conteve o final em 98,7%). Cada projeção publicada entra em `data/projecao-historico.json`
+    (só acrescenta; gráfico da noite) e, completa, em `saida/projecao-log.jsonl`. Também calcula "o que falta para a virada".
     Teste: `python3 projecao/backtest_2022.py saida/backtest2022/bruto` (dados abertos do TSE 2022 em
     `saida/backtest2022/bruto/{partido,detalhe}`). Sem pesquisa de opinião; na simulação, não aparece.
 
