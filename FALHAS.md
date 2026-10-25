@@ -2,6 +2,8 @@
 
 | data | o que quebrou | menor correção | prompt \| infra |
 |---|---|---|---|
+| 2026-10-25 | Reserva na VPS: nginx devolvia 403 em data/*.json (mkstemp grava 600; só funcionava aqui porque quem publica é o mesmo usuário) | `os.chmod(tmp, 0o644)` no `_grava_atomico` | infra |
+| 2026-10-25 | Espera "até 17:00" dispararia às 14h na VPS (fuso UTC) | horário com fuso explícito (`-0300`) no `espera_ate.sh` | infra |
 | 2026-10-24 | Municípios (revisão): eleitorado do índice preliminar sobrescrevia o da cidade já apurada → 27 estados republicados a cada 15 s com número errado | índice só preenche eleitorado/seções enquanto a cidade não tem arquivo | infra |
 | 2026-10-24 | Municípios (revisão): índice atualizado depois do arquivo faria baixar a mesma cidade para sempre | mesmo arquivo + hora publicada ≥ hora do índice = resolvido; teto de 8 tentativas | infra |
 | 2026-10-24 | Municípios: com a fila ordenada só pelo tamanho, cidade pequena nunca seria baixada enquanto as grandes mudassem (simulação: fila só crescia) | fila por tempo de espera, tamanho só desempata | infra |

@@ -79,6 +79,11 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     Botão "Ver por estado": projeção e faixa de cada estado (piso por % do eleitorado do estado encerrado,
     `PISO_UF` em `projetar.py`, medido em 6.048 casos: cobertura 95,5%); abaixo de 1% ou <3 cidades = "instável".
     Cada estado tem uma linha com a evolução da sua projeção na noite (o histórico guarda `ufs` a cada cálculo).
+18. ⚙️ **Reserva operacional na VPS4** (mkt3, 62.238.25.84, `/opt/eleicoes2026`, instalada por
+    `ferramentas/vps/instalar.sh`): coletores próprios (versões a partir de 500001, esperam 17:00 -0300), projeção e
+    nginx servindo os dois sites com os mesmos caches. Já responde em **https://eleicoes2026.inema.club** (DNS A com
+    proxy no Cloudflare). Em pane daqui: apontar `eleicoes.inema.club` (e `municipios.inema.club`) para 62.238.25.84
+    no Cloudflare. Atualizar: `ssh root@62.238.25.84 'cd /opt/eleicoes2026 && git pull && bash ferramentas/vps/instalar.sh'`.
     Teste: `python3 projecao/backtest_2022.py saida/backtest2022/bruto` (dados abertos do TSE 2022 em
     `saida/backtest2022/bruto/{partido,detalhe}`). Sem pesquisa de opinião; na simulação, não aparece.
 
