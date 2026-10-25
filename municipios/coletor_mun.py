@@ -68,12 +68,13 @@ class ColetorMun:
         self.paralelo = a.paralelo
         self.ufs = [u.lower() for u in a.ufs] if a.ufs else list(N.UFS)
         self.simulacao = a.simulacao
+        self.a_versao_inicial = a.versao_inicial  # outra máquina (reserva) começa noutra faixa: arquivos imutáveis não colidem
         os.makedirs(self.dados, exist_ok=True)
         self.est_arq = os.path.join(self.saida, "coletor-estado.json")
         try:
             self.est = json.load(open(self.est_arq))
         except (FileNotFoundError, json.JSONDecodeError):
-            self.est = {"etag_ab": {}, "mun": {}, "uf": {}, "versao": 0}
+            self.est = {"etag_ab": {}, "mun": {}, "uf": {}, "versao": a.versao_inicial}
         # as pendências não ficam salvas: depois de reiniciar, relê os 27 índices inteiros
         # (sem ETag) para remontar a fila. Custa ~27 pedidos pequenos.
         self.est["etag_ab"] = {}
@@ -388,7 +389,7 @@ class ColetorMun:
             eu = self.est["uf"].setdefault(uf, {})
             if eu.get("assin") == assin:
                 continue
-            v = eu.get("versao", 0) + 1
+            v = eu.get("versao", self.a_versao_inicial) + 1
             d["versao"], d["publicado_em"] = v, N.agora()
             arq = f"uf/{uf}/v{v:05d}.json"
             grava(os.path.join(self.dados, arq), d)
@@ -453,6 +454,7 @@ def main():
     ap.add_argument("--ufs", nargs="*", help="só estas UFs (teste)")
     ap.add_argument("--simulacao", action="store_true", help="marca os dados como SIMULAÇÃO (TSE falso)")
     ap.add_argument("--uma-vez", action="store_true")
+    ap.add_argument("--versao-inicial", type=int, default=0, help="primeira versão menos 1 (reserva na VPS: 500000)")
     a = ap.parse_args()
     N.configurar(a.eleicao, a.turno, a.ciclo, a.pleito, a.n_cand, a.base)
     ColetorMun(a).rodar(a.uma_vez)
