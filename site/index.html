@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="menu.css?v=5">
-<link rel="stylesheet" href="central.css?v=18">
+<link rel="stylesheet" href="central.css?v=19">
 </head>
 <body>
 <div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span></span></div>
@@ -74,6 +74,10 @@
         <div class="dist-itens" id="dist-itens"></div>
         <div class="dif" id="dif"></div>
       </div>
+      <div class="val-caixa">
+        <div class="caixa-tit"><span>Votos válidos</span><span>quem passar dos 50% vence</span></div>
+        <div class="val-wrap"><div class="barra alta" id="dist-val"></div><i class="meio" aria-hidden="true"><b>50%</b></i></div>
+      </div>
       <div class="caixa-pontilhada">
         <div class="caixa-tit"><span>Andamento da apuração (por seções)</span><span>100%</span></div>
         <div class="barra alta" id="apur-barra"></div>
@@ -106,6 +110,10 @@
       <div class="dist-leg">
         <div class="dist-itens" id="uf-itens"></div>
         <div class="dif" id="uf-dif"></div>
+      </div>
+      <div class="val-caixa">
+        <div class="caixa-tit"><span>Votos válidos no estado</span><span>quem passar dos 50% vence</span></div>
+        <div class="val-wrap"><div class="barra alta" id="uf-val"></div><i class="meio" aria-hidden="true"><b>50%</b></i></div>
       </div>
       <div class="caixa-pontilhada">
         <div class="caixa-tit"><span>Andamento da apuração no estado (por seções)</span><span>100%</span></div>
@@ -163,7 +171,7 @@
 
 <div class="dica" id="dica" hidden></div>
 <script src="replay.js?v=1"></script>
-<script src="central.js?v=11"></script>
+<script src="central.js?v=12"></script>
 <script src="acessos.js?v=1"></script>
 <script src="compartilhar.js?v=1"></script>
 </body>

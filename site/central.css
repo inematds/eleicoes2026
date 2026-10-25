@@ -97,6 +97,11 @@ h1, h2 { font-family: Sora, Inter, sans-serif; margin: 0; }
 .dif .v { font: 800 1.9rem/1.1 Sora; color: var(--ouro); }
 .dif .s { color: var(--mut); font-size: .75rem; }
 .rot-dir { text-align: right; color: var(--mut); font-size: .72rem; margin: -6px 0 3px; }
+.val-caixa { margin-top: 12px; padding-bottom: 14px; }
+.val-wrap { position: relative; }
+.val-wrap .barra > div { flex-direction: row; gap: 6px; }
+.val-wrap .meio { position: absolute; left: 50%; top: -5px; bottom: -5px; width: 0; border-left: 2px dashed var(--txt); transform: translateX(-1px); pointer-events: none; }
+.val-wrap .meio b { position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); font: 700 .62rem Inter; color: var(--txt); padding: 0 3px; border-radius: 3px; }
 .caixa-pontilhada { border: 1.5px dashed rgba(245,158,11,.55); border-radius: 10px; padding: 8px 10px 10px; margin-top: 12px; }
 .caixa-tit { display: flex; justify-content: space-between; font-size: .78rem; color: var(--txt); margin-bottom: 6px; }
 .caixa-tit span:last-child { color: var(--mut); }

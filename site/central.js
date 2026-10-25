@@ -100,6 +100,16 @@
       '<div class="s-ouro" style="flex-basis:' + e.pct_comparecimento + '%">Compareceram<span class="num">' + pc(e.pct_comparecimento) + " <small>(" + n(e.comparecimento) + ")</small></span></div>" +
       '<div class="s-abst" style="flex-basis:' + e.pct_abstencao + '%">Abstenção<span class="num">' + pc(e.pct_abstencao) + " <small>(" + n(e.abstencao) + ")</small></span></div>";
   }
+  // ---------- votos válidos: só os dois candidatos (100%), com o risco dos 50% ----------
+  function validos(res, alvo) {
+    const [a, b] = res.candidatos;
+    const x = a.pct_validos || 0, y = b.pct_validos || 0;
+    if (!(x + y)) { $(alvo).innerHTML = '<div class="s-pend" style="flex-basis:100%"><small>aguardando os primeiros votos</small></div>'; return; }
+    const seg = (c, i, v) => '<div style="flex-basis:' + v + "%;background:" + COR(c, i) + '" title="' + esc(c.nome_urna) + ": " + p2.format(v) + '% dos válidos">' +
+      (v >= 14 ? esc(c.nome_urna.split(" ")[0]) + ' <span class="num">' + p2.format(v) + "%</span>" : "") + "</div>";
+    $(alvo).innerHTML = seg(a, 0, x) + seg(b, 1, y);
+  }
+
   function andamento(res, alvo) {
     const s = res.secoes;
     const falta = 100 - s.pct_totalizadas;
@@ -274,10 +284,10 @@
     const [res, hist, ...rs] = await Promise.all([pega(info.arquivo, true), pega(manifesto.historico[abr], false), ...lista.map((u) => pega(manifesto.abrangencias[u].arquivo, true))]);
     const ufs = {}; lista.forEach((u, i) => (ufs[u] = rs[i]));
     const brRes = abr === "br" ? res : await pega(manifesto.abrangencias.br.arquivo, true);
-    cabecalho(abr, res); kpis(res); distribuicao(brRes); andamento(brRes, "#apur-barra"); participacao(res); grafico(res, hist); resumo(abr, res, ufs);
+    cabecalho(abr, res); kpis(res); distribuicao(brRes); validos(brRes, "#dist-val"); andamento(brRes, "#apur-barra"); participacao(res); grafico(res, hist); resumo(abr, res, ufs);
     const pUf = $("#p-uf");
     pUf.hidden = abr === "br";
-    if (abr !== "br") { $("#uf-nome").textContent = NOMES[abr]; distribuicao(res, "uf"); andamento(res, "#uf-apur"); }
+    if (abr !== "br") { $("#uf-nome").textContent = NOMES[abr]; distribuicao(res, "uf"); validos(res, "#uf-val"); andamento(res, "#uf-apur"); }
     linksMunicipios(abr);
     await mapa(abr, ufs);
     if (desenhado && desenhado.split("|")[1] === abr) document.querySelectorAll(".p-dist,.kpis").forEach((x) => { x.classList.add("pisca"); setTimeout(() => x.classList.remove("pisca"), 1500); });
