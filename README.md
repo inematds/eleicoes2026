@@ -63,6 +63,8 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     Ler: `python3 -c "import urllib.request;print(urllib.request.urlopen('https://eleicoes.inema.club/api/acessos').read())"`.
 13. 🧠 **Ligação com o painel**: item "Municípios" no menu e botão "Ver os municípios de <estado>" no card
     do estado levam ao mesmo estado em municipios.inema.club (com `?sim=1` na simulação).
+15. ⚙️ **Botão Compartilhar** (`site/compartilhar.js`): abaixo da Simulação no menu; no celular, na linha do
+    título. Só no navegador (menu de compartilhar do aparelho ou copia o link, sem `?sim=1`), sem servidor nem custo.
 
 ## Testes
 
