@@ -43,7 +43,17 @@ unit eleicoes-municipios "Eleições 2026 INEMA (reserva) — coletor de municí
 unit eleicoes-projecao "Eleições 2026 INEMA (reserva) — Projeção (só lê arquivos locais)" \
   "/usr/bin/python3 $R/projecao/projetar.py --laco 60" 800M
 
-sed "s#__RAIZ__#$R#g" "$R/ferramentas/vps/nginx-eleicoes.conf" > /etc/nginx/sites-available/eleicoes
+# HTTPS: usa o certificado do Let's Encrypt se já existir; senão, um autoassinado (vale no modo Full do Cloudflare)
+mkdir -p /var/www/certbot /etc/ssl/eleicoes
+LE=/etc/letsencrypt/live/eleicoes2026.inema.club
+if [ -f "$LE/fullchain.pem" ]; then CERT="$LE/fullchain.pem"; CHAVE="$LE/privkey.pem"
+else
+  CERT=/etc/ssl/eleicoes/autoassinado.crt; CHAVE=/etc/ssl/eleicoes/autoassinado.key
+  [ -f "$CERT" ] || openssl req -x509 -nodes -newkey rsa:2048 -days 365 -subj "/CN=eleicoes2026.inema.club" \
+    -addext "subjectAltName=DNS:eleicoes2026.inema.club,DNS:eleicoes.inema.club,DNS:municipios.inema.club" \
+    -keyout "$CHAVE" -out "$CERT" 2>/dev/null
+fi
+sed -e "s#__RAIZ__#$R#g" -e "s#__CERT__#$CERT#g" -e "s#__CHAVE__#$CHAVE#g" "$R/ferramentas/vps/nginx-eleicoes.conf" > /etc/nginx/sites-available/eleicoes
 ln -sfn /etc/nginx/sites-available/eleicoes /etc/nginx/sites-enabled/eleicoes
 rm -f /etc/nginx/sites-enabled/default
 # o nginx (www-data) precisa atravessar a pasta do projeto
