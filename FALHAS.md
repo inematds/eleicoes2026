@@ -2,6 +2,7 @@
 
 | data | o que quebrou | menor correção | prompt \| infra |
 |---|---|---|---|
+| 2026-10-25 | Hora de atualização de AC (−2 h) e AM/RR/RO/MT/MS (−1 h) aparecia no fuso local do estado, não em Brasília | `_iso(d, h, abr)` soma o atraso do fuso (tabela `FUSO_ATRAS`) | infra |
 | 2026-10-25 | Noite do 2º turno: total Brasil (e Exterior) não publicava — índice do TSE traz br/zz com hora local do exterior (26/10 09:05), arquivo parecia "mais velho que o índice" para sempre | hora do índice no futuro (>10 min) é ignorada; estado br/zz limpo e coletor reiniciado aqui e na VPS4 | infra |
 | 2026-10-25 | Reserva na VPS: nginx devolvia 403 em data/*.json (mkstemp grava 600; só funcionava aqui porque quem publica é o mesmo usuário) | `os.chmod(tmp, 0o644)` no `_grava_atomico` | infra |
 | 2026-10-25 | Espera "até 17:00" dispararia às 14h na VPS (fuso UTC) | horário com fuso explícito (`-0300`) no `espera_ate.sh` | infra |
