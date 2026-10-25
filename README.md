@@ -77,6 +77,7 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     (só acrescenta; gráfico da noite) e, completa, em `saida/projecao-log.jsonl`. Também calcula "o que falta para a virada".
     Botão "Ver por estado": projeção e faixa de cada estado (piso por % do eleitorado do estado encerrado,
     `PISO_UF` em `projetar.py`, medido em 6.048 casos: cobertura 95,5%); abaixo de 1% ou <3 cidades = "instável".
+    Cada estado tem uma linha com a evolução da sua projeção na noite (o histórico guarda `ufs` a cada cálculo).
     Teste: `python3 projecao/backtest_2022.py saida/backtest2022/bruto` (dados abertos do TSE 2022 em
     `saida/backtest2022/bruto/{partido,detalhe}`). Sem pesquisa de opinião; na simulação, não aparece.
 

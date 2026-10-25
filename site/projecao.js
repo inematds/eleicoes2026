@@ -90,6 +90,7 @@
       const r = await fetch("data/projecao-historico.json?t=" + Date.now(), { cache: "no-store" });
       if (!r.ok) return;
       const h = await r.json(), e = (h.entradas || []).filter((x) => x.a != null);
+      histo = e; estados();
       if (e.length < 2) { $("#pj-hist").hidden = true; return; }
       $("#pj-hist").hidden = false;
       const W = Math.max(320, Math.min(1100, $("#pj-graf").clientWidth || 900)), H = W < 600 ? 220 : 240, pl = 44, pr = 12, pt = 12, pb = 28;
@@ -115,7 +116,23 @@
     go: "Goiás", ma: "Maranhão", mg: "Minas Gerais", ms: "Mato Grosso do Sul", mt: "Mato Grosso", pa: "Pará", pb: "Paraíba", pe: "Pernambuco",
     pi: "Piauí", pr: "Paraná", rj: "Rio de Janeiro", rn: "Rio Grande do Norte", ro: "Rondônia", rr: "Roraima", rs: "Rio Grande do Sul",
     sc: "Santa Catarina", se: "Sergipe", sp: "São Paulo", to: "Tocantins", zz: "Exterior" };
-  let ordemUf = "disputa", ufsAberto = false;
+  let ordemUf = "disputa", ufsAberto = false, histo = [];
+
+  // linha da evolução da projeção de um estado (cada cálculo publicado)
+  function linhaUf(u) {
+    const pts = histo.map((x) => (x.ufs && x.ufs[u] != null ? x.ufs[u] : null)).filter((v) => v != null);
+    if (pts.length < 2) return '<div class="pj-spark pj-spark-vazio" title="A linha aparece a partir do segundo cálculo">—</div>';
+    // escala do próprio estado, com altura mínima de 3 pontos (ruído pequeno não vira drama)
+    const W = 120, H = 30, mn = Math.min(...pts), mx = Math.max(...pts), meio = (mn + mx) / 2;
+    const meia = Math.max(1.5, (mx - mn) / 2 + 0.3), lo = meio - meia, hi = meio + meia;
+    const X = (i) => 2 + (i / (pts.length - 1)) * (W - 4), Y = (v) => 2 + (1 - (v - lo) / (hi - lo)) * (H - 4);
+    const ult = pts[pts.length - 1], cor = ult >= 50 ? "var(--c13)" : "var(--c22)";
+    const d = pts.map((v, i) => X(i).toFixed(1) + "," + Y(v).toFixed(1)).join(" ");
+    return '<svg class="pj-spark" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Evolução da projeção: de ' + p1.format(pts[0]) + "% para " + p1.format(ult) + '%">' +
+      "<title>Projeção ao longo da noite: " + p1.format(pts[0]) + "% → " + p1.format(ult) + "%</title>" +
+      (50 > lo && 50 < hi ? '<line x1="0" x2="' + W + '" y1="' + Y(50) + '" y2="' + Y(50) + '" class="m50"/>' : "") +
+      '<polyline points="' + d + '" style="stroke:' + cor + '"/><circle cx="' + X(pts.length - 1) + '" cy="' + Y(ult) + '" r="2.5" style="fill:' + cor + '"/></svg>';
+  }
 
   function estados() {
     if (!dados || !dados.ufs) return;
@@ -127,7 +144,7 @@
       return dx - dy || NOMES_UF[x[0]].localeCompare(NOMES_UF[y[0]], "pt");
     });
     const na = esc(titulo(a.nome_urna)), nb = esc(titulo(b.nome_urna));
-    $("#pj-ufs-sub").textContent = "% dos válidos de " + titulo(a.nome_urna) + " (vermelho) × " + titulo(b.nome_urna) + " (azul) em cada estado, com a faixa provável";
+    $("#pj-ufs-sub").textContent = "% dos válidos de " + titulo(a.nome_urna) + " (vermelho) × " + titulo(b.nome_urna) + " (azul) em cada estado: a linha mostra a projeção ao longo da noite e a barra, a projeção de agora com a faixa provável";
     $("#pj-ufs-ord").querySelectorAll("button").forEach((bt) => bt.setAttribute("aria-pressed", String(bt.dataset.o === ordemUf)));
     $("#pj-ufs-lista").innerHTML = lista.map(([u, e]) => {
       const ap = e.tse && e.tse.pct_a != null ? "Apurado " + p2.format(e.tse.pct_a) + "% · " + p1.format(e.tse.pct_secoes) + "% das seções" : "Sem apuração ainda";
@@ -145,7 +162,7 @@
         num = '<span class="pj-inst-t">projeção instável</span>';
       }
       const link = u === "zz" ? "index.html#/uf/zz" : "index.html#/uf/" + u;
-      return '<a class="pj-uf" href="' + link + '"><div class="pj-uf-n"><b>' + NOMES_UF[u] + "</b><small>" + cid + '</small></div><div class="pj-uf-b">' + barra +
+      return '<a class="pj-uf" href="' + link + '"><div class="pj-uf-n"><b>' + NOMES_UF[u] + "</b><small>" + cid + '</small></div><div class="pj-uf-s">' + linhaUf(u) + '</div><div class="pj-uf-b">' + barra +
         '</div><div class="pj-uf-v">' + num + "<small>" + ap + "</small></div></a>";
     }).join("");
     $("#pj-ufs").hidden = !ufsAberto;

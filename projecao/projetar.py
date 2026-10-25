@@ -260,7 +260,8 @@ def registra_historico(caminho, out):
     e = {"t": out["calculado_em"], "v": out["modelo_versao"], "cid": b["cidades_finalizadas"],
          "pct_cid": b["pct_cidades"], "pct_el": b["pct_eleitorado_finalizado"],
          "a": pr["pct_validos"][ca], "lo": pr["faixa"][ca][0], "hi": pr["faixa"][ca][1],
-         "tse_a": (ap.get("pct_validos") or {}).get(ca), "tse_secoes": ap.get("pct_secoes")}
+         "tse_a": (ap.get("pct_validos") or {}).get(ca), "tse_secoes": ap.get("pct_secoes"),
+         "ufs": {u: e["pct_a"] for u, e in (out.get("ufs") or {}).items() if e.get("estavel") and e.get("pct_a") is not None}}
     try:
         h = le(caminho)
     except (FileNotFoundError, ValueError):
