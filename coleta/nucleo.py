@@ -181,6 +181,7 @@ def _grava_atomico(caminho, obj):
     fd, tmp = tempfile.mkstemp(dir=os.path.dirname(caminho), suffix=".tmp")
     with os.fdopen(fd, "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, separators=(",", ":"))
+    os.chmod(tmp, 0o644)  # mkstemp cria 600; arquivo público precisa ser legível pelo servidor web (reserva com nginx)
     os.replace(tmp, caminho)
 
 
