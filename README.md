@@ -111,6 +111,16 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     arquivos locais; quando o Brasil vira "totalização final" para `eleicoes-coletor`, quando todas as cidades fecham
     para `eleicoes-municipios` (aqui e na VPS4, por ssh), refaz a análise antes e se desliga no fim. Registro em
     `saida/fim-apuracao.jsonl`. O site continua no ar com o último resultado.
+22. ⚙️🤖 **Chat "Tire suas dúvidas"** (painel grande à direita em todas as páginas, `site/chat.js` + `chat.css`):
+    `analise/chat_contexto.py` (no mesmo timer da análise) junta os números das páginas em
+    `saida/oficial/data/chat-contexto.json` (sem carimbo de hora, para o cache de prompt valer). O Worker
+    (`ferramentas/cloudflare/contador.js`, rota `/api/chat`) chama a **API da Anthropic** (Claude Opus 5.5, esforço
+    baixo, chave `eleicoes2026` do `~/projetos/wifi/.env` guardada como segredo `ANTHROPIC_API_KEY` no Cloudflare;
+    autorizada pelo Nei em 26/10/2026 para este chat) e **grava cada pergunta e resposta** (anônima: hash do IP com
+    sal) no SQLite do Durable Object `Conversas`. Limites: 25 perguntas/hora e 80/dia por visitante, 1.500/dia no site.
+    Baixar para análise: `python3 ferramentas/chat_baixar.py` (timer `eleicoes-chat-baixar.timer`, de hora em hora)
+    → `saida/chat/conversas.jsonl`; token em `~/.config/eleicoes2026/chat.env`. Mudou só o Worker? `cd
+    ferramentas/cloudflare && npm install && npx wrangler@4 deploy` (o publicador só redeploya quando site/dados mudam).
 
 ## Testes
 

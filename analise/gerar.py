@@ -259,7 +259,7 @@ def main():
     # as outras páginas de análise (Raio-X, Conferência, Por que perdeu, A virada): uma falha não derruba as outras
     import subprocess
     import sys
-    for extra in ("raiox.py", "conferencia.py", "derrota.py", "virada.py"):
+    for extra in ("raiox.py", "conferencia.py", "derrota.py", "virada.py", "chat_contexto.py"):
         arq = os.path.join(P, "analise", extra)
         if os.path.exists(arq):
             r = subprocess.run([sys.executable, arq], capture_output=True, text=True, timeout=240)

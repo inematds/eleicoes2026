@@ -1,0 +1,10 @@
+[Unit]
+Description=Eleições 2026 INEMA — baixa as conversas do chat "Tire suas dúvidas" (saida/chat/conversas.jsonl)
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/nmaldaner/projetos/eleicoes2026
+ExecStart=/usr/bin/python3 /home/nmaldaner/projetos/eleicoes2026/ferramentas/chat_baixar.py
+TimeoutStartSec=120
+MemoryMax=300M
+Environment=PYTHONUNBUFFERED=1

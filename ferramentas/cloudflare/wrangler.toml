@@ -21,3 +21,12 @@ class_name = "Contador"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Contador"]
+
+# chat "Tire suas dúvidas": conversas gravadas + limites de uso (SQLite do Durable Object)
+[[durable_objects.bindings]]
+name = "CONVERSAS"
+class_name = "Conversas"
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["Conversas"]

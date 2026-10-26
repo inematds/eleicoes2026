@@ -1,0 +1,10 @@
+[Unit]
+Description=Eleições 2026 INEMA — baixa as conversas do chat de hora em hora
+
+[Timer]
+OnCalendar=hourly
+AccuracySec=1min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
