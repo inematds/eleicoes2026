@@ -1,0 +1,103 @@
+/* Página "A virada" (26/10) — usa central.css, projecao.css e derrota.css */
+#vr-placar .res-tab, #vr-coinc .res-tab, #vr-check .res-tab { max-height: none; margin-top: 10px; }
+#vr-regioes .res-tab { max-height: 560px; margin-top: 10px; }
+.vr-cid-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.vr-cid-grade .res-tab { max-height: 340px; }
+.an-tab tr.sub td { font-weight: 700; background: rgba(250,204,21,.05); border-top: 1px solid var(--line2); }
+.an-tab tr.tot td { background: rgba(250,204,21,.12); }
+
+/* identidade */
+.vr-eq { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 12px; }
+.vr-eq .lado { display: grid; text-align: center; border: 1px solid var(--line2); border-radius: 9px; padding: 6px 10px; min-width: 0; }
+.vr-eq .lado b { font: 800 1.05rem Sora; }
+.vr-eq .lado small { color: var(--mut); font-size: .75rem; }
+.vr-eq .lado.tot { border-color: var(--ouro); }
+.vr-eq .op { font: 800 1.2rem Sora; color: var(--ouro); }
+.vr-bar-tit { font-size: .82rem; color: var(--mut); margin: 12px 0 4px; }
+.vr-bolo .dr-pilha span { font-size: .78rem; }
+.dr-pilha.fina { height: 22px; }
+.dr-pilha.fina span { font-size: .72rem; }
+.vr-caixa { border: 1px dashed var(--ouro); border-radius: 10px; padding: 10px 12px; margin-top: 10px; font-size: .9rem; line-height: 1.5; }
+
+/* candidatos */
+.vr-cand { display: grid; gap: 4px; }
+.vr-cr { display: grid; grid-template-columns: 220px 1fr 96px; gap: 10px; align-items: center; font-size: .85rem; }
+.vr-cr .tr { height: 14px; background: rgba(255,255,255,.03); border-radius: 4px; position: relative; overflow: hidden; }
+.vr-cr .tr span { position: absolute; inset: 0 auto 0 0; background: var(--mut); border-radius: 4px; }
+.vr-cr.q .tr span { background: var(--ouro); }
+.vr-cr .nm small { color: var(--ouro); font-size: .72rem; }
+.vr-cr .vl { text-align: right; font-variant-numeric: tabular-nums; }
+.vr-est { display: grid; gap: 8px; }
+.vr-er { display: grid; grid-template-columns: 260px 1fr; gap: 10px; align-items: center; }
+.vr-er .nm { font-size: .86rem; font-weight: 600; }
+.vr-er .nm small { display: block; color: var(--mut); font-weight: 400; font-size: .74rem; }
+
+/* estados */
+.vr-ufs { display: grid; gap: 3px; margin-top: 6px; }
+.vr-uf { display: grid; grid-template-columns: 170px minmax(0, 1.4fr) minmax(0, 1fr); gap: 10px; align-items: center; font-size: .84rem; }
+.vr-uf.cab { color: var(--mut); font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+.vr-uf.ext { margin-top: 6px; opacity: .85; }
+.vr-uf .br { display: flex; height: 20px; border-radius: 4px; overflow: hidden; position: relative; font: 700 .72rem Inter; }
+.vr-uf .br .l { background: var(--c13); padding-left: 6px; display: flex; align-items: center; color: #fff; }
+.vr-uf .br .f { background: var(--c22); flex: 1; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; color: #0b0b0e; }
+.vr-uf .br i { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.75); }
+.vr-uf .df { display: grid; grid-template-columns: 1fr 1fr; position: relative; height: 20px; align-items: center; }
+.vr-uf .df > span { position: absolute; top: 3px; bottom: 3px; }
+.vr-uf .df > span.l { right: 50%; background: var(--c13); border-radius: 3px 0 0 3px; }
+.vr-uf .df > span.f { left: 50%; background: var(--c22); border-radius: 0 3px 3px 0; }
+.vr-uf .df b { position: relative; font-size: .76rem; font-variant-numeric: tabular-nums; }
+.vr-uf .df b.l { grid-column: 1; text-align: left; color: var(--c13); }
+.vr-uf .df b.f { grid-column: 2; text-align: right; color: var(--c22); }
+.vr-uf .df::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line2); }
+.vr-troca { color: var(--ouro); }
+
+/* regiões */
+.vr-regs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.vr-rg { border: 1px solid var(--line2); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+.vr-rg h3 { font: 700 .92rem Sora; margin: 0 0 6px; }
+.vr-rg .ln { font-size: .84rem; } .vr-rg .ln b { font-family: Sora; } .vr-rg .ln small { color: var(--mut); }
+.vr-rg .ln i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+.vr-rg .s { color: var(--mut); font-size: .75rem; margin-top: 6px; line-height: 1.35; }
+
+/* lupa */
+.vr-sel { display: inline-flex; gap: 8px; align-items: center; margin-top: 12px; font-size: .88rem; color: var(--mut); }
+.vr-sel select { background: var(--painel2); color: var(--txt); border: 1px solid var(--line2); border-radius: 8px; padding: 6px 10px; font: 600 .9rem Inter; }
+.vr-lupa-t { margin-top: 10px; max-width: 720px; }
+.vr-lupa-t td, .vr-lupa-t th { text-align: right; } .vr-lupa-t td:first-child, .vr-lupa-t th:first-child { text-align: left; font-weight: 700; }
+
+/* nível 3 */
+.vr-bu-g { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.vr-bu-c { border: 1px solid var(--line2); border-radius: 10px; padding: 10px 14px; font-size: .88rem; line-height: 1.45; min-width: 0; }
+.vr-bu-c.ok { border-top: 3px solid #4ade80; }
+.vr-bu-c h3 { font: 700 .95rem Sora; margin: 0 0 6px; }
+.vr-bu-c ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.vr-bu-c p { margin: 0 0 8px; }
+.vr-link { display: inline-block; margin-top: 8px; color: var(--ouro); font-weight: 600; text-decoration: none; }
+
+/* checagem */
+.vr-chk td { white-space: normal !important; vertical-align: top; font-size: .84rem; line-height: 1.4; }
+.vr-chk td:nth-child(3) { white-space: nowrap !important; }
+.vr-st { display: inline-block; font: 700 .72rem Inter; padding: 2px 7px; border-radius: 5px; border: 1px solid; }
+.vr-st.ok { color: #4ade80; border-color: rgba(74,222,128,.4); background: rgba(74,222,128,.1); }
+.vr-st.par { color: var(--ouro); border-color: rgba(250,204,21,.4); background: rgba(250,204,21,.08); }
+.vr-st.nao { color: #f87171; border-color: rgba(248,113,113,.4); background: rgba(248,113,113,.08); }
+
+@media (max-width: 1000px) {
+  .vr-regs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vr-bu-g, .vr-cid-grade { grid-template-columns: 1fr; }
+  .vr-er { grid-template-columns: 1fr; gap: 4px; }
+}
+@media (max-width: 640px) {
+  .vr-regs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vr-cr { grid-template-columns: 130px 1fr 78px; font-size: .8rem; }
+  .vr-uf { grid-template-columns: 92px minmax(0, 1fr); font-size: .78rem; }
+  .vr-uf .df { grid-column: 1 / -1; }
+  .vr-uf.cab span:last-child { display: none; }
+  .vr-eq .lado { padding: 4px 7px; } .vr-eq .lado b { font-size: .9rem; }
+}
+
+/* ajustes 26/10: rótulo legível sobre a barra; lupa rola dentro da caixa no celular */
+.vr-uf .df b.l, .vr-uf .df b.f { color: var(--txt); text-shadow: 0 0 3px #000, 0 0 2px #000; }
+.vr-lupa { overflow-x: auto; }
+@media (max-width: 640px) { .vr-lupa-t td, .vr-lupa-t th { padding-left: 5px; padding-right: 5px; font-size: .78rem; } }
+.vr-chk td, .vr-chk th { text-align: left !important; }

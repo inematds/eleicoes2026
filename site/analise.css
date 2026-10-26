@@ -90,3 +90,8 @@
 #an-gov .an-mapa-grade { grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); }
 #an-gov .res-tab { max-height: 520px; margin-top: 0; }
 @media (max-width: 1000px) { #an-gov .an-mapa-grade { grid-template-columns: 1fr; } }
+
+/* ponte para a página A virada (26/10) */
+.vr-ponte { display: block; border: 1px solid var(--ouro); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; color: var(--mut); text-decoration: none; font-size: .88rem; line-height: 1.45; background: rgba(250,204,21,.05); }
+.vr-ponte b { color: var(--ouro); }
+.vr-ponte:hover { background: rgba(250,204,21,.1); }

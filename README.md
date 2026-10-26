@@ -102,8 +102,11 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     O mesmo timer roda também `analise/raiox.py` (menu Raio-X: de onde veio a diferença, concentração, cenário
     aritmético, comparecimento), `analise/conferencia.py` (menu Conferência: somas Brasil/UF/cidades, sha256 dos
     brutos, exterior por boletim de urna, auditoria da Projeção) e `analise/derrota.py` (menu Por que perdeu:
-    aliados x presidente, voto dividido, a conta da virada, hipóteses rotuladas). Cada um grava o seu JSON em
-    `saida/oficial/data/`; o publicador leva os quatro.
+    aliados x presidente, voto dividido, a conta da virada, hipóteses rotuladas) e `analise/virada.py` (menu A virada:
+    placar 1º x 2º turno do Brasil com o 1º turno oficial final de `saida/teste1t/data`, a identidade contábil e por que
+    a "coincidência" não prova transferência, como votou cada estado, ganho por região, lupa por estado, cidades e
+    checagem dos gráficos que circularam). Cada um grava o seu JSON em `saida/oficial/data/`; o publicador leva os cinco
+    (mudou a lista `ANALISES`? reiniciar `eleicoes-publicar.service`).
 21. ⚙️ **Fim da apuração**: `ferramentas/fim_apuracao.py` (timer `eleicoes-fim-apuracao.timer`, de hora em hora) só lê
     arquivos locais; quando o Brasil vira "totalização final" para `eleicoes-coletor`, quando todas as cidades fecham
     para `eleicoes-municipios` (aqui e na VPS4, por ssh), refaz a análise antes e se desliga no fim. Registro em

@@ -140,3 +140,8 @@
 .an-hl .vl, .dr-cr .vl, .dr-rg .vl { white-space: nowrap; }
 .an-escala { flex-wrap: wrap; }
 @media (max-width: 640px) { .an-hl { grid-template-columns: 1fr 78px; } }
+
+/* ponte para a página A virada (26/10) */
+.vr-ponte { display: block; border: 1px solid var(--ouro); border-radius: 10px; padding: 10px 14px; margin: 0 0 12px; color: var(--mut); text-decoration: none; font-size: .88rem; line-height: 1.45; background: rgba(250,204,21,.05); }
+.vr-ponte b { color: var(--ouro); }
+.vr-ponte:hover { background: rgba(250,204,21,.1); }

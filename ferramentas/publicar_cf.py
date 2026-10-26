@@ -17,7 +17,7 @@ DEST = os.path.join(P, "saida", "publicar")
 FONTES = {"": os.path.join(P, "saida", "oficial", "data"), "simulacao": os.path.join(P, "saida", "simficticio", "data")}
 MANTER = 4  # versões por abrangência
 
-ANALISES = ("analise.json", "raiox.json", "conferencia.json", "derrota.json")
+ANALISES = ("analise.json", "raiox.json", "conferencia.json", "derrota.json", "virada.json")
 HEADERS = """/data/latest.json
   Cache-Control: no-cache, max-age=0
 /data/projecao.json
@@ -33,6 +33,8 @@ HEADERS = """/data/latest.json
 /data/conferencia.json
   Cache-Control: no-cache, max-age=0
 /data/derrota.json
+  Cache-Control: no-cache, max-age=0
+/data/virada.json
   Cache-Control: no-cache, max-age=0
 /data/historico/*
   Cache-Control: no-cache, max-age=0

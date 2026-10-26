@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A virada de 10,4 milhões · Eleições 2026 · INEMA</title>
+<meta name="description" content="Lula ganhou 10,4 milhões de votos do 1º para o 2º turno e Flávio 3,7 milhões. O que a matemática explica, o que não prova e o que ainda dá para investigar, com os números finais do TSE.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="menu.css?v=5">
+<link rel="stylesheet" href="central.css?v=18">
+<link rel="stylesheet" href="projecao.css?v=8">
+<link rel="stylesheet" href="derrota.css?v=2">
+<link rel="stylesheet" href="virada.css?v=3">
+</head>
+<body>
+<div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span></span></div>
+
+<aside class="lateral">
+  <a class="marca" href="index.html#/">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 45 24 24 45 3 24Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 12 36 24 24 36 12 24Z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 19 29 24 24 29 19 24Z" fill="currentColor"/></svg>
+    <span><b>INEMA</b><small>ELEIÇÕES <em>LIVE</em></small></span>
+  </a>
+  <nav class="menu" aria-label="Seções">
+    <a href="index.html#/" data-nav="br"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Visão geral</a>
+    <a href="index.html#estados" data-nav="estados"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/></svg>Estados</a>
+    <a href="https://municipios.inema.club/" data-nav="mun"><svg viewBox="0 0 24 24"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3zM9 3v15M15 6v15"/></svg>Municípios</a>
+    <a href="exterior.html" data-nav="ext"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Exterior</a>
+    <a href="projecao.html" data-nav="proj"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 16l4-5 4 3 6-8M15 6h4v4"/></svg>Projeção</a>
+    <a href="analise.html" data-nav="ana"><svg viewBox="0 0 24 24"><path d="M12 3v9h9M12 3a9 9 0 1 0 9 9"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Análise</a>
+    <a href="raiox.html" data-nav="rx"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5M8 11h6M11 8v6"/></svg>Raio-X</a>
+    <a href="derrota.html" data-nav="der"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M8 11h6M11 8v6"/></svg>Por que perdeu</a>
+    <a href="virada.html" data-nav="vir" class="ativo" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 8h14l-4-4M20 16H6l4 4"/></svg>A virada</a>
+    <a href="index.html#evolucao"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Evolução</a>
+    <a href="index.html#resumo"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>Resumo</a>
+    <a href="index.html#fonte"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8"/></svg>Fonte e auditoria</a>
+    <a href="conferencia.html" data-nav="conf"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Conferência</a>
+    <a href="classica.html"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 10h18"/></svg>Versão clássica</a>
+    <a class="comp-btn" href="#" role="button" data-compartilhar><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartilhar</span></a>
+  </nav>
+  <div class="lateral-pe">
+    <div class="acessos" data-acessos hidden><b>—</b> acessos</div>
+    <div class="dominio">eleicoes<span>.</span>inema<span>.</span>club</div>
+    <p>Dados oficiais do TSE em tempo real, para um Brasil mais transparente.</p>
+  </div>
+</aside>
+
+<div class="corpo">
+  <header class="cab">
+    <div class="cab-sigla">±</div>
+    <div class="cab-txt">
+      <div class="cab-linha"><h1>A virada de 10,4 milhões: o que a matemática explica e o que dá para investigar</h1><span class="cab-data">TSE <b id="vr-hora">—</b></span></div>
+      <div class="cab-sub"><span id="vr-sub">Presidente 2026</span> • <span class="vivo" id="vivo" data-estado="carregando"><i></i><span>carregando</span></span><span class="acessos-cel" data-acessos hidden> • <b>—</b> acessos</span><a class="comp-cel" href="#" role="button" data-compartilhar aria-label="Compartilhar"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartilhar</span></a></div>
+    </div>
+    <div class="cab-dir">DEMOCRACIA<br>EM TEMPO REAL<i></i></div>
+  </header>
+
+  <div class="pj-selo"><b>COMO LER</b> <span class="an-tag fato">FATO</span> = conta direta sobre os resultados finais do TSE. <span class="an-tag est">ESTIMATIVA</span> = cálculo estatístico do modelo da Projeção (o voto é secreto; vale para o conjunto, não para cada pessoa). <span class="an-tag exe">CHECAGEM</span> = afirmação que circulou nas redes comparada com o número oficial. A página não parte da ideia de fraude nem de que está tudo provado: mostra o que cada lado pode conferir com os mesmos dados.</div>
+  <div class="faixa-erro" id="faixa-erro" hidden role="alert"></div>
+
+  <section class="painel" id="vr-pergunta">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>A pergunta</h2><p id="vr-perg-sub">—</p></div></div>
+    <div class="dr-achados" id="vr-achados"></div>
+  </section>
+
+  <section class="painel" id="vr-placar">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Nível 1 · O placar do Brasil <span class="an-tag fato">FATO</span></h2><p>Resultado final oficial do 1º turno (4/10) e do 2º turno (25/10), com o exterior</p></div></div>
+    <div class="an-cards" id="vr-cards"></div>
+    <div class="res-tab"><table class="tab an-tab" id="vr-tab-br"><thead></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="painel" id="vr-conta">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>A conta que sempre fecha <span class="an-tag fato">FATO</span></h2><p>De onde podem ter vindo os 14,1 milhões de votos a mais que os dois somaram no 2º turno</p></div></div>
+    <div class="vr-ident" id="vr-ident"></div>
+    <div class="vr-bolo" id="vr-bolo"></div>
+    <p class="pj-nota" id="vr-bolo-nota"></p>
+  </section>
+
+  <section class="painel" id="vr-coinc">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Por que a “coincidência” não prova a transferência <span class="an-tag fato">FATO</span></h2><p>Um texto que circula divide as categorias entre os dois e encontra a mesma sobra dos dois lados. Isso acontece com qualquer divisão</p></div></div>
+    <p class="pj-nota an-nota-top" id="vr-coinc-txt"></p>
+    <div class="res-tab"><table class="tab an-tab" id="vr-tab-div"><thead></thead><tbody></tbody></table></div>
+    <div class="vr-caixa" id="vr-coinc-conc"></div>
+  </section>
+
+  <section class="painel" id="vr-alega">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>“Ele pegou todos os votos desse povo e mais as abstenções?”</h2><p>A postagem soma 4 candidatos. Aqui estão todos, e o que se sabe sobre para onde foram</p></div></div>
+    <h3 class="an-h3">Os 10 candidatos que ficaram fora do 2º turno <span class="an-tag fato">FATO</span></h3>
+    <div class="vr-cand" id="vr-cand"></div>
+    <p class="pj-nota" id="vr-cand-nota"></p>
+    <h3 class="an-h3">Para onde foram, pelo modelo <span class="an-tag est">ESTIMATIVA</span></h3>
+    <p class="pj-nota an-nota-top">O modelo da Projeção compara milhares de cidades: onde um candidato do 1º turno teve mais votos, quanto cada finalista cresceu. Vale para o conjunto, não para o voto de ninguém.</p>
+    <div class="an-leg" id="vr-est-leg"></div>
+    <div class="vr-est" id="vr-est"></div>
+    <p class="pj-nota" id="vr-est-nota"></p>
+  </section>
+
+  <section class="painel" id="vr-estados">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Nível 2 · Como votou cada estado <span class="an-tag fato">FATO</span></h2><p id="vr-est-sub">% dos votos válidos no 2º turno e diferença em votos, resultado final</p></div></div>
+    <div class="an-leg" id="vr-uf-leg"></div>
+    <div class="vr-ufs" id="vr-ufs"></div>
+  </section>
+
+  <section class="painel" id="vr-regioes">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Onde cada um ganhou votos <span class="an-tag fato">FATO</span></h2><p>1º turno x 2º turno por estado, agrupado por região, com o resultado final (inclui o Rio de Janeiro completo e o exterior)</p></div></div>
+    <div class="vr-regs" id="vr-regs"></div>
+    <div class="res-tab"><table class="tab an-tab" id="vr-tab-uf"><thead></thead><tbody></tbody></table></div>
+    <p class="pj-nota" id="vr-reg-nota"></p>
+  </section>
+
+  <section class="painel" id="vr-lupa">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Lupa por estado <span class="an-tag fato">FATO</span></h2><p>Escolha um estado: votos e % dos válidos de cada um nos dois turnos e quanto cresceu</p></div></div>
+    <label class="vr-sel">Estado <select id="vr-uf-sel"></select></label>
+    <div class="vr-lupa" id="vr-lupa-box"></div>
+  </section>
+
+  <section class="painel" id="vr-cid">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Cidade a cidade <span class="an-tag fato">FATO</span></h2><p id="vr-cid-sub">Onde ocorreram as maiores mudanças</p></div></div>
+    <div class="an-cards" id="vr-cid-cards"></div>
+    <div class="an-mapa-grade vr-cid-grade">
+      <div><h3 class="an-h3">Onde Lula mais ganhou votos</h3><div class="res-tab"><table class="tab an-tab" id="vr-tab-dl"><thead></thead><tbody></tbody></table></div></div>
+      <div><h3 class="an-h3">Onde Flávio mais ganhou votos</h3><div class="res-tab"><table class="tab an-tab" id="vr-tab-df"><thead></thead><tbody></tbody></table></div></div>
+      <div><h3 class="an-h3">Maior mudança a favor de Lula <small>(cidades com 20 mil eleitores ou mais, p.p. da parte de Lula entre os dois)</small></h3><div class="res-tab"><table class="tab an-tab" id="vr-tab-ppl"><thead></thead><tbody></tbody></table></div></div>
+      <div><h3 class="an-h3">Maior mudança a favor de Flávio <small>(mesmo critério)</small></h3><div class="res-tab"><table class="tab an-tab" id="vr-tab-ppf"><thead></thead><tbody></tbody></table></div></div>
+    </div>
+  </section>
+
+  <section class="painel" id="vr-bu">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Nível 3 · Boletins de urna x totalização</h2><p>A pergunta que dá para responder com dados: observadores independentes conseguem refazer a soma?</p></div></div>
+    <div class="vr-bu" id="vr-bu-box"></div>
+  </section>
+
+  <section class="painel" id="vr-check">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Checagem dos gráficos que circularam <span class="an-tag exe">CHECAGEM</span></h2><p>Cada afirmação comparada com o número oficial final do TSE</p></div></div>
+    <div class="res-tab"><table class="tab an-tab vr-chk" id="vr-tab-chk"><thead></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="painel" id="vr-nao">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>O que os números não respondem</h2><p>Limites desta análise</p></div></div>
+    <ul class="dr-lista" id="vr-nao-lista"></ul>
+  </section>
+
+  <section class="painel aud" id="vr-metodo">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Como esta página é feita</h2><p>Fonte e limites</p></div></div>
+    <div class="aud-grade">
+      <div class="aud-bloco"><h3>Fatos</h3><ul>
+        <li>Brasil, estados e exterior: arquivos oficiais finais do TSE do 1º turno (eleição 6257, totalizada em 5/10) e do 2º turno (eleição 6258), coletados por este site. A soma dos 27 estados com o exterior é conferida contra o total do Brasil nos dois turnos.</li>
+        <li>Cidades: resultado de cada uma das 5.571 cidades nos dois turnos (sem exterior).</li>
+        <li>Por isso os números por estado desta página podem diferir um pouco dos da página <a href="analise.html">Análise</a>, que usa só a soma das cidades.</li>
+      </ul></div>
+      <div class="aud-bloco"><h3>Estimativa</h3><ul>
+        <li>As transferências vêm do modelo da <a href="projecao.html">Projeção INEMA</a>, que compara cidades. O voto é secreto; o modelo vale para o conjunto.</li>
+        <li>Política econômica, juros e outros temas ficam fora desta página: não ajudam a testar a conta eleitoral.</li>
+      </ul></div>
+      <div class="aud-bloco"><h3>Transparência</h3><ul>
+        <li>Números desta página: <a href="data/virada.json" target="_blank" rel="noopener">data/virada.json</a>.</li>
+        <li>Código aberto: <a href="https://github.com/inematds/eleicoes2026/tree/main/analise" target="_blank" rel="noopener">analise/virada.py</a>.</li>
+        <li>Conferência das somas e dos boletins do exterior: <a href="conferencia.html">menu Conferência</a>.</li>
+      </ul></div>
+    </div>
+  </section>
+</div>
+
+<script src="virada.js?v=2"></script>
+<script src="acessos.js?v=1"></script>
+<script src="compartilhar.js?v=1"></script>
+</body>
+</html>
