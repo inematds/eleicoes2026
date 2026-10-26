@@ -98,6 +98,11 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     cidade a cidade (FATO: variação de votos, viradas, onde Flávio perdeu votos, estado a estado) e usa as
     transferências da Projeção (ESTIMATIVA: de onde vieram os votos, para onde foram os do 1º turno). Só lê
     arquivos locais; grava `saida/oficial/data/analise.json`; timer `eleicoes-analise.timer` a cada 5 min (aqui e na VPS4).
+    Senador/governador por cidade: `python3 analise/coleta_estaduais.py` (uma vez; eleições 6259 e 6260 do TSE → `saida/estaduais/`).
+21. ⚙️ **Fim da apuração**: `ferramentas/fim_apuracao.py` (timer `eleicoes-fim-apuracao.timer`, de hora em hora) só lê
+    arquivos locais; quando o Brasil vira "totalização final" para `eleicoes-coletor`, quando todas as cidades fecham
+    para `eleicoes-municipios` (aqui e na VPS4, por ssh), refaz a análise antes e se desliga no fim. Registro em
+    `saida/fim-apuracao.jsonl`. O site continua no ar com o último resultado.
 
 ## Testes
 

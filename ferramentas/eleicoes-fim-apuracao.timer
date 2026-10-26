@@ -1,0 +1,9 @@
+[Unit]
+Description=Eleições 2026 INEMA — checagem do fim da apuração de hora em hora
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target

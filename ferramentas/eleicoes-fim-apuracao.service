@@ -1,0 +1,8 @@
+[Unit]
+Description=Eleições 2026 INEMA — confere se o TSE fechou a apuração e desliga os coletores
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/nmaldaner/projetos/eleicoes2026
+ExecStart=/usr/bin/python3 /home/nmaldaner/projetos/eleicoes2026/ferramentas/fim_apuracao.py
+TimeoutStartSec=300
