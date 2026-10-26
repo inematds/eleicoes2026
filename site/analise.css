@@ -58,3 +58,35 @@
 }
 #an-reg, #an-cand { flex-wrap: wrap; }
 @media (max-width: 640px) { #an-reg, #an-cand { margin-left: 0; margin-top: 8px; } #an-fluxo .p-cab, #an-cascata .p-cab { flex-wrap: wrap; } }
+
+/* senado e governador x presidente */
+.an-h3 { font: 700 .95rem Sora; margin: 18px 0 4px; }
+.an-nota-top { margin: 0 0 6px; }
+.an-ponto { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+.an-hal { display: grid; gap: 4px; margin-top: 6px; }
+.an-hl { display: grid; grid-template-columns: 150px 1fr 74px; gap: 10px; align-items: center; font-size: .82rem; }
+.an-hl .tr { position: relative; height: 18px; border-left: 1px solid var(--line2); border-right: 1px solid var(--line2); background: linear-gradient(90deg, transparent calc(50% - .5px), var(--line2) calc(50% - .5px), var(--line2) calc(50% + .5px), transparent calc(50% + .5px)); }
+.an-hl .ln { position: absolute; top: 8px; height: 2px; background: var(--mut); opacity: .5; }
+.an-hl .vl { text-align: right; font-variant-numeric: tabular-nums; }
+.an-eixo .tr { height: 14px; border: 0; background: none; } .an-eixo .tr span { position: absolute; transform: translateX(-50%); color: var(--fraco, var(--mut)); font-size: .68rem; }
+.an-mk { position: absolute; top: 3px; width: 12px; height: 12px; border-radius: 50%; transform: translateX(-50%); display: inline-block; }
+.an-leg .an-mk { position: static; transform: none; vertical-align: -2px; margin-right: 6px; }
+.an-mk.o { background: transparent; border: 2px solid; box-sizing: border-box; }
+.an-mk.q { border-radius: 2px; background: var(--ouro, #FACC15); transform: translateX(-50%) rotate(45deg); width: 10px; height: 10px; top: 4px; }
+.an-leg .an-mk.q { transform: rotate(45deg); }
+.an-disp svg { width: 100%; height: auto; display: block; max-height: 420px; }
+.an-disp .g { stroke: var(--line2); } .an-disp .m50 { stroke: var(--ouro, #FACC15); stroke-dasharray: 5 4; stroke-width: 1.2; }
+.an-disp .ty, .an-disp .tx { fill: var(--mut); font: 11px Inter; } .an-disp .ty { text-anchor: end; } .an-disp .tx { text-anchor: middle; }
+#an-sen .res-tab { margin-top: 10px; max-height: 460px; }
+#an-sen-tab td { vertical-align: top; } #an-sen-tab td:nth-child(2) { text-align: left; line-height: 1.5; }
+#an-gov-tab td:nth-child(2) { text-align: left; }
+#an-sen-campo, #an-gov .map-opts { flex-wrap: wrap; }
+@media (max-width: 640px) {
+  .an-hl { grid-template-columns: 1fr 64px; }
+  .an-hl .nm { grid-column: 1 / -1; }
+  .an-hl .tr { grid-column: 1; }
+  #an-sen-campo { margin-left: 0; margin-top: 8px; } #an-sen .p-cab { flex-wrap: wrap; }
+}
+#an-gov .an-mapa-grade { grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); }
+#an-gov .res-tab { max-height: 520px; margin-top: 0; }
+@media (max-width: 1000px) { #an-gov .an-mapa-grade { grid-template-columns: 1fr; } }

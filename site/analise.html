@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="menu.css?v=5">
 <link rel="stylesheet" href="central.css?v=18">
 <link rel="stylesheet" href="projecao.css?v=8">
-<link rel="stylesheet" href="analise.css?v=1">
+<link rel="stylesheet" href="analise.css?v=2">
 </head>
 <body>
 <div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span></span></div>
@@ -92,11 +92,32 @@
     <div class="res-tab"><table class="tab an-tab" id="an-uf"><thead></thead><tbody></tbody></table></div>
   </section>
 
+  <section class="painel" id="an-sen" hidden>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Senado x Presidente <span class="an-tag fato">FATO</span></h2><p>Em cada estado: quanto o candidato a presidente teve no 1º e no 2º turno e quanto os candidatos a senador do campo dele tiveram no 1º turno</p></div>
+      <div class="map-opts" id="an-sen-campo" role="group" aria-label="Campo"></div></div>
+    <div class="an-leg" id="an-sen-leg"></div>
+    <div class="an-hal" id="an-sen-hal"></div>
+    <h3 class="an-h3">Cidade a cidade</h3>
+    <p class="pj-nota an-nota-top" id="an-sen-disp-nota"></p>
+    <div class="an-disp" id="an-sen-disp"></div>
+    <div class="res-tab"><table class="tab an-tab" id="an-sen-tab"><thead></thead><tbody></tbody></table></div>
+    <p class="pj-nota">Campo de Lula = candidato de coligação com o PT (ou da federação dele); campo de Flávio = coligação com o PL. Os outros ficam em “outros”. Cada eleitor votou em 2 senadores, por isso a conta usa a parte de cada campo nos votos válidos para senador. “Voto dividido” = cidades em que o campo que venceu para senador não é o do presidente que venceu ali no 2º turno.</p>
+  </section>
+
+  <section class="painel" id="an-gov" hidden>
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Governador x Presidente <span class="an-tag fato">FATO</span></h2><p>Quem venceu para governador, de que campo, e se o estado votou do mesmo lado para presidente</p></div></div>
+    <div class="an-mapa-grade">
+      <div><div class="an-mapa" id="an-gov-mapa"></div><div class="an-leg" id="an-gov-leg"></div></div>
+      <div class="res-tab"><table class="tab an-tab" id="an-gov-tab"><thead></thead><tbody></tbody></table></div>
+    </div>
+    <p class="pj-nota">Nos 6 estados com 2º turno para governador (AC, AM, DF, ES, RN, TO) vale o 2º turno dos dois cargos. “Voto dividido” = % das cidades em que o governador mais votado é de um campo e o presidente mais votado no 2º turno é do outro (só conta cidades em que o governador mais votado é de um dos dois campos).</p>
+  </section>
+
   <section class="painel aud" id="an-metodo">
     <div class="p-cab"><span class="ico-l"></span><div><h2>Como esta análise é feita</h2><p>Fonte e limites</p></div></div>
     <div class="aud-grade">
       <div class="aud-bloco"><h3>Fatos</h3><ul>
-        <li>Resultados oficiais do TSE por cidade, 1º e 2º turno, para presidente.</li>
+        <li>Resultados oficiais do TSE por cidade, 1º e 2º turno, para presidente; 1º turno de governador e senador; 2º turno de governador nos 6 estados que tiveram.</li>
         <li>Só entram cidades com a apuração finalizada nos dois turnos, para a comparação ser justa.</li>
         <li>Votos de cada candidato e comparecimento são números do TSE; as diferenças são só subtração.</li>
       </ul></div>
@@ -113,7 +134,7 @@
   </section>
 </div>
 
-<script src="analise.js?v=1"></script>
+<script src="analise.js?v=2"></script>
 <script src="acessos.js?v=1"></script>
 <script src="compartilhar.js?v=1"></script>
 </body>

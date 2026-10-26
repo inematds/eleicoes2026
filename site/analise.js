@@ -116,10 +116,74 @@
     }).join("");
   }
 
+  // ---------- senado e governador x presidente ----------
+  var campoSen = "L";
+  var CAMPO = { L: { cor: COR[A], nm: function () { return "campo de " + curto(A); } }, F: { cor: COR[B], nm: function () { return "campo de " + curto(B); } }, O: { cor: "var(--mut)", nm: function () { return "outros"; } }, M: { cor: "var(--ouro)", nm: function () { return "PT e PL juntos"; } } };
+  function tagCampo(c) { return '<i class="an-ponto" style="background:' + CAMPO[c || "O"].cor + '" title="' + CAMPO[c || "O"].nm() + '"></i>'; }
+
+  function senado() {
+    var es = d.estaduais;
+    if (!es || !es.ufs || !Object.keys(es.ufs).length) { $("an-sen").hidden = true; return; }
+    $("an-sen").hidden = false;
+    var cs = campoSen, num = cs === "L" ? A : B, cor = CAMPO[cs].cor, U = es.ufs;
+    botoes($("an-sen-campo"), [["L", "Campo de " + curto(A)], ["F", "Campo de " + curto(B)]], cs, function (v) { campoSen = v; senado(); });
+    var k1 = cs === "L" ? "lula_1t" : "flavio_1t", k2 = cs === "L" ? "lula_2t" : "flavio_2t", ks = cs === "L" ? "senado_L" : "senado_F";
+    $("an-sen-leg").innerHTML = '<span><i class="an-mk o" style="border-color:' + cor + '"></i>' + esc(curto(num)) + " no 1º turno</span>" +
+      '<span><i class="an-mk" style="background:' + cor + '"></i>' + esc(curto(num)) + " no 2º turno</span>" +
+      '<span><i class="an-mk q"></i>Senadores do campo de ' + esc(curto(num)) + "</span>";
+    var lista = Object.keys(U).sort(function (a, b) { return (U[b][ks] - U[b][k2]) - (U[a][ks] - U[a][k2]); });
+    $("an-sen-hal").innerHTML = '<div class="an-hl an-eixo"><div></div><div class="tr">' + [0, 25, 50, 75, 100].map(function (x) { return '<span style="left:' + x + '%">' + x + "%</span>"; }).join("") + "</div><div></div></div>" +
+      lista.map(function (uf) {
+        var u = U[uf], v = [u[k1], u[k2], u[ks]], mn = Math.min.apply(null, v), mx = Math.max.apply(null, v), dif = u[ks] - u[k2];
+        return '<div class="an-hl"><div class="nm">' + UF[uf] + '</div><div class="tr"><b class="ln" style="left:' + mn + "%;width:" + (mx - mn) + '%"></b>' +
+          '<i class="an-mk o" style="left:' + u[k1] + "%;border-color:" + cor + '" title="1º turno: ' + p1(u[k1]) + '"></i>' +
+          '<i class="an-mk" style="left:' + u[k2] + "%;background:" + cor + '" title="2º turno: ' + p1(u[k2]) + '"></i>' +
+          '<i class="an-mk q" style="left:' + u[ks] + '%" title="Senado: ' + p1(u[ks]) + '"></i></div><div class="vl num ' + (dif >= 0 ? "an-pos" : "an-neg") + '">' + (dif >= 0 ? "+" : "−") + Math.abs(dif).toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " p.p.</div></div>";
+      }).join("");
+    // dispersão cidade a cidade
+    var W = 640, H = 360, m = { l: 44, r: 12, t: 10, b: 34 }, X = function (x) { return m.l + x / 100 * (W - m.l - m.r); }, Y = function (y) { return m.t + (1 - y / 100) * (H - m.t - m.b); };
+    var gr = "";
+    [0, 25, 50, 75, 100].forEach(function (t) { gr += '<line class="g" x1="' + X(0) + '" x2="' + X(100) + '" y1="' + Y(t) + '" y2="' + Y(t) + '"/><text class="ty" x="' + (m.l - 6) + '" y="' + (Y(t) + 4) + '">' + t + '%</text><text class="tx" x="' + X(t) + '" y="' + (H - 16) + '">' + t + "%</text>"; });
+    var pts = es.pontos.filter(function (p) { return p[1] != null; }).map(function (p) {
+      var x = cs === "L" ? p[1] : 100 - p[1], y = cs === "L" ? p[2] : p[3], r = Math.max(1.6, Math.min(9, Math.sqrt(p[6]) / 90));
+      return '<circle cx="' + X(x).toFixed(1) + '" cy="' + Y(y).toFixed(1) + '" r="' + r.toFixed(1) + '" fill="' + cor + '" fill-opacity=".45"/>';
+    }).join("");
+    $("an-sen-disp-nota").textContent = "Cada bolinha é uma cidade (maior = mais eleitores). Na horizontal, " + curto(num) + " no 2º turno; na vertical, os senadores do campo dele no 1º turno. Abaixo da linha tracejada, o senado do campo foi pior que o presidente; acima, melhor.";
+    $("an-sen-disp").innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Dispersão cidade a cidade">' + gr +
+      '<line class="m50" x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(100) + '" y2="' + Y(100) + '"/>' + pts +
+      '<text class="tx" x="' + X(50) + '" y="' + (H - 2) + '">' + esc(curto(num)) + " no 2º turno (% dos válidos)</text></svg>";
+    $("an-sen-tab").querySelector("thead").innerHTML = "<tr><th>Estado</th><th>Senadores eleitos</th><th>" + esc(curto(num)) + " 2º turno</th><th>Senado do campo</th><th>Voto dividido</th></tr>";
+    $("an-sen-tab").querySelector("tbody").innerHTML = lista.map(function (uf) {
+      var u = U[uf];
+      return "<tr><td>" + UF[uf] + "</td><td>" + u.senadores_eleitos.map(function (s) { return tagCampo(s.campo) + esc(bonito(s.nome)) + " <small>" + esc(s.partido) + "</small>"; }).join("<br>") + "</td><td>" + p1(u[k2]) + "</td><td>" + p1(u[ks]) + "</td><td>" + p1(u.voto_dividido_sen) + " <small>(" + n(u.cidades_div_sen) + " cid.)</small></td></tr>";
+    }).join("");
+  }
+
+  function governo() {
+    var es = d.estaduais;
+    if (!es || !es.ufs || !Object.keys(es.ufs).length) { $("an-gov").hidden = true; return; }
+    $("an-gov").hidden = false;
+    var U = es.ufs;
+    var eleito = function (u) { var g2 = u.governador_2t && u.governador_2t[0]; return g2 ? { g: g2, t: "2º" } : { g: u.governador_1t[0], t: "1º" }; };
+    if (mapa) {
+      $("an-gov-mapa").innerHTML = '<svg viewBox="' + mapa.viewBox + '" role="img" aria-label="Mapa do campo do governador eleito">' + Object.keys(mapa.ufs).map(function (uf) {
+        var u = U[uf], e = u && eleito(u);
+        return '<path d="' + mapa.ufs[uf].d + '" fill="' + (e ? CAMPO[e.g.campo].cor : "var(--pend)") + '" fill-opacity="' + (e ? ".85" : "1") + '" stroke="var(--bg)" stroke-width="1"><title>' + UF[uf] + (e ? ": " + bonito(e.g.nome) + " (" + e.g.partido + "), " + CAMPO[e.g.campo].nm() : " (ainda sem dados)") + "</title></path>";
+      }).join("") + "</svg>";
+    }
+    $("an-gov-leg").innerHTML = ["L", "F", "O"].map(function (c) { return '<span><i style="background:' + CAMPO[c].cor + '"></i>Governador do ' + CAMPO[c].nm() + "</span>"; }).join("");
+    $("an-gov-tab").querySelector("thead").innerHTML = "<tr><th>Estado</th><th>Governador eleito</th><th>%</th><th>Presidente (2º t.)</th><th>Mesmo lado?</th><th>Voto dividido</th></tr>";
+    $("an-gov-tab").querySelector("tbody").innerHTML = Object.keys(U).sort(function (a, b) { return UF[a].localeCompare(UF[b]); }).map(function (uf) {
+      var u = U[uf], e = eleito(u), pv = u.lula_2t >= u.flavio_2t ? A : B, pp = pv === A ? u.lula_2t : u.flavio_2t;
+      var mesmo = e.g.campo === "O" || e.g.campo === "M" ? "—" : ((e.g.campo === "L") === (pv === A) ? '<b class="an-pos">sim</b>' : '<b class="an-neg">não</b>');
+      return "<tr><td>" + UF[uf] + "</td><td>" + tagCampo(e.g.campo) + esc(bonito(e.g.nome)) + " <small>" + esc(e.g.partido) + " · " + e.t + " turno</small></td><td>" + p1(e.g.pct) + '</td><td><b style="color:' + COR[pv] + '">' + esc(curto(pv)) + "</b> " + p1(pp) + "</td><td>" + mesmo + "</td><td>" + p1(u.voto_dividido_gov) + "</td></tr>";
+    }).join("");
+  }
+
   function desenha() {
     $("an-hora").textContent = hora(d.tse.totalizado_tse);
     $("an-sub").textContent = "Presidente 2026 · apuração " + p1(d.tse.pct_secoes) + " das seções · " + curto(A) + " " + p1(d.tse.pct_validos[A]) + " x " + curto(B) + " " + p1(d.tse.pct_validos[B]);
-    resumo(); cascata(); fluxo(); perdas(); viradas(); ufs();
+    resumo(); cascata(); fluxo(); perdas(); viradas(); ufs(); senado(); governo();
   }
 
   function vivo(estado, txt) { var el = $("vivo"); el.dataset.estado = estado; el.querySelector("span").textContent = txt; }
