@@ -1,0 +1,87 @@
+/* Página Raio-X (25/10) — usa os tokens de central.css e partes de projecao.css */
+.corpo > .painel { margin-bottom: 12px; }
+.rx-tag { display: inline-block; font: 700 .62rem Inter; letter-spacing: .06em; padding: 2px 6px; border-radius: 5px; vertical-align: middle; margin-left: 4px; }
+.rx-tag.fato { background: rgba(74,222,128,.14); color: #4ade80; border: 1px solid rgba(74,222,128,.35); }
+.rx-tag.exerc { background: rgba(250,204,21,.12); color: var(--ouro, #FACC15); border: 1px solid rgba(250,204,21,.35); }
+.painel h2 .rx-tag { white-space: normal; }
+
+.rx-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.rx-card { border: 1px solid var(--line2); border-radius: 10px; padding: 10px 12px; border-top: 3px solid var(--cor, var(--line2)); min-width: 0; }
+.rx-card .t { color: var(--mut); font-size: .8rem; }
+.rx-card .v { font: 800 1.35rem Sora; margin: 2px 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.rx-card .s { color: var(--mut); font-size: .76rem; }
+
+.rx-leg { display: flex; flex-wrap: wrap; gap: 14px; color: var(--mut); font-size: .8rem; margin: 12px 0 6px; }
+.rx-leg i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+/* cascata horizontal */
+.rx-casc { display: grid; gap: 3px; margin-top: 6px; }
+.rx-cl { display: grid; grid-template-columns: 150px 1fr 96px; gap: 10px; align-items: center; font-size: .82rem; }
+.rx-cl .nm { color: var(--txt); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rx-cl .nm small { color: var(--fraco, var(--mut)); margin-left: 4px; }
+.rx-cl .tr { position: relative; height: 16px; }
+.rx-cl .tr span { position: absolute; top: 0; bottom: 0; border-radius: 3px; background: var(--cor); }
+.rx-cl .tr .z { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--line2); }
+.rx-cl .tr .lig { position: absolute; top: 50%; height: 0; border-top: 1px dotted var(--fraco, #6e6e7a); }
+.rx-cl .vl { text-align: right; font-variant-numeric: tabular-nums; }
+.rx-cl.tot { font-weight: 700; margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--line2); }
+.rx-cl.tot .tr { height: 22px; }
+.rx-cl.tot .tr span { outline: 1px dashed var(--txt); outline-offset: -1px; }
+.rx-cl.real .tr span { background: var(--ouro, #FACC15); }
+.rx-cl.real { font-weight: 700; }
+.rx-cl.reg .tr { height: 22px; }
+
+.rx-fonte { margin-top: 10px; font-size: .78rem; }
+.rx-h3 { font: 700 .95rem Sora; margin: 18px 0 6px; }
+.rx-h4 { font: 700 .85rem Sora; margin: 12px 0 6px; color: var(--txt); }
+.rx-nota-top { margin: 0 0 6px; }
+.rx-opts { margin: 0 0 8px; flex-wrap: wrap; }
+
+.rx-duas { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-top: 4px; }
+.rx-duas > div, .rx-mapa-grade > div { min-width: 0; }
+.rx-duas .res-tab { margin-top: 0; max-height: 440px; }
+.rx-tab td, .rx-tab th { white-space: nowrap; }
+.rx-tab td:first-child, .rx-tab th:first-child { text-align: left; }
+.rx-tab small { color: var(--fraco, var(--mut)); font-size: .72rem; }
+.rx-pos { color: #4ade80; } .rx-neg { color: #f87171; }
+.rx-cor-a { color: var(--c13); font-weight: 700; } .rx-cor-b { color: var(--c22); font-weight: 700; }
+
+/* cenário */
+.rx-cen-barra { margin-top: 14px; }
+.rx-cb { display: grid; grid-template-columns: 170px 1fr; gap: 10px; align-items: center; font-size: .82rem; margin-bottom: 6px; }
+.rx-cb .bx { position: relative; height: 22px; border-radius: 5px; overflow: hidden; display: flex; background: var(--pend); }
+.rx-cb .bx span { display: flex; align-items: center; justify-content: center; font: 700 .72rem Sora; color: #0b0b0e; white-space: nowrap; overflow: hidden; }
+.rx-cb .meio { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 2px; background: var(--ouro, #FACC15); }
+
+/* mapa */
+.rx-mapa-grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px; margin-top: 12px; align-items: start; }
+.rx-mapa svg { width: 100%; height: auto; max-height: 440px; display: block; }
+.rx-escala { display: flex; align-items: center; gap: 8px; color: var(--mut); font-size: .76rem; margin-top: 6px; flex-wrap: wrap; }
+.rx-escala i { flex: 1; min-width: 80px; max-width: 200px; height: 8px; border-radius: 99px; background: linear-gradient(90deg, rgba(214,214,220,1), rgba(214,214,220,.1) 49%, rgba(250,204,21,.1) 51%, rgba(250,204,21,1)); }
+#rx-comp .rx-mapa-grade .res-tab { margin-top: 0; max-height: 460px; }
+#rx-cresc > .res-tab { margin-top: 12px; max-height: 460px; }
+
+/* brancos e nulos */
+.rx-bn { display: grid; gap: 6px; }
+.rx-bnl { display: grid; grid-template-columns: 170px 1fr 150px; gap: 10px; align-items: center; font-size: .82rem; }
+.rx-bnl .tr { position: relative; height: 20px; background: rgba(255,255,255,.03); border-radius: 4px; }
+.rx-bnl .tr span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+.rx-bnl .vl { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 1000px) {
+  .rx-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rx-mapa-grade, .rx-duas { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .rx-cl { grid-template-columns: 92px 1fr 70px; gap: 6px; font-size: .74rem; }
+  .rx-cl .nm small { display: none; }
+  .rx-card .v { font-size: 1.08rem; }
+  .rx-tab td, .rx-tab th { padding-left: 6px; padding-right: 6px; }
+  .rx-cb { grid-template-columns: 1fr; gap: 4px; }
+  .rx-bnl { grid-template-columns: 1fr 110px; }
+  .rx-bnl .nm { grid-column: 1 / -1; }
+  .rx-bnl .tr { grid-column: 1; }
+  #rx-saldo .p-cab, #rx-cresc .p-cab { flex-wrap: wrap; }
+  #rx-saldo-modo, #rx-cresc-cand { margin-left: 0; margin-top: 8px; }
+}
+#rx-saldo-modo, #rx-cresc-cand { flex-wrap: wrap; }

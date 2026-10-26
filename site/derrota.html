@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Por que Flávio perdeu? · Eleições 2026 · INEMA</title>
+<meta name="description" content="O campo de Flávio elegeu mais governadores e senadores, e mesmo assim ele perdeu o 2º turno. O que os números do TSE mostram, separando fato, estimativa e hipótese.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="menu.css?v=5">
+<link rel="stylesheet" href="central.css?v=18">
+<link rel="stylesheet" href="projecao.css?v=8">
+<link rel="stylesheet" href="derrota.css?v=1">
+</head>
+<body>
+<div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span></span></div>
+
+<aside class="lateral">
+  <a class="marca" href="index.html#/">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 45 24 24 45 3 24Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 12 36 24 24 36 12 24Z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 19 29 24 24 29 19 24Z" fill="currentColor"/></svg>
+    <span><b>INEMA</b><small>ELEIÇÕES <em>LIVE</em></small></span>
+  </a>
+  <nav class="menu" aria-label="Seções">
+    <a href="index.html#/" data-nav="br"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Visão geral</a>
+    <a href="index.html#estados" data-nav="estados"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/></svg>Estados</a>
+    <a href="https://municipios.inema.club/" data-nav="mun"><svg viewBox="0 0 24 24"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3zM9 3v15M15 6v15"/></svg>Municípios</a>
+    <a href="exterior.html" data-nav="ext"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Exterior</a>
+    <a href="projecao.html" data-nav="proj"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 16l4-5 4 3 6-8M15 6h4v4"/></svg>Projeção</a>
+    <a href="analise.html" data-nav="ana"><svg viewBox="0 0 24 24"><path d="M12 3v9h9M12 3a9 9 0 1 0 9 9"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Análise</a>
+    <a href="raiox.html" data-nav="rx"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5M8 11h6M11 8v6"/></svg>Raio-X</a>
+    <a href="derrota.html" data-nav="der" class="ativo" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M8 11h6M11 8v6"/></svg>Por que perdeu</a>
+    <a href="index.html#evolucao"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Evolução</a>
+    <a href="index.html#resumo"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>Resumo</a>
+    <a href="index.html#fonte"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8"/></svg>Fonte e auditoria</a>
+    <a href="conferencia.html" data-nav="conf"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Conferência</a>
+    <a href="classica.html"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 10h18"/></svg>Versão clássica</a>
+    <a class="comp-btn" href="#" role="button" data-compartilhar><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartilhar</span></a>
+  </nav>
+  <div class="lateral-pe">
+    <div class="acessos" data-acessos hidden><b>—</b> acessos</div>
+    <div class="dominio">eleicoes<span>.</span>inema<span>.</span>club</div>
+    <p>Dados oficiais do TSE em tempo real, para um Brasil mais transparente.</p>
+  </div>
+</aside>
+
+<div class="corpo">
+  <header class="cab">
+    <div class="cab-sigla">?</div>
+    <div class="cab-txt">
+      <div class="cab-linha"><h1>Por que Flávio perdeu? O que os números mostram</h1><span class="cab-data">TSE <b id="dr-hora">—</b></span></div>
+      <div class="cab-sub"><span id="dr-sub">Presidente 2026</span> • <span class="vivo" id="vivo" data-estado="carregando"><i></i><span>carregando</span></span><span class="acessos-cel" data-acessos hidden> • <b>—</b> acessos</span><a class="comp-cel" href="#" role="button" data-compartilhar aria-label="Compartilhar"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartilhar</span></a></div>
+    </div>
+    <div class="cab-dir">DEMOCRACIA<br>EM TEMPO REAL<i></i></div>
+  </header>
+
+  <div class="pj-selo"><b>TRÊS TIPOS DE INFORMAÇÃO</b> <span class="an-tag fato">FATO</span> = conta direta sobre os resultados do TSE. <span class="an-tag est">ESTIMATIVA</span> = cálculo estatístico do modelo da Projeção (o voto é secreto; vale para o conjunto, não para cada pessoa). <span class="an-tag hip">HIPÓTESE</span> = explicação possível que os números não provam. <span class="an-tag exe">SIMULAÇÃO</span> = conta hipotética feita sobre os fatos.</div>
+  <div class="faixa-erro" id="faixa-erro" hidden role="alert"></div>
+
+  <section class="painel" id="dr-pergunta">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>A pergunta</h2><p id="dr-perg-sub">—</p></div></div>
+    <div class="dr-achados" id="dr-achados"></div>
+  </section>
+
+  <section class="painel" id="dr-placar">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>1. O placar dos aliados <span class="an-tag fato">FATO</span></h2><p>Quantos governadores e senadores cada campo elegeu, e quantos votos os aliados tiveram em comparação com os dois candidatos a presidente</p></div></div>
+    <div class="dr-campo-def" id="dr-campo-def"></div>
+    <div class="dr-placar-grade">
+      <div><h3 class="an-h3">Governadores eleitos</h3><div id="dr-gov-barra"></div></div>
+      <div><h3 class="an-h3">Senadores eleitos (54 vagas)</h3><div id="dr-sen-barra"></div></div>
+    </div>
+    <h3 class="an-h3">Votos dos aliados x votos do presidente <small>(% dos votos válidos de cada cargo, só no Brasil)</small></h3>
+    <div class="an-leg" id="dr-cmp-leg"></div>
+    <div class="dr-cmp" id="dr-cmp"></div>
+    <p class="pj-nota" id="dr-cmp-nota"></p>
+  </section>
+
+  <section class="painel" id="dr-divisao">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>2. Onde o voto se dividiu <span class="an-tag fato">FATO</span></h2><p>O mesmo eleitor votou num aliado de um campo e no presidente do outro? Estado a estado, na mesma urna do 1º turno</p></div></div>
+    <div class="an-cards" id="dr-div-cards"></div>
+    <h3 class="an-h3">Estado a estado: Flávio x aliados dele</h3>
+    <p class="pj-nota an-nota-top">Todos os números são % dos votos válidos. Senador e governador são do 1º turno, comparados com Flávio no 1º turno (mesmo dia, mesma urna). A coluna da direita é quanto o senado do campo de Flávio teve a mais (+) ou a menos (−) que ele.</p>
+    <div class="an-leg" id="dr-hal-leg"></div>
+    <div class="an-hal" id="dr-hal"></div>
+    <div class="an-mapa-grade dr-mapa-div">
+      <div><h3 class="an-h3">Governador eleito x presidente que venceu no estado</h3><div class="an-mapa" id="dr-div-mapa"></div><div class="an-leg" id="dr-div-leg"></div></div>
+      <div><h3 class="an-h3">Maiores cidades com voto dividido <small>(governador de um campo, presidente do outro)</small></h3><div class="res-tab"><table class="tab an-tab" id="dr-div-tab"><thead></thead><tbody></tbody></table></div></div>
+    </div>
+  </section>
+
+  <section class="painel" id="dr-conta">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>3. A conta que decidiu</h2><p>Flávio saiu do 1º turno na frente. O que aconteceu com os votos que estavam em jogo no 2º turno</p></div></div>
+    <h3 class="an-h3">O saldo de votos <span class="an-tag fato">FATO</span></h3>
+    <div class="an-cards" id="dr-conta-cards"></div>
+    <div class="dr-bolo" id="dr-bolo"></div>
+    <p class="pj-nota" id="dr-bolo-nota"></p>
+    <h3 class="an-h3">De onde veio a diferença <span class="an-tag est">ESTIMATIVA</span></h3>
+    <p class="pj-nota an-nota-top">O que cada grupo de eleitores do 1º turno levou para cada candidato no 2º turno, pelo modelo da Projeção (compara milhares de cidades; não é o voto de ninguém em particular).</p>
+    <div class="an-leg" id="dr-orig-leg"></div>
+    <div class="dr-orig" id="dr-orig"></div>
+    <div class="res-tab"><table class="tab an-tab" id="dr-terc"><thead></thead><tbody></tbody></table></div>
+    <h3 class="an-h3">Exercício: quanto faltou <span class="an-tag exe">SIMULAÇÃO</span></h3>
+    <div class="dr-exerc" id="dr-exerc"></div>
+  </section>
+
+  <section class="painel" id="dr-virada">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>4. Onde a virada aconteceu no mapa <span class="an-tag fato">FATO</span></h2><p id="dr-vir-sub">Cidades e estados em que o mais votado entre os dois mudou do 1º para o 2º turno</p></div></div>
+    <div class="an-mapa-grade">
+      <div><div class="an-mapa" id="dr-vir-mapa"></div><div class="an-escala" id="dr-vir-escala"></div></div>
+      <div><h3 class="an-h3">Saldo por região <small>(votos que Lula ganhou − votos que Flávio ganhou)</small></h3><div class="dr-reg" id="dr-reg"></div>
+        <h3 class="an-h3">Maiores cidades que viraram</h3><div class="res-tab"><table class="tab an-tab" id="dr-vir-tab"><thead></thead><tbody></tbody></table></div></div>
+    </div>
+  </section>
+
+  <section class="painel" id="dr-hip">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>5. Explicações possíveis <span class="an-tag hip">HIPÓTESE</span></h2><p>Cada uma com o que os dados desta página mostram e o que seria preciso para confirmar ou descartar</p></div></div>
+    <div class="dr-hips" id="dr-hips"></div>
+  </section>
+
+  <section class="painel" id="dr-nao">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>O que os números não respondem</h2><p>Limites desta análise</p></div></div>
+    <ul class="dr-lista" id="dr-nao-lista"></ul>
+  </section>
+
+  <section class="painel aud" id="dr-metodo">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Como esta página é feita</h2><p>Fonte e limites</p></div></div>
+    <div class="aud-grade">
+      <div class="aud-bloco"><h3>Fatos</h3><ul>
+        <li>Resultados do TSE por cidade: presidente nos dois turnos, governador e senador no 1º turno e governador no 2º turno nos 6 estados que tiveram.</li>
+        <li>Votos de governador e senador somam todas as cidades do Brasil (sem exterior, onde só se vota para presidente).</li>
+        <li>As diferenças são só soma e subtração sobre esses números.</li>
+      </ul></div>
+      <div class="aud-bloco"><h3>Estimativas e hipóteses</h3><ul>
+        <li>O voto é secreto. As estimativas vêm do modelo da <a href="projecao.html">Projeção INEMA</a> e valem para o conjunto.</li>
+        <li>As hipóteses são explicações possíveis, testadas só com os dados desta página. Nenhuma está provada.</li>
+      </ul></div>
+      <div class="aud-bloco"><h3>Transparência</h3><ul>
+        <li>Números desta página: <a href="data/derrota.json" target="_blank" rel="noopener">data/derrota.json</a>.</li>
+        <li>Código aberto: <a href="https://github.com/inematds/eleicoes2026/tree/main/analise" target="_blank" rel="noopener">analise/derrota.py</a>.</li>
+      </ul></div>
+    </div>
+  </section>
+</div>
+
+<script src="derrota.js?v=1"></script>
+<script src="acessos.js?v=1"></script>
+<script src="compartilhar.js?v=1"></script>
+</body>
+</html>

@@ -256,6 +256,14 @@ def main():
     f = out["fatos"]
     print(json.dumps({"cidades": f["cidades_comparadas"], "flavio_perdeu": f["flavio_perdeu_cidades"],
                       "viradas": f["viradas"], "bytes": os.path.getsize(dest)}))
+    # as outras páginas de análise (Raio-X, Conferência, Por que perdeu): uma falha não derruba as outras
+    import subprocess
+    import sys
+    for extra in ("raiox.py", "conferencia.py", "derrota.py"):
+        arq = os.path.join(P, "analise", extra)
+        if os.path.exists(arq):
+            r = subprocess.run([sys.executable, arq], capture_output=True, text=True, timeout=240)
+            print(json.dumps({"extra": extra, "rc": r.returncode, "erro": r.stderr.strip()[-300:]}))
 
 
 if __name__ == "__main__":

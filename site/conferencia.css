@@ -1,0 +1,78 @@
+/* Página Conferência (25/10) — usa os tokens de central.css e partes de projecao.css */
+:root { --cf-ok: #4ade80; --cf-ok-bg: rgba(74,222,128,.12); --cf-ok-ln: rgba(74,222,128,.35);
+  --cf-pend: var(--ouro, #FACC15); --cf-pend-bg: rgba(250,204,21,.10); --cf-pend-ln: rgba(250,204,21,.35);
+  --cf-bad: #f87171; --cf-bad-bg: rgba(248,113,113,.12); --cf-bad-ln: rgba(248,113,113,.4);
+  --cf-ins: var(--mut, #a3a3ae); --cf-ins-bg: rgba(163,163,174,.10); --cf-ins-ln: rgba(163,163,174,.35); }
+.corpo > .painel { margin-bottom: 12px; }
+
+.cf-st { display: inline-block; font: 700 .75rem Inter; padding: 2px 7px; border-radius: 6px; white-space: nowrap; vertical-align: middle; border: 1px solid; }
+.cf-st.conferido { color: var(--cf-ok); background: var(--cf-ok-bg); border-color: var(--cf-ok-ln); }
+.cf-st.pendente { color: var(--cf-pend); background: var(--cf-pend-bg); border-color: var(--cf-pend-ln); }
+.cf-st.divergencia { color: var(--cf-bad); background: var(--cf-bad-bg); border-color: var(--cf-bad-ln); }
+.cf-st.insuficiente { color: var(--cf-ins); background: var(--cf-ins-bg); border-color: var(--cf-ins-ln); }
+h2 .cf-st, h3 .cf-st { margin-left: 6px; }
+
+.cf-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 4px; }
+.cf-card { border: 1px solid var(--line2); border-radius: 10px; padding: 10px 12px; border-top: 3px solid var(--line2); min-width: 0; }
+.cf-card.conferido { border-top-color: var(--cf-ok); } .cf-card.pendente { border-top-color: var(--cf-pend); }
+.cf-card.divergencia { border-top-color: var(--cf-bad); } .cf-card.insuficiente { border-top-color: var(--cf-ins); }
+.cf-card .t { color: var(--mut); font-size: .82rem; }
+.cf-card .v { font: 800 1.35rem Sora; margin: 2px 0; overflow-wrap: anywhere; }
+.cf-card .s { color: var(--mut); font-size: .78rem; }
+
+.cf-leg { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--mut); font-size: .84rem; margin: 12px 0 0; }
+.cf-leg .cf-st { margin-right: 6px; }
+
+.cf-h3 { font: 700 .98rem Sora; margin: 18px 0 6px; }
+.cf-txt { color: var(--txt); font-size: .88rem; margin: 6px 0; line-height: 1.55; max-width: 110ch; }
+.cf-txt .cf-st { margin-right: 4px; }
+
+.cf-tab td, .cf-tab th { white-space: nowrap; }
+.cf-tab td:first-child, .cf-tab th:first-child { text-align: left; }
+.cf-tab tbody tr { cursor: default; }
+.cf-tab td.cf-crit { white-space: normal; text-align: left; color: var(--mut); min-width: 220px; max-width: 420px; }
+.cf-tab small { color: var(--fraco, var(--mut)); font-size: .74rem; }
+.cf-tab .cf-ok, .cf-ok { color: var(--cf-ok); }
+.cf-tab .cf-dif, .cf-dif { color: var(--cf-bad); font-weight: 700; }
+.cf-tab .cf-mut { color: var(--fraco, var(--mut)); }
+.cf-mono { font: .72rem JetBrains Mono, monospace; }
+.res-tab.cf-tab-itens { max-height: 420px; margin-top: 12px; }
+.res-tab.cf-tab-br { max-height: none; }
+.res-tab.cf-tab-uf { max-height: 520px; }
+.res-tab.cf-tab-bloq, .res-tab.cf-tab-ext { max-height: none; }
+.res-tab.cf-tab-puf { max-height: 480px; }
+
+.cf-cob { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 6px; }
+.cf-cob-barra { flex: 1 1 220px; max-width: 420px; height: 10px; border-radius: 99px; background: var(--pend); overflow: hidden; }
+.cf-cob-barra span { display: block; height: 100%; background: var(--ouro); border-radius: 99px; }
+.cf-cob-txt { color: var(--mut); font-size: .88rem; } .cf-cob-txt b { color: var(--txt); font: 700 1rem Sora; }
+
+.cf-graf svg { margin-top: 12px; }
+.cf-graf .lp { stroke: var(--c13); }
+.cf-graf .ar { fill: rgba(229,72,77,.16); }
+.cf-graf .cf-fin { stroke: var(--txt); stroke-width: 1.4; stroke-dasharray: 2 3; }
+.cf-graf .tx { fill: var(--mut); font: 11px Inter; }
+.cf-rot { font: 600 11px Inter; fill: var(--mut); }
+.cf-rot.p { fill: var(--c13); } .cf-rot.f { fill: var(--txt); } .cf-rot.m { fill: var(--ouro); }
+.cf-leg2 { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--mut); font-size: .8rem; margin: 6px 0 4px; }
+.cf-leg2 i { display: inline-block; width: 18px; height: 0; vertical-align: 3px; margin-right: 6px; border-top: 2.5px solid var(--c13); }
+.cf-leg2 i.ar { height: 10px; border: 0; background: rgba(229,72,77,.22); vertical-align: -1px; }
+.cf-leg2 i.lt { border-top: 1.5px dashed var(--mut); }
+.cf-leg2 i.fin { border-top: 1.5px dotted var(--txt); }
+.cf-leg2 i.m50 { border-top: 1.5px dashed var(--ouro); }
+
+.cf-prox { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cf-prox li { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; line-height: 1.5; }
+.cf-prox li > .cf-st { flex: none; margin-top: 2px; }
+
+#cf-eixo { flex-wrap: wrap; }
+@media (max-width: 640px) {
+  .cf-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .cf-card .v { font-size: 1.1rem; }
+  .cf-tab td, .cf-tab th { padding-left: 6px; padding-right: 6px; }
+  .cf-tab td.cf-crit { min-width: 200px; }
+  #cf-itens td:first-child, #cf-uf td:last-child { white-space: normal; min-width: 150px; }
+  #cf-eixo { margin-left: 0; margin-top: 8px; } #cf-proj .p-cab { flex-wrap: wrap; }
+  .cf-prox li { flex-direction: column; gap: 4px; }
+  .cf-leg { flex-direction: column; gap: 6px; }
+}

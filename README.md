@@ -99,6 +99,11 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     transferências da Projeção (ESTIMATIVA: de onde vieram os votos, para onde foram os do 1º turno). Só lê
     arquivos locais; grava `saida/oficial/data/analise.json`; timer `eleicoes-analise.timer` a cada 5 min (aqui e na VPS4).
     Senador/governador por cidade: `python3 analise/coleta_estaduais.py` (uma vez; eleições 6259 e 6260 do TSE → `saida/estaduais/`).
+    O mesmo timer roda também `analise/raiox.py` (menu Raio-X: de onde veio a diferença, concentração, cenário
+    aritmético, comparecimento), `analise/conferencia.py` (menu Conferência: somas Brasil/UF/cidades, sha256 dos
+    brutos, exterior por boletim de urna, auditoria da Projeção) e `analise/derrota.py` (menu Por que perdeu:
+    aliados x presidente, voto dividido, a conta da virada, hipóteses rotuladas). Cada um grava o seu JSON em
+    `saida/oficial/data/`; o publicador leva os quatro.
 21. ⚙️ **Fim da apuração**: `ferramentas/fim_apuracao.py` (timer `eleicoes-fim-apuracao.timer`, de hora em hora) só lê
     arquivos locais; quando o Brasil vira "totalização final" para `eleicoes-coletor`, quando todas as cidades fecham
     para `eleicoes-municipios` (aqui e na VPS4, por ssh), refaz a análise antes e se desliga no fim. Registro em

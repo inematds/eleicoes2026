@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conferência dos resultados · Eleições 2026 · INEMA</title>
+<meta name="description" content="O INEMA refaz as contas do TSE a partir dos arquivos oficiais: somas do Brasil, dos estados e das cidades, integridade dos arquivos guardados, boletins de urna do exterior e a auditoria da Projeção INEMA. Publica o que confere e o que ainda está pendente.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="menu.css?v=5">
+<link rel="stylesheet" href="central.css?v=18">
+<link rel="stylesheet" href="projecao.css?v=8">
+<link rel="stylesheet" href="conferencia.css?v=1">
+</head>
+<body>
+<div class="marca-sim" id="marca-sim" hidden aria-hidden="true"><span></span></div>
+
+<aside class="lateral">
+  <a class="marca" href="index.html#/">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3 45 24 24 45 3 24Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 12 36 24 24 36 12 24Z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M24 19 29 24 24 29 19 24Z" fill="currentColor"/></svg>
+    <span><b>INEMA</b><small>ELEIÇÕES <em>LIVE</em></small></span>
+  </a>
+  <nav class="menu" aria-label="Seções">
+    <a href="index.html#/" data-nav="br"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Visão geral</a>
+    <a href="index.html#estados" data-nav="estados"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/></svg>Estados</a>
+    <a href="https://municipios.inema.club/" data-nav="mun"><svg viewBox="0 0 24 24"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3zM9 3v15M15 6v15"/></svg>Municípios</a>
+    <a href="exterior.html" data-nav="ext"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Exterior</a>
+    <a href="projecao.html" data-nav="proj"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 16l4-5 4 3 6-8M15 6h4v4"/></svg>Projeção</a>
+    <a href="analise.html" data-nav="ana"><svg viewBox="0 0 24 24"><path d="M12 3v9h9M12 3a9 9 0 1 0 9 9"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Análise</a>
+    <a href="raiox.html" data-nav="rx"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5M8 11h6M11 8v6"/></svg>Raio-X</a>
+    <a href="derrota.html" data-nav="der"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M8 11h6M11 8v6"/></svg>Por que perdeu</a>
+    <a href="index.html#evolucao"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Evolução</a>
+    <a href="index.html#resumo"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>Resumo</a>
+    <a href="index.html#fonte"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6zM14 2v6h6M9 13h8M9 17h8"/></svg>Fonte e auditoria</a>
+    <a href="conferencia.html" data-nav="conf" class="ativo" aria-current="page"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Conferência</a>
+    <a href="classica.html"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 10h18"/></svg>Versão clássica</a>
+    <a class="comp-btn" href="#" role="button" data-compartilhar><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartilhar</span></a>
+  </nav>
+  <div class="lateral-pe">
+    <div class="acessos" data-acessos hidden><b>—</b> acessos</div>
+    <div class="dominio">eleicoes<span>.</span>inema<span>.</span>club</div>
+    <p>Dados oficiais do TSE em tempo real, para um Brasil mais transparente.</p>
+  </div>
+</aside>
+
+<div class="corpo">
+  <header class="cab">
+    <div class="cab-sigla">CF</div>
+    <div class="cab-txt">
+      <div class="cab-linha"><h1>Conferência dos resultados</h1><span class="cab-data">TSE <b id="cf-hora">—</b></span></div>
+      <div class="cab-sub"><span id="cf-sub">Presidente 2026 · fase inicial</span> • <span class="vivo" id="vivo" data-estado="carregando"><i></i><span>carregando</span></span><span class="acessos-cel" data-acessos hidden> • <b>—</b> acessos</span><a class="comp-cel" href="#" role="button" data-compartilhar aria-label="Compartilhar"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span>Compartilhar</span></a></div>
+    </div>
+    <div class="cab-dir">DEMOCRACIA<br>EM TEMPO REAL<i></i></div>
+  </header>
+
+  <div class="pj-selo"><b>CONFERÊNCIA INDEPENDENTE</b> O INEMA refaz as contas a partir dos arquivos oficiais do TSE e publica tudo: o que confere e o que ainda não dá para conferir. Durante a apuração, arquivos de horários diferentes não batem, e isso é normal. Um número fora do padrão não é prova de nada; só indica onde olhar com mais cuidado.</div>
+  <div class="faixa-erro" id="faixa-erro" hidden role="alert"></div>
+
+  <section class="painel" id="cf-resumo">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Resumo das conferências</h2><p id="cf-resumo-sub">—</p></div></div>
+    <div class="cf-cards" id="cf-cards"></div>
+    <div class="cf-leg">
+      <span><b class="cf-st conferido">✓ Conferido</b> as contas batem com os arquivos oficiais</span>
+      <span><b class="cf-st pendente">… Pendente</b> falta arquivo ou a apuração ainda não fechou</span>
+      <span><b class="cf-st divergencia">! Divergência reproduzida</b> diferença que continua depois de refazer a conta</span>
+      <span><b class="cf-st insuficiente">? Dados insuficientes</b> não há informação para classificar</span>
+    </div>
+    <div class="res-tab cf-tab-itens"><table class="tab cf-tab" id="cf-itens"><thead></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="painel" id="cf-somas">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>1. As somas fecham?</h2><p>Brasil = 27 estados + exterior, e cada estado = soma das suas cidades, campo a campo</p></div></div>
+    <h3 class="cf-h3">Brasil = 27 UFs + exterior <span id="cf-br-st"></span></h3>
+    <p class="cf-txt" id="cf-br-motivo"></p>
+    <div class="res-tab cf-tab-br"><table class="tab cf-tab" id="cf-br"><thead></thead><tbody></tbody></table></div>
+    <p class="cf-txt" id="cf-br-mom"></p>
+    <h3 class="cf-h3">Cada estado = soma das cidades (2º turno)</h3>
+    <p class="cf-txt" id="cf-uf-txt"></p>
+    <div class="res-tab cf-tab-uf"><table class="tab cf-tab" id="cf-uf"><thead></thead><tbody></tbody></table></div>
+    <p class="pj-nota">A soma das cidades só é comparada quando todas as cidades do estado têm resultado final e o arquivo do estado também está com 100% das seções. Antes disso o status é “pendente”, com quantas cidades faltam.</p>
+  </section>
+
+  <section class="painel" id="cf-integ">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>2. Os arquivos guardados são os originais?</h2><p>Cada arquivo baixado do TSE fica guardado sem alteração, com a “impressão digital” (sha256) no nome</p></div></div>
+    <div class="cf-cards" id="cf-integ-cards"></div>
+    <h3 class="cf-h3">Bloqueios automáticos do INEMA</h3>
+    <p class="cf-txt">O bloqueio é a trava de segurança do próprio INEMA: antes de publicar, o coletor confere cada arquivo do TSE. Se os números andarem para trás, se a hora voltar no tempo ou se a soma não fechar, o arquivo fica guardado mas não vai para o painel. Isso costuma acontecer quando a rede de distribuição do TSE entrega por alguns segundos uma cópia mais antiga.</p>
+    <div class="res-tab cf-tab-bloq"><table class="tab cf-tab" id="cf-bloq"><thead></thead><tbody></tbody></table></div>
+    <p class="pj-nota" id="cf-integ-nota"></p>
+  </section>
+
+  <section class="painel" id="cf-ext">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>3. Exterior: boletins de urna x total oficial <span id="cf-ext-st"></span></h2><p id="cf-ext-sub">—</p></div></div>
+    <div class="cf-cob"><div class="cf-cob-barra"><span id="cf-ext-barra"></span></div><div class="cf-cob-txt" id="cf-ext-cob"></div></div>
+    <p class="cf-txt" id="cf-ext-motivo"></p>
+    <div class="res-tab cf-tab-ext"><table class="tab cf-tab" id="cf-ext-tab"><thead></thead><tbody></tbody></table></div>
+    <p class="pj-nota">O boletim de urna é o papel (e o arquivo) que cada urna imprime ao fim da votação, com os votos daquela seção. O INEMA baixa o boletim de cada seção do exterior e soma por conta própria. A conta só fecha quando 100% das seções tiverem o boletim lido; até lá, nenhuma soma parcial pode passar do total oficial.</p>
+  </section>
+
+  <section class="painel" id="cf-proj">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>4. Auditoria da Projeção INEMA</h2><p id="cf-proj-sub">Cada cálculo da projeção ficou guardado com a hora e a versão do modelo; aqui ele é comparado com o resultado apurado</p></div>
+      <div class="map-opts" id="cf-eixo" role="group" aria-label="Eixo do gráfico"></div></div>
+    <div class="cf-cards" id="cf-proj-cards"></div>
+    <div class="pj-graf cf-graf" id="cf-graf"></div>
+    <div class="cf-leg2" id="cf-graf-leg"></div>
+    <p class="cf-txt" id="cf-proj-txt"></p>
+    <h3 class="cf-h3">Estado a estado</h3>
+    <div class="res-tab cf-tab-puf"><table class="tab cf-tab" id="cf-puf"><thead></thead><tbody></tbody></table></div>
+    <p class="pj-nota" id="cf-proj-nota"></p>
+  </section>
+
+  <section class="painel" id="cf-prox">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>5. Próximas fases</h2><p>O que ainda não foi feito nesta conferência</p></div></div>
+    <ul class="cf-prox">
+      <li><b class="cf-st insuficiente">Ainda não feito</b> <span><b>Amostra de boletins de urna no Brasil.</b> Baixar o boletim de uma amostra sorteada de seções em todos os estados e comparar com o total do TSE de cada cidade.</span></li>
+      <li><b class="cf-st insuficiente">Ainda não feito</b> <span><b>Assinaturas digitais e registros das urnas.</b> Conferir a assinatura de cada boletim e ler os registros de funcionamento (log) das urnas que o TSE publica.</span></li>
+      <li><b class="cf-st insuficiente">Ainda não feito</b> <span><b>Estatística por seção, com controles.</b> Comparar seções parecidas (tamanho, cidade, 1º turno) e listar o que foge do padrão, sempre como sinal para conferir, nunca como conclusão.</span></li>
+    </ul>
+  </section>
+
+  <section class="painel aud" id="cf-metodo">
+    <div class="p-cab"><span class="ico-l"></span><div><h2>Como esta conferência é feita</h2><p>Fonte, critérios e limites</p></div></div>
+    <div class="aud-grade">
+      <div class="aud-bloco"><h3>Fonte</h3><ul>
+        <li>Só arquivos oficiais do TSE já baixados pelo INEMA: resultado do Brasil, de cada estado e do exterior, resultado de cada cidade e boletins de urna do exterior.</li>
+        <li>Cada arquivo original fica guardado com data, hora e sha256. Nada é reescrito.</li>
+        <li>A página busca a conferência mais recente de 2 em 2 minutos; a hora em que as contas foram refeitas aparece no resumo.</li>
+      </ul></div>
+      <div class="aud-bloco"><h3>Critérios</h3><ul>
+        <li><b>Conferido</b>: todos os campos comparados são iguais.</li>
+        <li><b>Pendente</b>: falta arquivo, a apuração não fechou ou os arquivos são de horários diferentes.</li>
+        <li><b>Divergência reproduzida</b>: diferença que continua com arquivos da mesma atualização. Pede explicação, não é conclusão.</li>
+        <li>Todo indicador mostra quantos conferiram, de quantos, quando e por qual regra.</li>
+      </ul></div>
+      <div class="aud-bloco"><h3>Limites desta fase</h3><ul>
+        <li>Ainda não confere boletins de urna no Brasil, assinaturas digitais nem registros das urnas.</li>
+        <li>O resultado só é final quando o TSE fecha a totalização; até lá os números podem mudar algumas décimas.</li>
+        <li>Um padrão fora do comum não diz a causa. Diferenças podem vir de versões, retificações ou da própria coleta.</li>
+      </ul></div>
+      <div class="aud-bloco"><h3>Transparência</h3><ul>
+        <li>Números desta página: <a href="data/conferencia.json" target="_blank" rel="noopener">data/conferencia.json</a>.</li>
+        <li>Código aberto: <a href="https://github.com/inematds/eleicoes2026/tree/main/analise" target="_blank" rel="noopener">github.com/inematds/eleicoes2026</a> (<code>analise/conferencia.py</code>).</li>
+      </ul></div>
+    </div>
+  </section>
+</div>
+
+<script src="conferencia.js?v=1"></script>
+<script src="acessos.js?v=1"></script>
+<script src="compartilhar.js?v=1"></script>
+</body>
+</html>
