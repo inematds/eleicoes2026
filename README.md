@@ -28,6 +28,16 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
 
 🧠 sessão com o Nei · ⚙️ script/serviço · 🤖 `claude -p`
 
+> **Desde 26/10/2026 a operação roda só na VPS4** (`root@62.238.25.84`, `/opt/eleicoes2026`, serviços de sistema
+> como root). A máquina principal foi desativada (serviços `eleicoes-*` parados e desabilitados; arquivos mantidos
+> como cópia). Na VPS: `eleicoes-analise.timer` (a cada 30 min), `eleicoes-chat-baixar.timer` (de hora em hora),
+> `eleicoes-publicar` e `eleicoes-municipios-publicar` (publicam no Cloudflare quando os dados mudam, com o login do
+> wrangler copiado para `/root/.config/.wrangler` e `CLOUDFLARE_ACCOUNT_ID` em `/etc/eleicoes2026/cloudflare.env`).
+> Coletores, projeção e exterior ficam desligados (apuração encerrada). Instalar/reinstalar:
+> `ssh root@62.238.25.84 'cd /opt/eleicoes2026 && git pull && bash ferramentas/vps/operacao.sh --executar'`.
+> Mudou o Worker? `ssh root@62.238.25.84 'cd /opt/eleicoes2026/ferramentas/cloudflare && npx wrangler@4 deploy'`.
+> Os passos abaixo descrevem como foi a noite da apuração (comandos `systemctl --user` eram da máquina principal).
+
 1. ⚙️ **Coletor ligado** (serviço permanente, volta sozinho):
    `systemctl --user status eleicoes-coletor` — a cada 15 s pede ao TSE o índice
    `oficial/ele2026/6258/dados/br/br-e006258-ab.json` (com ETag; sem novidade = 304).
@@ -118,7 +128,7 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     baixo, chave `eleicoes2026` do `~/projetos/wifi/.env` guardada como segredo `ANTHROPIC_API_KEY` no Cloudflare;
     autorizada pelo Nei em 26/10/2026 para este chat) e **grava cada pergunta e resposta** (anônima: hash do IP com
     sal) no SQLite do Durable Object `Conversas`. Limites: 25 perguntas/hora e 80/dia por visitante, 1.500/dia no site.
-    Baixar para análise: `python3 ferramentas/chat_baixar.py` (timer `eleicoes-chat-baixar.timer`, de hora em hora)
+    Baixar para análise (na VPS4): `python3 ferramentas/chat_baixar.py` (timer `eleicoes-chat-baixar.timer`, de hora em hora)
     → `saida/chat/conversas.jsonl`; token em `~/.config/eleicoes2026/chat.env`. Mudou só o Worker? `cd
     ferramentas/cloudflare && npm install && npx wrangler@4 deploy` (o publicador só redeploya quando site/dados mudam).
 
