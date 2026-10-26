@@ -255,7 +255,8 @@ class ColetorMun:
             return
         raw = json.loads(corpo)
         h_raw = hora_tse(raw.get("dt"), raw.get("ht"))
-        if p["hora"] and h_raw and h_raw < p["hora"]:
+        # arquivo sem hora (cópia vazia do CDN) ou mais velho que o índice: espera a cópia nova
+        if p["hora"] and (h_raw is None or h_raw < p["hora"]):
             info["sha_ruim"] = sha
             self.espera(cd)
             return
