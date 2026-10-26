@@ -12,7 +12,7 @@ import os
 
 P = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = os.path.join(P, "saida", "oficial", "data")
-FORA = {"gerado_em", "analise_gerada_em", "calculado_em", "ultima_consulta_tse", "schema", "versao", "coletado_em"}
+FORA = {"gerado_em", "analise_gerada_em", "horario", "calculado_em", "ultima_consulta_tse", "schema", "versao", "coletado_em"}
 
 
 def le(nome):
