@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How INEMA Elections 2026 was built — scale, costs and backup</title>
+<meta name="description" content="How the eleicoes.inema.club dashboard was built in about 37 hours: one collector, static files on Cloudflare's edge and a standby VPS. Why it holds up for millions of people, what it costs and how the server switch works.">
+<link rel="alternate" hreflang="pt-BR" href="https://inematds.github.io/eleicoes2026/guia/arquitetura/">
+<link rel="alternate" hreflang="en" href="https://inematds.github.io/eleicoes2026/guia/arquitetura/en/">
+<link rel="alternate" hreflang="es" href="https://inematds.github.io/eleicoes2026/guia/arquitetura/es/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#FACC15; --amb2:#fde68a; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#a16207; --amb2:#854d0e; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1180px){nav .links a.sec[href="#tecnicas"],nav .links a.sec[href="#ler"]{display:none}}
+  .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
+  .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(250,204,21,.12)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:900px){nav .links a.sec{display:none}}
+  @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(250,204,21,.22),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:74px 22px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.18rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:34ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;height:auto;display:block}
+  .resumo{padding:38px 0 34px;border-bottom:1px solid var(--line)}
+  .resumo p{font-size:1.12rem;line-height:1.7;max-width:74ch;margin:.55em 0 0}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:48px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:62ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.92rem;margin:0}
+  .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:8px;background:rgba(250,204,21,.14);color:var(--amb);font-family:Sora;font-weight:800;font-size:.9rem;margin-bottom:.7em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.85rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.86rem;line-height:1.6;color:#d6d6e0}
+  pre .c{color:#6f6f7c} pre .k{color:var(--amb2)} pre .s{color:#9ece6a}
+  .step{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;margin-bottom:26px}
+  .step>div,.card{min-width:0}
+  p code,li code,td code{overflow-wrap:anywhere}
+  .step .b{width:46px;height:46px;border-radius:12px;background:var(--amb);color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;height:auto;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px}
+  .tbl{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:8px}
+  .tbl th,.tbl td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl th{font-family:Sora;font-size:.8rem;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+  .tbl td.n{font-family:"JetBrains Mono",monospace;white-space:nowrap}
+  .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+  .t{display:inline-block;font:700 .75rem Inter;letter-spacing:.06em;padding:1px 7px;border-radius:5px;vertical-align:middle}
+  .t.f{background:rgba(74,222,128,.14);color:#4ade80;border:1px solid rgba(74,222,128,.35)}
+  .t.e{background:rgba(250,204,21,.12);color:var(--amb);border:1px solid rgba(250,204,21,.35)}
+  body.light .t.f{color:#15803d}
+  .lim{border-left:3px solid var(--amb)}
+  ol.tec{margin:0;padding-left:1.3em;display:grid;gap:12px}
+  ol.tec li{color:var(--mut)} ol.tec li b{color:var(--txt)}
+  .pagina{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="brand" href="#top"><span class="emoji">🗳️</span> Elections 2026</a>
+  <span class="sep">|</span>
+  <span class="clubpro">
+    <a class="inema" href="https://inema.club" target="_blank" rel="noopener">INEMA.CLUB</a>
+    <span class="sep">-</span>
+    <a class="pro" href="https://inema.pro" target="_blank" rel="noopener">PRO</a>
+  </span>
+  <div class="links">
+    <a class="sec" href="#linha">Timeline</a>
+    <a class="sec" href="#escala">Scale</a>
+    <a class="sec" href="#custos">Costs</a>
+    <a class="sec" href="#backup">Backup</a>
+    <a class="sec" href="#tecnicas">Techniques</a>
+    <a class="sec" href="#ler">Read more</a>
+    <span class="lang"><a href="../">PT</a><a class="on" href="./">EN</a><a href="../es/">ES</a></span>
+    <button class="tgl" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
+    <a class="btn" href="https://github.com/inematds/eleicoes2026" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div></nav>
+<header class="hero" id="top">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div>
+      <span class="chip">How it was built · architecture</span>
+      <h1>An election dashboard ready for <span class="amb">millions</span> of people</h1>
+      <p class="lead">One collector, static files on Cloudflare's edge and a standby VPS. None of our servers sit in the visitor's path.</p>
+      <div class="cta">
+        <a class="btn" href="#escala">See why it scales</a>
+        <a class="btn ghost" href="https://eleicoes.inema.club" target="_blank" rel="noopener">Open the dashboard</a>
+      </div>
+    </div>
+    <figure><img src="../../assets/arquitetura-banner-en.jpg" alt="Banner: ready for millions, how the election dashboard was built"></figure>
+  </div>
+</header>
+<section id="resumo" class="resumo"><div class="wrap">
+  <span class="chip">In short</span>
+  <p>This page explains how the <a href="https://eleicoes.inema.club" target="_blank" rel="noopener">eleicoes.inema.club</a> dashboard was made. It showed the 2026 2nd-round count live, using official TSE data. A single collector reads the TSE and writes ready-made files; those files sit on Cloudflare servers spread around the world; each person's browser only reads those files. So the number of visitors changes nothing about the load on the TSE or on our machine. It is for anyone who wants to understand, copy or teach this way of building a site that handles traffic peaks at low cost.</p>
+</div></section>
+<section id="oque"><div class="wrap">
+  <span class="chip">The idea</span>
+  <h2>Three parts that only talk through files</h2>
+  <p class="sub">The <b>collection</b> talks to the TSE and writes files. The <b>contract</b> defines the format of those files. The <b>site</b> only reads the files and draws the screen. One part can go down or move to another machine without touching the others — which is what happened when the whole operation moved to the VPS.</p>
+  <figure style="margin:0 0 26px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000"><img src="../../assets/arquitetura-banner-grade-en.jpg" alt="Single collector, immutable files, Cloudflare edge, low cost, standby VPS and one-command switch" loading="lazy" style="width:100%;display:block"></figure>
+  <div class="flow">
+    <span>TSE</span><span class="arr">→</span>
+    <span>1 collector (every 15 s, with ETag)</span><span class="arr">→</span>
+    <span>Checks the sums</span><span class="arr">→</span>
+    <span>Versioned files + manifest</span><span class="arr">→</span>
+    <span>Cloudflare edge</span><span class="arr">→</span>
+    <span>Each person's browser</span>
+  </div>
+</div></section>
+<section id="linha"><div class="wrap">
+  <span class="chip">Timeline</span>
+  <h2>From the first commit to the live dashboard: about 37 hours</h2>
+  <p class="sub">Taken from the repository history (<code>git log</code>), with a night's sleep in the middle. Everything was done in Claude Code sessions; each fixed failure became a line in <code>FALHAS.md</code>.</p>
+  <div class="phase"><div class="tag">Oct 24 04:19</div><div class="d"><strong>1st commit</strong><span>Collector, contract and dashboard tested with real 1st-round data.</span></div></div>
+  <div class="phase"><div class="tag">Oct 24 05:50</div><div class="d"><strong>Municipalities</strong><span>All 5,571 cities on the map, in a system separate from the dashboard.</span></div></div>
+  <div class="phase"><div class="tag">Oct 25 early hours</div><div class="d"><strong>Projection, audit and standby</strong><span>Projection calibrated on 224 scenarios (2022 data and simulations), Source and audit section, standby on the VPS and domain switching by script.</span></div></div>
+  <div class="phase"><div class="tag">Oct 25 17:00</div><div class="d"><strong>TSE opens the release of results</strong><span>The collectors start on their own via timers. During the count, 10 commits go in: fixes and new menus.</span></div></div>
+  <div class="phase"><div class="tag">Oct 26</div><div class="d"><strong>After the count</strong><span>"The comeback" page, the "Ask your questions" chat and the whole operation moving to the VPS.</span></div></div>
+</div></section>
+<section id="escala"><div class="wrap">
+  <span class="chip">Scale</span>
+  <h2>Why it handles millions without bringing a server down</h2>
+  <p class="sub">The secret is having none of our servers in the visitor's path.</p>
+  <div class="grid g3">
+    <div class="card"><div class="num">1</div><h3>The edge serves the requests</h3><p>The files sit on Cloudflare servers spread around the world. Our machine only sends files when something changes. If it goes down, the site keeps showing the last result.</p></div>
+    <div class="card"><div class="num">2</div><h3>The TSE sees a single client</h3><p>A thousand or a million visitors: the collector makes the same request every 15 s. If nothing changed, the TSE answers "not modified" and nothing is transferred.</p></div>
+    <div class="card"><div class="num">3</div><h3>A file that never changes is cached</h3><p>Each version has its own name (<code>v100340.json</code>) and is never altered. The browser downloads it once and keeps it for a year.</p></div>
+    <div class="card"><div class="num">4</div><h3>Only a small file is polled</h3><p>The <code>latest.json</code> manifest is 4.9 KB and says which version is current. The large file is only downloaded when it changes.</p></div>
+    <div class="card"><div class="num">5</div><h3>A static file runs no code</h3><p>A file request is served directly, without triggering any program. According to Cloudflare's documentation, these requests are neither billed nor limited.</p></div>
+    <div class="card"><div class="num">6</div><h3>Manifest last</h3><p>The collector writes the version files before the manifest, and the upload to Cloudflare takes everything together at once. Nobody sees a manifest pointing to a file that has not arrived yet.</p></div>
+  </div>
+  <h3 style="margin:34px 0 10px">The math <span class="t e">ESTIMATE</span></h3>
+  <p class="mut" style="margin:0 0 10px">Each person with the dashboard open requests the manifest every 15 seconds. It was not tested with 1 million real people: this is what the edge needs to deliver.</p>
+  <div class="scroll"><table class="tbl">
+    <tr><th>People at the same time</th><th>Requests per second at the edge</th><th>Traffic</th><th>Requests to the TSE</th><th>Load on our machine</th></tr>
+    <tr><td class="n">10 thousand</td><td class="n">~670</td><td class="n">~3 MB/s</td><td>1 every 15 s</td><td>none</td></tr>
+    <tr><td class="n">100 thousand</td><td class="n">~6,700</td><td class="n">~33 MB/s</td><td>1 every 15 s</td><td>none</td></tr>
+    <tr><td class="n">1 million</td><td class="n">~67,000</td><td class="n">~330 MB/s</td><td>1 every 15 s</td><td>none</td></tr>
+  </table></div>
+  <h3 style="margin:34px 0 10px">Where the real limits are</h3>
+  <div class="grid g2">
+    <div class="card lim"><h3>Visitor counter</h3><p>It is a single instance on Cloudflare. With millions of simultaneous sessions, it becomes a bottleneck. If it fails, only the number disappears from the menu; the dashboard keeps working. Fix: split it into several instances and add them up.</p></div>
+    <div class="card lim"><h3>"Ask your questions" chat</h3><p>Each question calls the Anthropic API. That's why there is a cap: 25 questions per hour and 80 per day per visitor, 1,500 per day on the site.</p></div>
+    <div class="card lim"><h3>The source</h3><p>If the TSE is late or sends a file that doesn't add up, that state stays frozen at the last valid value. We can't be faster than the source.</p></div>
+    <div class="card lim"><h3>Publishing</h3><p>Each change becomes an upload to Cloudflare taking 18 to 26 seconds (measured in the publisher log). Added to the 15 s collection interval, the site stays about half a minute behind the TSE (estimate).</p></div>
+  </div>
+</div></section>
+<section id="custos"><div class="wrap">
+  <span class="chip">Costs</span>
+  <h2>The cost does not grow with the number of visitors</h2>
+  <p class="sub">For the dashboard itself, more people looking doesn't raise the bill. Only the chat and the counter have a per-use cost.</p>
+  <div class="scroll"><table class="tbl">
+    <tr><th>Item</th><th>Cost</th><th>Type</th></tr>
+    <tr><td>Collector, analyses and publisher</td><td>One small VPS (Hetzner CX23: 2 processors, 4 GB). Price in the range of a few euros per month.</td><td><span class="t e">ESTIMATE</span></td></tr>
+    <tr><td>Site and data (files on the edge)</td><td>No per-request charge on Cloudflare static files.</td><td><span class="t f">FACT</span></td></tr>
+    <tr><td>Counter and chat (program on Cloudflare)</td><td>Within the free allowance at low volume; billed by volume above it, according to the account's plan.</td><td><span class="t e">ESTIMATE</span></td></tr>
+    <tr><td>Chat (Anthropic API, Claude Opus 5.5)</td><td>About US$ 0.04 per question, measured in the first conversations.</td><td><span class="t f">FACT</span></td></tr>
+    <tr><td>TSE data</td><td>Public and free, no key.</td><td><span class="t f">FACT</span></td></tr>
+  </table></div>
+</div></section>
+<section id="backup"><div class="wrap">
+  <span class="chip">Backup</span>
+  <h2>A standby VPS and a one-command switch</h2>
+  <p class="sub">On count night, a second machine ran everything for real, ready to take over in minutes.</p>
+  <div class="grid g3">
+    <div class="card"><h3>Its own collection</h3><p>The VPS had its own collectors, started at 5 pm, writing versions from 500001. That way they never collided with the files already published by the main machine (which start at 100001).</p></div>
+    <div class="card"><h3>Always-on copy</h3><p>The VPS served both sites at eleicoes2026.inema.club and municipios2026.inema.club, with the same cache rules. The standby could be tested at any time.</p></div>
+    <div class="card"><h3>Switch by script or by hand</h3><p>One command sent the domains to the VPS and another brought them back. Without the main machine, a manual explains the same switch through the Cloudflare dashboard: <code>ferramentas/vps/TROCA-MANUAL.md</code> (in Portuguese). The backup is installed with <code>ferramentas/vps/instalar.sh vps</code>.</p></div>
+  </div>
+  <pre style="margin-top:22px"><span class="c"># on election night: send the traffic to the VPS (without --executar it only shows what it would do)</span>
+<span class="k">ferramentas/vps/trocar_dominios.sh</span> vps --executar
+<span class="c"># switch back to Cloudflare</span>
+<span class="k">ferramentas/vps/trocar_dominios.sh</span> volta --executar
+<span class="c"># today (since Oct 26) the VPS is the primary; reinstall the entire operation:</span>
+<span class="k">ssh</span> root@&lt;VPS-IP&gt; <span class="s">'cd /opt/eleicoes2026 &amp;&amp; git pull &amp;&amp; bash ferramentas/vps/operacao.sh --executar'</span></pre>
+  <p class="sub" style="margin-top:14px">On Oct 26 the final data was copied to the VPS, the analyses ran there with identical results (checked by the sha256 fingerprint) and the main machine was shut down. The site never went offline.</p>
+</div></section>
+<section id="tecnicas"><div class="wrap">
+  <span class="chip">Techniques</span>
+  <h2>What made it efficient</h2>
+  <p class="sub">Nothing exotic: a handful of simple decisions, applied with discipline.</p>
+  <ol class="tec">
+    <li><b>Contract first.</b> The file format was written before the code; collection and site moved in parallel.</li>
+    <li><b>Separate who collects from who displays.</b> The site never talks to the TSE; the collection knows nothing about the screen.</li>
+    <li><b>Immutable file + small manifest.</b> Eternal cache on what doesn't change, cheap polling on what does.</li>
+    <li><b>Ask the TSE "did it change?" (ETag).</b> Download only the state that changed.</li>
+    <li><b>Check before publishing.</b> A sum that doesn't add up, a vote count that decreases, a time that goes backwards: that state isn't published and the last valid value stays.</li>
+    <li><b>Keep the original with a fingerprint (sha256).</b> The Conferência (Check) page redoes the sums and checks the integrity of each downloaded file.</li>
+    <li><b>Atomic writes.</b> Write to a temporary file and swap in one step; nobody reads a half-written file.</li>
+    <li><b>Publish only on change.</b> The publisher compares a signature of the data; restarting duplicates nothing.</li>
+    <li><b>Services with limits and schedules.</b> Automatic restart, memory limit, a timer to start at 5 pm and shut the simulations down at 4 pm, even if the machine reboots.</li>
+    <li><b>Rehearse the night.</b> Accelerated simulation with fictional names and a "fake TSE" with deliberate failures.</li>
+    <li><b>Test the model on old data.</b> The Projection was tested on 2022 data and on simulations: across 224 scenarios, the range contained the final result 98.7% of the time. This is measured on the same sample that helped set the range, so it is not a guarantee.</li>
+    <li><b>Hot standby.</b> The VPS ran for real all night, with a different series of versions.</li>
+    <li><b>One-line failure log.</b> Example from that night: the TSE index listed Brazil with overseas time (16 hours in the future) and the total wouldn't publish; the fix was to ignore times in the future.</li>
+  </ol>
+</div></section>
+<section id="ler"><div class="wrap">
+  <span class="chip">Read more</span>
+  <h2>Everything open in the repository</h2>
+  <p class="sub">The full document, with the technical details and file names, is in <code>ARQUITETURA.md</code>.</p>
+  <div class="pagina">
+    <a class="btn" href="https://github.com/inematds/eleicoes2026/blob/main/ARQUITETURA.md" target="_blank" rel="noopener">ARQUITETURA.md (in Portuguese)</a>
+    <a class="btn ghost" href="../../en/">Dashboard user guide</a>
+    <a class="btn ghost" href="https://github.com/inematds/eleicoes2026/blob/main/FALHAS.md" target="_blank" rel="noopener">FALHAS.md (in Portuguese)</a>
+    <a class="btn ghost" href="https://eleicoes.inema.club/conferencia.html" target="_blank" rel="noopener">Check page on the dashboard</a>
+  </div>
+</div></section>
+<footer>
+  <div class="wrap">
+    <div class="pill">Python</div><div class="pill">HTML + CSS + JS</div><div class="pill">Cloudflare (edge)</div><div class="pill">Standby VPS</div>
+    <p style="margin-top:18px">INEMA Elections 2026 · independent dashboard, not affiliated with the TSE ·
+      <a href="https://github.com/inematds/eleicoes2026">inematds/eleicoes2026</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+  </div>
+</footer>
+<script>
+  (function(){
+    var KEY='eleicoes2026-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    var salvo=null; try{ salvo=localStorage.getItem(KEY); }catch(e){}
+    if(salvo==='light'){ b.classList.add('light'); t.textContent='☀️'; }
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      try{ localStorage.setItem(KEY, light?'light':'dark'); }catch(e){}
+    });
+  })();
+</script>
+</body>
+</html>

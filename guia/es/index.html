@@ -46,14 +46,14 @@
   nav .clubpro{display:inline-flex;align-items:center;gap:6px}
   nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
   nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
-  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1180px){nav .links a.sec[href="#exemplos"],nav .links a.sec[href="#roadmap"]{display:none}}
+  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1700px){nav .links a.sec[href="#exemplos"],nav .links a.sec[href="#roadmap"],nav .links a.sec[href="#fluxo"]{display:none}} @media(max-width:1180px){nav .links a.sec[href="#municipios"],nav .links a.sec[href="#projecao"],nav .links a.sec[href="#depois"]{display:none}}
   .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
   .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
   .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
   .tgl:hover{border-color:var(--amb)}
   .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
   .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
-  @media(max-width:760px){nav .links a.sec{display:none}}
+  @media(max-width:900px){nav .links a.sec{display:none}}
   @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
   .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
   .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
@@ -117,6 +117,8 @@
     <a class="sec" href="#guia">Guía de uso</a>
     <a class="sec" href="#municipios">Municipios</a>
     <a class="sec" href="#projecao">Proyección</a>
+    <a class="sec" href="#depois">Análisis y chat</a>
+    <a class="sec" href="../arquitetura/es/">Cómo se hizo</a>
     <a class="sec" href="#exemplos">Ejemplos</a>
     <a class="sec" href="#roadmap">Roadmap</a>
     <span class="lang"><a href="../">PT</a><a href="../en/">EN</a><a class="on" href="./">ES</a></span>
@@ -288,6 +290,20 @@
 <span class="k">python3</span> projecao/projetar.py --laco 60</pre>
   <p class="sub" style="margin-top:12px">Código y detalles: <a href="https://github.com/inematds/eleicoes2026/tree/main/projecao" target="_blank" rel="noopener">projecao/</a>. Requiere <code>numpy</code> y <code>scipy</code>.</p>
 </div></section>
+<section id="depois"><div class="wrap">
+  <span class="chip">Después del conteo</span>
+  <h2>Análisis del resultado y un chat para resolver dudas</h2>
+  <p class="sub">Con el resultado final del TSE, el panel ganó páginas que comparan la 1.ª y la 2.ª vuelta ciudad por ciudad, separando siempre lo que es <b>hecho</b> (cuenta sobre los números del TSE) de lo que es <b>estimación</b> (modelo de la Proyección). Todas están en el menú del panel.</p>
+  <div class="grid g3">
+    <div class="card"><h3>📊 Análise (Análisis)</h3><p>Qué cambió de la 1.ª a la 2.ª vuelta en cada ciudad y estado, ciudades que cambiaron de ganador, senado y gobernador comparados con presidente.</p></div>
+    <div class="card"><h3>🔎 Raio-X (Rayos X)</h3><p>De dónde vino la diferencia, dónde se concentró y el papel de la participación.</p></div>
+    <div class="card"><h3>✅ Conferência (Verificación)</h3><p>Brasil = suma de los estados + exterior, cada estado = suma de las ciudades, integridad de los archivos descargados y el exterior sección por sección según los boletines de urna.</p></div>
+    <div class="card"><h3>❓ Por que perdeu (Por qué perdió)</h3><p>Aliados electos de cada lado, dónde se dividió el voto y las explicaciones posibles, rotuladas como hipótesis.</p></div>
+    <div class="card"><h3>± A virada (El vuelco)</h3><p>Cómo Lula ganó 10,4 millones de votos de la 1.ª a la 2.ª vuelta: la cuenta que siempre cierra, la "coincidencia" que no prueba nada y la verificación de los gráficos que circularon.</p></div>
+    <div class="card"><h3>💬 Tire suas dúvidas (Resuelve tus dudas)</h3><p>Chat grande a la derecha de todas las páginas: una IA (Claude) responde solo con los números del sitio y dice de qué página provienen. Las conversaciones se guardan de forma anónima para análisis.</p></div>
+  </div>
+  <div class="card" style="margin-top:16px;border-color:var(--amb)"><h3>🏗️ Cómo se construyó</h3><p>Por qué el panel aguanta a millones de personas sin tumbar el servidor, cuánto cuesta, la VPS de reserva y las técnicas usadas: <a href="../arquitetura/es/">página Cómo se hizo</a> y <a href="https://github.com/inematds/eleicoes2026/blob/main/ARQUITETURA.md" target="_blank" rel="noopener">ARQUITETURA.md</a> (en portugués).</p></div>
+</div></section>
 <section id="exemplos"><div class="wrap">
   <span class="chip">Ejemplos</span>
   <h2>Cómo se ve en pantalla</h2>
@@ -304,6 +320,8 @@
   <div class="phase"><div class="tag">Hecho</div><div class="d"><strong>Presidente · Brasil + 27 estados + exterior</strong><span>Colector con verificación, paneles Central y Clásica, mapa real, simulación acelerada, publicación estática.</span></div></div>
   <div class="phase"><div class="tag">Hecho</div><div class="d"><strong>Municipios</strong><span>Mapa de cada estado con las ciudades coloreándose en vivo, votos y evolución del estado, 10 ciudades y simulación, en municipios.inema.club (24/10/2026).</span></div></div>
   <div class="phase"><div class="tag">Hecho</div><div class="d"><strong>Proyección, auditoría y compartir</strong><span>Proyección del resultado final por transferencia de votos, con rango medido, lista por estado, historial de la noche y lo que falta para el vuelco; sección Fonte e auditoria (Fuente y auditoría) y botón Compartilhar (Compartir) (25/10/2026).</span></div></div>
+  <div class="phase"><div class="tag">Hecho</div><div class="d"><strong>Análisis del resultado y chat</strong><span>Análise (Análisis), Raio-X (Rayos X), Conferência (Verificación), Por que perdeu (Por qué perdió), A virada (El vuelco) y el chat "Tire suas dúvidas" (Resuelve tus dudas) (25 y 26/10/2026).</span></div></div>
+  <div class="phase"><div class="tag">Hecho</div><div class="d"><strong>Operación en la VPS</strong><span>Después del conteo, la recolección de datos, los análisis y la publicación pasaron a la VPS de reserva; el sitio siguió en Cloudflare sin salir del aire (26/10/2026).</span></div></div>
   <div class="phase"><div class="tag">Después</div><div class="d"><strong>Otras elecciones</strong><span>Gobernador y las próximas elecciones: como el colector y la pantalla están separados, solo cambia la parte del colector.</span></div></div>
 </div></section>
 <footer>

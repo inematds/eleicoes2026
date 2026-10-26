@@ -24,6 +24,16 @@ Two separate parts, linked only by the contract's JSON files:
 
 Initial analysis and decisions: `ANALISE.md`. Fixed failures: `FALHAS.md`.
 
+## 🏗️ How it was built (and why it handles millions)
+
+A single collector reads the TSE and writes versioned files; the files sit on Cloudflare's edge; the browser
+only reads those files. None of our servers sits in the path of visitors, so the number of people changes neither the
+load on the TSE nor on our machine. From the first commit to the live dashboard took about 37 hours. Scale, costs,
+the backup VPS, the one-command switchover and the techniques used:
+
+- **Page:** https://inematds.github.io/eleicoes2026/guia/arquitetura/en/
+- **Full document:** [`ARQUITETURA.md`](ARQUITETURA.md) (in Portuguese)
+
 ## The process, start to finish
 
 🧠 session with Nei · ⚙️ script/service · 🤖 `claude -p`

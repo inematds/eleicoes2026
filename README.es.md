@@ -24,6 +24,16 @@ Dos partes separadas, unidas solo por los archivos JSON del contrato:
 
 Análisis inicial y decisiones: `ANALISE.md`. Fallas corregidas: `FALHAS.md`.
 
+## 🏗️ Cómo se construyó (y por qué aguanta a millones)
+
+Un único colector lee el TSE y graba archivos versionados; los archivos quedan en el borde de Cloudflare; el navegador
+solo lee esos archivos. Ningún servidor nuestro queda en el camino de quien visita, así que el número de personas no cambia la
+carga del TSE ni de nuestra máquina. Del primer commit al panel en vivo fueron cerca de 37 horas. Escala, costos,
+la VPS de reserva, el cambio en un comando y las técnicas usadas:
+
+- **Página:** https://inematds.github.io/eleicoes2026/guia/arquitetura/es/
+- **Documento completo:** [`ARQUITETURA.md`](ARQUITETURA.md) (en portugués)
+
 ## El proceso, de principio a fin
 
 🧠 sesión con Nei · ⚙️ script/servicio · 🤖 `claude -p`

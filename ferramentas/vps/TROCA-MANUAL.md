@@ -1,5 +1,11 @@
 # Troca manual para a VPS4 (sem a máquina principal)
 
+> **Atualização 26/10/2026: os papéis trocaram.** Depois da apuração a VPS4 virou a máquina principal: os
+> publicadores (`eleicoes-publicar`, `eleicoes-municipios-publicar`) rodam lá como serviços de sistema e o login do
+> wrangler está em `/root/.config/.wrangler`. A antiga máquina principal está desligada. Os domínios continuam
+> nos Workers do Cloudflare. Este manual descreve a reserva como foi usada na noite de 25/10; os comandos
+> `systemctl --user ...` abaixo eram da máquina antiga. Operação atual: `ferramentas/vps/operacao.sh` e `ARQUITETURA.md`.
+
 Use quando a máquina principal estiver fora do ar. A VPS4 (62.238.25.84) funciona sozinha: coleta o TSE a partir
 das 17h de Brasília, calcula a projeção e serve os sites. Ela não depende da máquina principal.
 

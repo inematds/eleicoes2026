@@ -46,14 +46,14 @@
   nav .clubpro{display:inline-flex;align-items:center;gap:6px}
   nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
   nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
-  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1180px){nav .links a.sec[href="#exemplos"],nav .links a.sec[href="#roadmap"]{display:none}}
+  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1700px){nav .links a.sec[href="#exemplos"],nav .links a.sec[href="#roadmap"],nav .links a.sec[href="#fluxo"]{display:none}} @media(max-width:1180px){nav .links a.sec[href="#municipios"],nav .links a.sec[href="#projecao"],nav .links a.sec[href="#depois"]{display:none}}
   .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
   .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
   .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
   .tgl:hover{border-color:var(--amb)}
   .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
   .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
-  @media(max-width:760px){nav .links a.sec{display:none}}
+  @media(max-width:900px){nav .links a.sec{display:none}}
   @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
   .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
   .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
@@ -117,6 +117,8 @@
     <a class="sec" href="#guia">User guide</a>
     <a class="sec" href="#municipios">Municipalities</a>
     <a class="sec" href="#projecao">Projection</a>
+    <a class="sec" href="#depois">Analyses and chat</a>
+    <a class="sec" href="../arquitetura/en/">How it was built</a>
     <a class="sec" href="#exemplos">Examples</a>
     <a class="sec" href="#roadmap">Roadmap</a>
     <span class="lang"><a href="../">PT</a><a class="on" href="./">EN</a><a href="../es/">ES</a></span>
@@ -288,6 +290,20 @@
 <span class="k">python3</span> projecao/projetar.py --laco 60</pre>
   <p class="sub" style="margin-top:12px">Code and details: <a href="https://github.com/inematds/eleicoes2026/tree/main/projecao" target="_blank" rel="noopener">projecao/</a>. Requires <code>numpy</code> and <code>scipy</code>.</p>
 </div></section>
+<section id="depois"><div class="wrap">
+  <span class="chip">After the count</span>
+  <h2>Result analyses and a chat for your questions</h2>
+  <p class="sub">With the TSE's final result, the dashboard gained pages that compare the 1st and 2nd rounds city by city, always separating what is <b>fact</b> (arithmetic on the TSE numbers) from what is <b>estimate</b> (the Projeção (Projection) model). They are all in the dashboard menu.</p>
+  <div class="grid g3">
+    <div class="card"><h3>📊 Análise (Analysis)</h3><p>What changed from the 1st to the 2nd round in each city and state, cities that flipped, and Senate and governor races compared with president.</p></div>
+    <div class="card"><h3>🔎 Raio-X (X-ray)</h3><p>Where the difference came from, where it was concentrated, and the role of turnout.</p></div>
+    <div class="card"><h3>✅ Conferência (Verification)</h3><p>Brazil = sum of the states + abroad, each state = sum of its cities, integrity of the downloaded files, and abroad section by section through the ballot-box reports.</p></div>
+    <div class="card"><h3>❓ Por que perdeu (Why he lost)</h3><p>Allies elected on each side, where the vote split, and the possible explanations, labeled as hypotheses.</p></div>
+    <div class="card"><h3>± A virada (The turnaround)</h3><p>How Lula gained 10.4 million votes from the 1st to the 2nd round: the arithmetic that always adds up, the "coincidence" that proves nothing, and a check of the charts that circulated.</p></div>
+    <div class="card"><h3>💬 Tire suas dúvidas (Ask your questions)</h3><p>A large chat on the right of every page: an AI (Claude) answers only with the site's numbers and says which page they come from. Conversations are recorded anonymously for analysis.</p></div>
+  </div>
+  <div class="card" style="margin-top:16px;border-color:var(--amb)"><h3>🏗️ How it was built</h3><p>Why the dashboard handles millions of people without bringing a server down, how much it costs, the backup VPS and the techniques used: <a href="../arquitetura/en/">How it was built page</a> and <a href="https://github.com/inematds/eleicoes2026/blob/main/ARQUITETURA.md" target="_blank" rel="noopener">ARQUITETURA.md</a> (in Portuguese).</p></div>
+</div></section>
 <section id="exemplos"><div class="wrap">
   <span class="chip">Examples</span>
   <h2>What it looks like on screen</h2>
@@ -304,6 +320,8 @@
   <div class="phase"><div class="tag">Done</div><div class="d"><strong>President · Brazil + 27 states + abroad</strong><span>Collector with verification, Central and Classic dashboards, real map, accelerated simulation, static publishing.</span></div></div>
   <div class="phase"><div class="tag">Done</div><div class="d"><strong>Municipalities</strong><span>Map of each state with cities coloring in live, statewide votes and progress, 10 cities and simulation, at municipios.inema.club (10/24/2026).</span></div></div>
   <div class="phase"><div class="tag">Done</div><div class="d"><strong>Projection, audit and sharing</strong><span>Projection of the final result through vote transfer, with a measured range, a per-state list, the night's history and what is still needed for a comeback; Fonte e auditoria (Source and audit) section and Compartilhar (Share) button (10/25/2026).</span></div></div>
+  <div class="phase"><div class="tag">Done</div><div class="d"><strong>Result analyses and chat</strong><span>Análise (Analysis), Raio-X (X-ray), Conferência (Verification), Por que perdeu (Why he lost), A virada (The turnaround) and the "Tire suas dúvidas" (Ask your questions) chat (10/25 and 10/26/2026).</span></div></div>
+  <div class="phase"><div class="tag">Done</div><div class="d"><strong>Operations on the VPS</strong><span>After the count, collection, analyses and publishing moved to the backup VPS; the site stayed on Cloudflare without going offline (10/26/2026).</span></div></div>
   <div class="phase"><div class="tag">Later</div><div class="d"><strong>Other elections</strong><span>Governor and future elections: since collection and display are separate, only the collection part changes.</span></div></div>
 </div></section>
 <footer>

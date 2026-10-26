@@ -46,14 +46,14 @@
   nav .clubpro{display:inline-flex;align-items:center;gap:6px}
   nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
   nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
-  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1180px){nav .links a.sec[href="#exemplos"],nav .links a.sec[href="#roadmap"]{display:none}}
+  nav .links a.sec{white-space:nowrap} @media(max-width:1400px){nav .links{gap:14px}} @media(max-width:1700px){nav .links a.sec[href="#exemplos"],nav .links a.sec[href="#roadmap"],nav .links a.sec[href="#fluxo"]{display:none}} @media(max-width:1180px){nav .links a.sec[href="#municipios"],nav .links a.sec[href="#projecao"],nav .links a.sec[href="#depois"]{display:none}}
   .lang{display:inline-flex;gap:2px;font-family:Sora;font-size:.78rem}
   .lang a{color:var(--mut);padding:.2em .45em;border-radius:6px} .lang a.on{color:var(--amb);background:rgba(226,162,59,.12)}
   .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
   .tgl:hover{border-color:var(--amb)}
   .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
   .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
-  @media(max-width:760px){nav .links a.sec{display:none}}
+  @media(max-width:900px){nav .links a.sec{display:none}}
   @media(max-width:520px){nav .wrap{gap:8px;padding:8px 14px;height:auto;flex-wrap:wrap} nav .links{gap:8px;margin-left:0;width:100%;justify-content:space-between} nav .btn{padding:.45em .7em;font-size:.82rem} .tgl{width:34px;height:34px}}
   .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
   .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
@@ -117,6 +117,8 @@
     <a class="sec" href="#guia">Guia de uso</a>
     <a class="sec" href="#municipios">Municípios</a>
     <a class="sec" href="#projecao">Projeção</a>
+    <a class="sec" href="#depois">Análises e chat</a>
+    <a class="sec" href="arquitetura/">Como foi feito</a>
     <a class="sec" href="#exemplos">Exemplos</a>
     <a class="sec" href="#roadmap">Roadmap</a>
     <span class="lang"><a class="on" href="./">PT</a><a href="en/">EN</a><a href="es/">ES</a></span>
@@ -288,6 +290,20 @@
 <span class="k">python3</span> projecao/projetar.py --laco 60</pre>
   <p class="sub" style="margin-top:12px">Código e detalhes: <a href="https://github.com/inematds/eleicoes2026/tree/main/projecao" target="_blank" rel="noopener">projecao/</a>. Precisa de <code>numpy</code> e <code>scipy</code>.</p>
 </div></section>
+<section id="depois"><div class="wrap">
+  <span class="chip">Depois da apuração</span>
+  <h2>Análises do resultado e um chat para tirar dúvidas</h2>
+  <p class="sub">Com o resultado final do TSE, o painel ganhou páginas que comparam o 1º e o 2º turno cidade a cidade, sempre separando o que é <b>fato</b> (conta sobre os números do TSE) do que é <b>estimativa</b> (modelo da Projeção). Todas estão no menu do painel.</p>
+  <div class="grid g3">
+    <div class="card"><h3>📊 Análise</h3><p>O que mudou do 1º para o 2º turno em cada cidade e estado, cidades que viraram, senado e governador comparados com presidente.</p></div>
+    <div class="card"><h3>🔎 Raio-X</h3><p>De onde veio a diferença, onde ela se concentrou e o papel do comparecimento.</p></div>
+    <div class="card"><h3>✅ Conferência</h3><p>Brasil = soma dos estados + exterior, cada estado = soma das cidades, integridade dos arquivos baixados e o exterior seção a seção pelos boletins de urna.</p></div>
+    <div class="card"><h3>❓ Por que perdeu</h3><p>Aliados eleitos de cada lado, onde o voto se dividiu e as explicações possíveis, rotuladas como hipótese.</p></div>
+    <div class="card"><h3>± A virada</h3><p>Como Lula ganhou 10,4 milhões de votos do 1º para o 2º turno: a conta que sempre fecha, a "coincidência" que não prova nada e a checagem dos gráficos que circularam.</p></div>
+    <div class="card"><h3>💬 Tire suas dúvidas</h3><p>Chat grande à direita de todas as páginas: uma IA (Claude) responde só com os números do site e diz de qual página eles vêm. As conversas são gravadas de forma anônima para análise.</p></div>
+  </div>
+  <div class="card" style="margin-top:16px;border-color:var(--amb)"><h3>🏗️ Como foi construído</h3><p>Por que o painel aguenta milhões de pessoas sem derrubar servidor, quanto custa, a VPS de reserva e as técnicas usadas: <a href="arquitetura/">página Como foi feito</a> e <a href="https://github.com/inematds/eleicoes2026/blob/main/ARQUITETURA.md" target="_blank" rel="noopener">ARQUITETURA.md</a>.</p></div>
+</div></section>
 <section id="exemplos"><div class="wrap">
   <span class="chip">Exemplos</span>
   <h2>Como fica na tela</h2>
@@ -304,6 +320,8 @@
   <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Presidente · Brasil + 27 estados + exterior</strong><span>Coletor com conferência, painéis Central e Clássica, mapa real, simulação acelerada, publicação estática.</span></div></div>
   <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Municípios</strong><span>Mapa de cada estado com as cidades colorindo ao vivo, votos e evolução do estado, 10 cidades e simulação, em municipios.inema.club (24/10/2026).</span></div></div>
   <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Projeção, auditoria e compartilhar</strong><span>Projeção do resultado final por transferência de votos, com faixa medida, lista por estado, histórico da noite e o que falta para a virada; seção Fonte e auditoria e botão Compartilhar (25/10/2026).</span></div></div>
+  <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Análises do resultado e chat</strong><span>Análise, Raio-X, Conferência, Por que perdeu, A virada e o chat "Tire suas dúvidas" (25 e 26/10/2026).</span></div></div>
+  <div class="phase"><div class="tag">Feito</div><div class="d"><strong>Operação na VPS</strong><span>Depois da apuração, coleta, análises e publicação passaram para a VPS de reserva; o site seguiu no Cloudflare sem sair do ar (26/10/2026).</span></div></div>
   <div class="phase"><div class="tag">Depois</div><div class="d"><strong>Outras eleições</strong><span>Governador e as próximas eleições: como coleta e tela são separadas, muda só a parte da coleta.</span></div></div>
 </div></section>
 <footer>
