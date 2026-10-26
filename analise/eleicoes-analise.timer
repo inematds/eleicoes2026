@@ -1,0 +1,9 @@
+[Unit]
+Description=Eleições 2026 INEMA — análise 1º x 2º turno a cada 5 min
+
+[Timer]
+OnCalendar=*:0/5
+AccuracySec=20s
+
+[Install]
+WantedBy=timers.target

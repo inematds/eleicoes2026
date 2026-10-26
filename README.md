@@ -94,6 +94,10 @@ Análise inicial e decisões: `ANALISE.md`. Falhas corrigidas: `FALHAS.md`.
     `saida/oficial/data/exterior.json`; timer `eleicoes-exterior.timer` a cada 30 min em 25/10 (exceção à regra das
     17h autorizada pelo Nei). 1º turno ao lado: `python3 exterior/coletor_ext.py --primeiro-turno` (uma vez).
     Previsto x apurado usa a regra de transferência da Projeção. Leitor do boletim (BER/ASN.1): `exterior/bu.py`.
+20. ⚙️ **Análise do resultado** (menu Análise, `site/analise.html`): `analise/gerar.py` compara 1º e 2º turno
+    cidade a cidade (FATO: variação de votos, viradas, onde Flávio perdeu votos, estado a estado) e usa as
+    transferências da Projeção (ESTIMATIVA: de onde vieram os votos, para onde foram os do 1º turno). Só lê
+    arquivos locais; grava `saida/oficial/data/analise.json`; timer `eleicoes-analise.timer` a cada 5 min (aqui e na VPS4).
 
 ## Testes
 

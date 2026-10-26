@@ -1,0 +1,60 @@
+/* Página Análise (25/10) — usa os tokens de central.css e partes de projecao.css */
+.corpo > .painel { margin-bottom: 12px; }
+.an-tag { display: inline-block; font: 700 .62rem Inter; letter-spacing: .06em; padding: 2px 6px; border-radius: 5px; vertical-align: middle; margin-left: 4px; }
+.an-tag.fato { background: rgba(74,222,128,.14); color: #4ade80; border: 1px solid rgba(74,222,128,.35); }
+.an-tag.est { background: rgba(250,204,21,.12); color: var(--ouro, #FACC15); border: 1px solid rgba(250,204,21,.35); }
+
+.an-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.an-card { border: 1px solid var(--line2); border-radius: 10px; padding: 10px 12px; border-top: 3px solid var(--cor, var(--line2)); min-width: 0; }
+.an-card .t { color: var(--mut); font-size: .8rem; }
+.an-card .v { font: 800 1.35rem Sora; margin: 2px 0; }
+.an-card .s { color: var(--mut); font-size: .76rem; }
+
+.an-casc { margin-top: 12px; display: grid; gap: 6px; }
+.an-cl { display: grid; grid-template-columns: minmax(150px, 30%) 1fr 104px; gap: 10px; align-items: center; font-size: .85rem; }
+.an-cl .nm { color: var(--txt); }
+.an-cl .tr { position: relative; height: 22px; background: rgba(255,255,255,.03); border-radius: 4px; }
+.an-cl .tr span { position: absolute; top: 0; bottom: 0; border-radius: 4px; background: var(--cor); }
+.an-cl.base .tr span { opacity: .55; }
+.an-cl.neg .tr span { background: repeating-linear-gradient(45deg, #ef4444 0 5px, #b91c1c 5px 10px); }
+.an-cl.tot .tr span { background: var(--cor); opacity: .85; outline: 1px dashed var(--txt); outline-offset: -1px; }
+.an-cl.real .tr span { background: var(--ouro, #FACC15); }
+.an-cl.tot, .an-cl.real { font-weight: 700; }
+.an-cl.tot { margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--line2); }
+.an-cl .vl { text-align: right; font-variant-numeric: tabular-nums; }
+.an-cl.neg .vl { color: #f87171; }
+
+.an-leg { display: flex; flex-wrap: wrap; gap: 14px; color: var(--mut); font-size: .8rem; margin: 12px 0 6px; }
+.an-leg i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.an-fluxo { display: grid; gap: 8px; }
+.an-fl { display: grid; grid-template-columns: minmax(150px, 28%) 1fr; gap: 10px; align-items: center; }
+.an-fl .nm { font-size: .88rem; font-weight: 600; }
+.an-fl .nm small { display: block; color: var(--mut); font-weight: 400; font-size: .74rem; }
+.an-fl .bx { display: flex; height: 26px; border-radius: 6px; overflow: hidden; gap: 2px; background: var(--pend); }
+.an-fl .bx span { display: flex; align-items: center; justify-content: center; font: 700 .74rem Sora; color: #0b0b0e; white-space: nowrap; overflow: hidden; }
+
+.an-mapa-grade { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px; margin-top: 10px; align-items: start; }
+.an-mapa svg { width: 100%; height: auto; max-height: 440px; display: block; }
+.an-escala { display: flex; align-items: center; gap: 8px; color: var(--mut); font-size: .76rem; margin-top: 6px; }
+.an-escala i { flex: 1; max-width: 180px; height: 8px; border-radius: 99px; background: linear-gradient(90deg, rgba(250,204,21,.12), rgba(250,204,21,1)); }
+#an-perdas .res-tab, #an-viradas .res-tab, #an-ufs .res-tab { max-height: 460px; margin-top: 0; }
+#an-viradas .res-tab, #an-ufs .res-tab { margin-top: 10px; }
+.an-tab td, .an-tab th { white-space: nowrap; }
+.an-tab td:first-child, .an-tab th:first-child { text-align: left; }
+.an-tab small { color: var(--fraco, var(--mut)); font-size: .72rem; }
+.an-pos { color: #4ade80; } .an-neg { color: #f87171; }
+
+@media (max-width: 1000px) {
+  .an-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .an-mapa-grade { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .an-cl { grid-template-columns: 1fr 86px; }
+  .an-cl .nm { grid-column: 1 / -1; font-size: .8rem; }
+  .an-cl .tr { grid-column: 1; }
+  .an-fl { grid-template-columns: 1fr; gap: 4px; }
+  .an-card .v { font-size: 1.12rem; }
+  .an-tab td, .an-tab th { padding-left: 6px; padding-right: 6px; }
+}
+#an-reg, #an-cand { flex-wrap: wrap; }
+@media (max-width: 640px) { #an-reg, #an-cand { margin-left: 0; margin-top: 8px; } #an-fluxo .p-cab, #an-cascata .p-cab { flex-wrap: wrap; } }

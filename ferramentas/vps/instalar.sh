@@ -100,6 +100,26 @@ AccuracySec=30s
 [Install]
 WantedBy=timers.target
 EOF
+# Análise 1º x 2º turno: a cada 5 min (só lê arquivos locais)
+cat > /etc/systemd/system/eleicoes-analise.service <<EOF
+[Unit]
+Description=Eleições 2026 INEMA (reserva) — análise 1º x 2º turno
+[Service]
+Type=oneshot
+WorkingDirectory=$R
+ExecStart=/usr/bin/python3 $R/analise/gerar.py
+TimeoutStartSec=300
+MemoryMax=600M
+EOF
+cat > /etc/systemd/system/eleicoes-analise.timer <<EOF
+[Unit]
+Description=Eleições 2026 INEMA (reserva) — análise a cada 5 min
+[Timer]
+OnCalendar=*:0/5
+AccuracySec=20s
+[Install]
+WantedBy=timers.target
+EOF
 
 # HTTPS: usa o certificado do Let's Encrypt se já existir; senão, um autoassinado (vale no modo Full do Cloudflare)
 mkdir -p /var/www/certbot /etc/ssl/eleicoes
@@ -121,6 +141,6 @@ systemctl daemon-reload
 systemctl enable --now nginx
 systemctl reload nginx
 systemctl enable eleicoes-coletor eleicoes-municipios eleicoes-projecao
-systemctl enable --now eleicoes-exterior.timer
+systemctl enable --now eleicoes-exterior.timer eleicoes-analise.timer
 systemctl restart eleicoes-coletor eleicoes-municipios eleicoes-projecao --no-block
 echo "reserva instalada em $R · coletores esperam até $ABERTURA · versões a partir de $((BASE + 1))"

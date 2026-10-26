@@ -1,0 +1,10 @@
+[Unit]
+Description=Eleições 2026 INEMA — análise 1º x 2º turno (só lê arquivos locais)
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/nmaldaner/projetos/eleicoes2026
+ExecStart=/usr/bin/python3 /home/nmaldaner/projetos/eleicoes2026/analise/gerar.py
+TimeoutStartSec=300
+MemoryMax=600M
+Environment=PYTHONUNBUFFERED=1
